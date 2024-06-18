@@ -1,0 +1,6 @@
+rootProject.name = 'velog'
+include 'api'
+include 'api'
+include 'db'
+include 'view'
+
