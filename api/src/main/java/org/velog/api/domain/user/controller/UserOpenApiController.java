@@ -34,12 +34,10 @@ public class UserOpenApiController {
     @PostMapping("/login")
     public Api<UserResponse> login(
             @Valid
-            @RequestBody Api<UserLoginRequest> request,
-            HttpServletRequest req
+            @RequestBody Api<UserLoginRequest> userLoginRequest,
+            HttpServletRequest request
     ){
-        UserResponse response = userBusiness.login(request.getBody(), req);
+        UserResponse response = userBusiness.login(userLoginRequest.getBody(), request);
         return Api.OK(response);
     }
-
-
 }

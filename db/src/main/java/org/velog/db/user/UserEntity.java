@@ -34,4 +34,11 @@ public class UserEntity extends BaseEntity {
     private String email;
 
     private LocalDateTime registrationDate;
+
+    public void changeEmail(String email){
+        this.email = email;
+    }
+    public void setRegistrationDate(){
+        this.registrationDate = LocalDateTime.now();
+    }
 }

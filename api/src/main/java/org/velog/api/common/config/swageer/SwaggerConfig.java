@@ -1,4 +1,4 @@
-package org.velog.api.common.swageer;
+package org.velog.api.common.config.swageer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.core.jackson.ModelResolver;

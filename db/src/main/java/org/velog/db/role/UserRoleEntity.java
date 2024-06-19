@@ -31,5 +31,12 @@ public class UserRoleEntity extends BaseEntity {
     private RoleEntity roleEntity;
 
     private LocalDateTime authorizationDate;
+
+    public void setAuthorizationDate(){
+        this.authorizationDate = LocalDateTime.now();
+    }
+    public void setUserRoleDefault(){
+        this.roleEntity = new RoleEntity(Admin.ROLE_USER);
+    }
 }
 
