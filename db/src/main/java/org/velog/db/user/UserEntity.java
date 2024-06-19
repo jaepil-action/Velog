@@ -2,6 +2,7 @@ package org.velog.db.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +12,8 @@ import org.velog.db.BaseEntity;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "user")
+@Entity
+@Table(name = "users")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
