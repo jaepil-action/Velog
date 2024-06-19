@@ -16,12 +16,14 @@ import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import java.util.Objects;
 
+import static org.velog.api.domain.session.SessionService.LOGIN_USER;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class AuthorizationInterceptor implements HandlerInterceptor {
 
-    public static final String LOGIN_USER = "loginUser";
+    //public static final String LOGIN_USER = "loginUser";
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("Authorization Interceptor url : {}",request.getRequestURI());
