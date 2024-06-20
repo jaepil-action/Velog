@@ -6,5 +6,5 @@ import org.velog.db.user.UserEntity;
 import java.util.Optional;
 
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
-
+    Optional<RoleEntity> findByAdmin(Admin admin);
 }

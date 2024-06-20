@@ -16,6 +16,7 @@ import org.velog.api.domain.user.converter.UserConverter;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.role.RoleEntity;
 import org.velog.db.role.UserRoleEntity;
+import org.velog.db.user.UserEntity;
 
 import java.util.Optional;
 
@@ -47,6 +48,15 @@ public class UserRoleBusiness {
                 .map(converter::toUserRoleEntity)
                 .map(service::userRoleRegister)
                 .map(converter::toUserRoleResponse)
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest request Null"));
+    }
+
+    public UserEntity UserRoleDefaultRegister(UserEntity userEntity){
+
+        return Optional.ofNullable(userEntity)
+                .map(converter::toUserRoleDefaultEntity)
+                .map(service::userRoleRegister)
+                .map(converter::toUserEntity)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest request Null"));
     }
 

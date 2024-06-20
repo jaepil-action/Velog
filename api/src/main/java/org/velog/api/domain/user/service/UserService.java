@@ -66,16 +66,6 @@ public class UserService {
         }
     }
 
-    // TODO
-    public void setDefaultUserRole(
-            Long userId
-    ){
-        userRoleRepository.findFirstByUserEntity_Id(userId)
-                .ifPresentOrElse(UserRoleEntity::setUserRoleDefault, () -> {
-                    throw new ApiException(ErrorCode.NULL_POINT, "User Entity null");
-                });
-    }
-
     public UserEntity login(
             String loginId,
             String password

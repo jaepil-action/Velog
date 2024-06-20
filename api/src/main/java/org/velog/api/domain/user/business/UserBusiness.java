@@ -3,11 +3,10 @@ package org.velog.api.domain.user.business;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.jms.JmsProperties;
 import org.velog.api.common.annotation.Business;
-import org.velog.api.common.api.Api;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
+import org.velog.api.domain.role.business.UserRoleBusiness;
 import org.velog.api.domain.session.SessionService;
 import org.velog.api.domain.user.controller.model.*;
 import org.velog.api.domain.user.converter.UserConverter;
@@ -25,7 +24,7 @@ public class UserBusiness {
     private final UserService userService;
     private final UserConverter userConverter;
     private final SessionService sessionService;
-    //private final TokenBusiness tokenBusiness;
+    private final UserRoleBusiness userRoleBusiness;
 
 
     public UserResponse register(UserRegisterRequest registerParam){
@@ -33,6 +32,7 @@ public class UserBusiness {
         return Optional.ofNullable(registerParam)
                 .map(userConverter::toEntity)
                 .map(userService::register)
+                .map(userRoleBusiness::UserRoleDefaultRegister)
                 .map(userConverter::toResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "request Null"));
     }
@@ -70,10 +70,5 @@ public class UserBusiness {
     private static Long getUserId(HttpSession session) {
         return (Long) session.getAttribute(LOGIN_USER_ID);
     }
-
-/*    public UserResponse me(User user){
-        UserEntity userEntity = userService.getUserWithThrow(user.getId());
-        return userConverter.toResponse(userEntity);
-    }*/
 }
 

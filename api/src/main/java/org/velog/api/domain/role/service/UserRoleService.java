@@ -21,7 +21,7 @@ public class UserRoleService {
     private final UserRoleRepository userRoleRepository;
 
 
-    public RoleEntity roleRegister(RoleEntity roleEntity){
+    public RoleEntity roleRegister(RoleEntity roleEntity) {
         return Optional.ofNullable(roleEntity)
                 .map(it -> {
                     return roleRepository.save(roleEntity); ///
@@ -29,21 +29,9 @@ public class UserRoleService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "RoleEntity null"));
     }
 
-    public UserRoleEntity userRoleRegister(UserRoleEntity userRoleEntity){
+    public UserRoleEntity userRoleRegister(UserRoleEntity userRoleEntity) {
         return Optional.ofNullable(userRoleEntity)
                 .map(it -> {
-                    userRoleEntity.setAuthorizationDate();
-                    return userRoleRepository.save(userRoleEntity);
-                })
-                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "RoleEntity null"));
-    }
-
-
-    // TODO
-    public UserRoleEntity userRoleRegister2(UserRoleEntity userRoleEntity){
-        return Optional.ofNullable(userRoleEntity)
-                .map(it -> {
-                    userRoleEntity.setUserRoleDefault();
                     userRoleEntity.setAuthorizationDate();
                     return userRoleRepository.save(userRoleEntity);
                 })

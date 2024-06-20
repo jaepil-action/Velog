@@ -7,9 +7,7 @@ import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.role.controller.model.RoleDto;
 import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
 import org.velog.api.domain.role.controller.model.UserRoleResponse;
-import org.velog.db.role.RoleEntity;
-import org.velog.db.role.RoleRepository;
-import org.velog.db.role.UserRoleEntity;
+import org.velog.db.role.*;
 import org.velog.db.user.UserEntity;
 import org.velog.db.user.UserRepository;
 
@@ -20,6 +18,7 @@ import java.util.Optional;
 public class UserRoleConverter {
 
     private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
     private final UserRepository userRepository;
 
     public RoleEntity toRoleEntity(RoleDto request){
@@ -45,16 +44,17 @@ public class UserRoleConverter {
 
     public UserRoleEntity toUserRoleEntity(UserRoleRegisterRequest request){
 
+        UserRoleEntity userRoleEntity = userRoleRepository.findFirstByUserEntity_Id(request.getUserId())
+                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest Null"));
+
         RoleEntity roleEntity = roleRepository.findById(request.getRoleId())
                 .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest Null"));
 
-        UserEntity userEntity = userRepository.findById(request.getUserId())
-                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest Null"));
+        //UserEntity userEntity = userRepository.findById(request.getUserId())
 
-        return UserRoleEntity.builder()
-                .userEntity(userEntity)
-                .roleEntity(roleEntity)
-                .build();
+        userRoleEntity.editUserRole(roleEntity);
+
+        return userRoleEntity;
     }
 
     public UserRoleResponse toUserRoleResponse(UserRoleEntity userRoleEntity) {
@@ -69,5 +69,35 @@ public class UserRoleConverter {
                             .build();
                 })
                 .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleEntity Null"));
+    }
+
+    public UserRoleEntity toUserRoleDefaultEntity(UserEntity request){
+
+        RoleEntity roleEntity = roleRepository.findByAdmin(Admin.ROLE_USER) // 고정 디폴트값
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "RoleEntity not found for ROLE_USER"));
+
+        UserEntity userEntity = userRepository.findById(request.getId())
+                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest Null"));
+
+        return UserRoleEntity.builder()
+                .roleEntity(roleEntity)
+                .userEntity(userEntity)
+                .build();
+    }
+
+    public UserEntity toUserEntity(UserRoleEntity userRoleEntity) {
+
+        UserEntity request = userRoleEntity.getUserEntity();
+
+        return Optional.ofNullable(request)
+                .map(it -> {
+                    return UserEntity.builder()
+                            .loginId(request.getLoginId())
+                            .name(request.getName())
+                            .email(request.getEmail())
+                            .password(request.getPassword())
+                            .build();
+                })
+                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserEntity Null"));
     }
 }
