@@ -5,10 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.role.business.UserRoleBusiness;
 import org.velog.api.domain.role.controller.model.RoleDto;
@@ -24,9 +21,9 @@ public class UserRoleController {
 
     private final UserRoleBusiness userRoleBusiness;
 
-    @Operation(summary = "어드민 등록 API",
+    @Operation(summary = "어드민 종류 등록 API",
             description = "ROLE_USER / ROLE_ADMIN 등록")
-    @PostMapping("/admin")
+    @PostMapping("/role")
     public Api<RoleDto> registerAdmin(
         @Valid
         @RequestBody RoleDto roleRequest,
@@ -36,7 +33,9 @@ public class UserRoleController {
         return Api.OK(roleDto);
     }
 
-    @PostMapping("{userId}")
+    @Operation(summary = "어드민 권한 부여 API",
+            description = "관리자만 권한 부여 가능")
+    @PutMapping("edit")
     public Api<UserRoleResponse> registerUserRole(
             @Valid
             @RequestBody Api<UserRoleRegisterRequest> userRoleRegister,

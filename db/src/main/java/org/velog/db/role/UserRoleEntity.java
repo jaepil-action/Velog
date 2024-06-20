@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class UserRoleEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private UserEntity userEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,8 +35,9 @@ public class UserRoleEntity extends BaseEntity {
     public void setAuthorizationDate(){
         this.authorizationDate = LocalDateTime.now();
     }
-    public void setUserRoleDefault(){
-        this.roleEntity = new RoleEntity(Admin.ROLE_USER);
+    public void editUserRole(RoleEntity roleEntity){
+        //this.userEntity = userEntity;
+        this.roleEntity = roleEntity;
     }
 }
 
