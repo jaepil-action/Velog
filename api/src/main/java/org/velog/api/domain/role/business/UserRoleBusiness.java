@@ -3,6 +3,7 @@ package org.velog.api.domain.role.business;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.api.Api;
 import org.velog.api.common.error.ErrorCode;
@@ -12,6 +13,7 @@ import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
 import org.velog.api.domain.role.controller.model.UserRoleResponse;
 import org.velog.api.domain.role.converter.UserRoleConverter;
 import org.velog.api.domain.role.service.UserRoleService;
+import org.velog.api.domain.session.SessionService;
 import org.velog.api.domain.user.converter.UserConverter;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.role.RoleEntity;
@@ -23,15 +25,17 @@ import java.util.Optional;
 import static org.velog.api.domain.session.SessionService.LOGIN_ADMIN;
 
 @Business
+@Transactional
 @RequiredArgsConstructor
 public class UserRoleBusiness {
 
     private final UserRoleConverter converter;
     private final UserRoleService service;
+    private final SessionService sessionService;
 
-    public RoleDto RoleRegister(RoleDto roleDto, HttpServletRequest request){
+    public RoleDto RoleRegister(RoleDto roleDto, HttpServletRequest request) {
 
-        checkRoleAdmin(request);
+        sessionService.validateRoleAdmin(request);
 
         return Optional.ofNullable(roleDto)
                 .map(converter::toRoleEntity)
@@ -40,9 +44,9 @@ public class UserRoleBusiness {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "RoleDto request Null"));
     }
 
-    public UserRoleResponse UserRoleRegister(UserRoleRegisterRequest userRoleRegister, HttpServletRequest request){
+    public UserRoleResponse UserRoleRegister(UserRoleRegisterRequest userRoleRegister, HttpServletRequest request) {
 
-        checkRoleAdmin(request);
+        sessionService.validateRoleAdmin(request);
 
         return Optional.ofNullable(userRoleRegister)
                 .map(converter::toUserRoleEntity)
@@ -51,19 +55,12 @@ public class UserRoleBusiness {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest request Null"));
     }
 
-    public UserEntity UserRoleDefaultRegister(UserEntity userEntity){
+    public UserEntity UserRoleDefaultRegister(UserEntity userEntity) {
 
         return Optional.ofNullable(userEntity)
                 .map(converter::toUserRoleDefaultEntity)
                 .map(service::userRoleRegister)
                 .map(converter::toUserEntity)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest request Null"));
-    }
-
-    private static void checkRoleAdmin(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if(session.getAttribute(LOGIN_ADMIN) == null){
-            throw new ApiException(ErrorCode.BAD_REQUEST, "관리자 권한이 없습니다");
-        }
     }
 }

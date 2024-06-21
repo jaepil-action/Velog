@@ -87,9 +87,9 @@ public class UserRoleConverter {
 
     public UserEntity toUserEntity(UserRoleEntity userRoleEntity) {
 
-        UserEntity request = userRoleEntity.getUserEntity();
+        return userRoleEntity.getUserEntity();
 
-        return Optional.ofNullable(request)
+/*        return Optional.ofNullable(request)
                 .map(it -> {
                     return UserEntity.builder()
                             .loginId(request.getLoginId())
@@ -98,6 +98,6 @@ public class UserRoleConverter {
                             .password(request.getPassword())
                             .build();
                 })
-                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserEntity Null"));
+                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserEntity Null"));*/
     }
 }

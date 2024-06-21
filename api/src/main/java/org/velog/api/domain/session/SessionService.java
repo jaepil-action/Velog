@@ -35,4 +35,18 @@ public class SessionService {
             throw new ApiException(ErrorCode.NULL_POINT);
         }
     }
+
+    public void validateRoleAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if(session.getAttribute(LOGIN_ADMIN) == null){
+            throw new ApiException(ErrorCode.BAD_REQUEST, "관리자 권한이 없습니다");
+        }
+    }
+
+    public void validateRoleUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(LOGIN_USER) == null) {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "관리자 권한이 없습니다");
+        }
+    }
 }
