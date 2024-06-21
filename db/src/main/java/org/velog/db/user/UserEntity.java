@@ -1,14 +1,13 @@
 package org.velog.db.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.velog.db.BaseEntity;
+import org.velog.db.blog.BlogEntity;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +19,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SuperBuilder
 public class UserEntity extends BaseEntity {
+
+    @OneToOne(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private BlogEntity blogEntity;
 
     @Column(length = 50, nullable = false, unique = true)
     private String loginId;

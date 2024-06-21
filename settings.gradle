@@ -3,4 +3,5 @@ include 'api'
 include 'api'
 include 'db'
 include 'view'
+include 'service'
 
