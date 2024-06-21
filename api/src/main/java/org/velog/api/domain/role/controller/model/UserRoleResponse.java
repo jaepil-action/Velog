@@ -21,13 +21,7 @@ public class UserRoleResponse {
     private Long userRoleId;
 
     @NotBlank
-    private Long userId;
-
-    @NotBlank
     private String userEmail;
-
-    @NotBlank
-    private Long adminId;
 
     @NotBlank
     private Admin admin;

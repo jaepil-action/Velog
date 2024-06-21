@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode implements ErrorCodeIfs{
 
     OK(200, 200, "성공"),
+    CREATED(201, 201, "생성완료"),
+    FOUND(302, 302, "Welcome"),
     BAD_REQUEST(400, 400, "잘못된 요청"),
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), 500, "서버에러"),
     NULL_POINT(HttpStatus.INTERNAL_SERVER_ERROR.value(), 512, "Null Point Exp");

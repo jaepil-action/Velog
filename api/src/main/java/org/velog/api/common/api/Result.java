@@ -25,6 +25,22 @@ public class Result {
                 .build();
     }
 
+    public static Result CREATED(){
+        return Result.builder()
+                .resultCode(ErrorCode.CREATED.getErrorCode())
+                .resultMessage(ErrorCode.CREATED.getDescription())
+                .resultDescription("성공")
+                .build();
+    }
+
+    public static Result FOUND(){
+        return Result.builder()
+                .resultCode(ErrorCode.FOUND.getErrorCode())
+                .resultMessage(ErrorCode.FOUND.getDescription())
+                .resultDescription("성공")
+                .build();
+    }
+
     public static Result ERROR(ErrorCodeIfs errorCodeIfs){
         return Result.builder()
                 .resultCode(errorCodeIfs.getErrorCode())

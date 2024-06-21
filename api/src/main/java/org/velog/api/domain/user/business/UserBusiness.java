@@ -70,6 +70,24 @@ public class UserBusiness {
         sessionService.deleteSession(session);
     }
 
+    public DuplicationResponse checkDuplicateEmail(String email){
+        // 중복이라면
+        if(userService.checkDuplicationEmail(email)){
+            return new DuplicationResponse("중복");
+        }else{
+            return new DuplicationResponse("중복X");
+        }
+    }
+
+    public DuplicationResponse checkDuplicateLoginId(String loginId){
+        // 중복이라면
+        if(userService.checkDuplicationLoginId(loginId)){
+            return new DuplicationResponse("중복");
+        }else{
+            return new DuplicationResponse("중복X");
+        }
+    }
+
     private static Long getUserId(HttpSession session) {
         return (Long) session.getAttribute(LOGIN_USER_ID);
     }
