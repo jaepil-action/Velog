@@ -50,8 +50,6 @@ public class UserRoleConverter {
         RoleEntity roleEntity = roleRepository.findById(request.getRoleId())
                 .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest Null"));
 
-        //UserEntity userEntity = userRepository.findById(request.getUserId())
-
         userRoleEntity.editUserRole(roleEntity);
 
         return userRoleEntity;
@@ -62,10 +60,9 @@ public class UserRoleConverter {
                 .map(it -> {
                     return UserRoleResponse.builder()
                             .userRoleId(userRoleEntity.getId())
-                            .userId(userRoleEntity.getUserEntity().getId())
                             .userEmail(userRoleEntity.getUserEntity().getEmail())
-                            .adminId(userRoleEntity.getRoleEntity().getId())
                             .admin(userRoleEntity.getRoleEntity().getAdmin())
+                            .authorizationDate(userRoleEntity.getAuthorizationDate())
                             .build();
                 })
                 .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleEntity Null"));
@@ -86,18 +83,6 @@ public class UserRoleConverter {
     }
 
     public UserEntity toUserEntity(UserRoleEntity userRoleEntity) {
-
         return userRoleEntity.getUserEntity();
-
-/*        return Optional.ofNullable(request)
-                .map(it -> {
-                    return UserEntity.builder()
-                            .loginId(request.getLoginId())
-                            .name(request.getName())
-                            .email(request.getEmail())
-                            .password(request.getPassword())
-                            .build();
-                })
-                .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserEntity Null"));*/
     }
 }

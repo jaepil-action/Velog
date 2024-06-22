@@ -26,8 +26,10 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
 
     public UserEntity register(UserEntity userEntity){
+
         return Optional.ofNullable(userEntity)
                 .map(it -> {
+                    checkDuplicationLoginIdAndEmail(userEntity.getLoginId(), userEntity.getEmail());
                     userEntity.setRegistrationDate();
                     return userRepository.save(userEntity);
                 })
@@ -64,6 +66,36 @@ public class UserService {
         }else{
             return false;
         }
+    }
+
+    public void checkDuplicationLoginIdAndEmail(
+        String loginId,
+        String email
+    ){
+
+        if(userRepository.findFirstByEmail(email).isPresent() &&
+                userRepository.findFirstByLoginId(loginId).isPresent()){
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Email and LonginId is already taken");
+        }
+
+        if(userRepository.findFirstByLoginId(loginId).isPresent()){
+            throw new ApiException(ErrorCode.BAD_REQUEST, "LogInId is already taken");
+        }
+
+        if(userRepository.findFirstByEmail(email).isPresent()){
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Email is already taken");
+        }
+    }
+
+    public boolean checkDuplicationEmail(
+            String email
+    ){
+        return userRepository.findFirstByEmail(email).isPresent();
+    }
+    public boolean checkDuplicationLoginId(
+            String loginId
+    ){
+        return userRepository.findFirstByLoginId(loginId).isPresent();
     }
 
     public UserEntity login(

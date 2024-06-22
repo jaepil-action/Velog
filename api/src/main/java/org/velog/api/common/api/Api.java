@@ -19,6 +19,20 @@ public class Api<T> {
         return api;
     }
 
+    public static <T> Api<T> CREATED(T data){
+        Api<T> api = new Api<>();
+        api.result = Result.CREATED();
+        api.body = data;
+        return api;
+    }
+
+    public static <T> Api<T> FOUND(T data){
+        Api<T> api = new Api<>();
+        api.result = Result.FOUND();
+        api.body = data;
+        return api;
+    }
+
     public static Api<Object> ERROR(ErrorCodeIfs errorCodeIfs){
         Api<Object> api = new Api<Object>();
         api.result = Result.ERROR(errorCodeIfs);
