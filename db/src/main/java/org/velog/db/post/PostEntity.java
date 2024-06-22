@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.velog.db.blog.BlogEntity;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 
@@ -25,6 +26,10 @@ public class PostEntity {
     @Column(name = "post_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blog_id")
+    private BlogEntity blogEntity;
+
     @Column(length = 255, nullable = false)
     private String title;;
 
@@ -33,6 +38,7 @@ public class PostEntity {
 
     private LocalDateTime createAt;
 
-    @OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL)
-    private List<SeriesEntity> seriesEntity = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "series_id")
+    private SeriesEntity seriesEntity;
 }

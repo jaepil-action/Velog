@@ -7,6 +7,9 @@ import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "blogs")
 @Data
@@ -29,17 +32,14 @@ public class BlogEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id")
-    private TagEntity tagEntity;
+    @OneToMany(mappedBy = "blogEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TagEntity> tagEntities = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private PostEntity postEntity;
+    @OneToMany(mappedBy = "blogEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostEntity> postEntities = new ArrayList<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "series_id")
-    private SeriesEntity seriesEntity;
+    @OneToMany(mappedBy = "blogEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SeriesEntity> seriesEntities = new ArrayList<>();
 
     @Column(length = 255)
     private String introduction;

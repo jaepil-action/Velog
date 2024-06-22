@@ -15,7 +15,7 @@ import org.velog.api.domain.user.controller.model.EmailDto;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-@Tag(name = "UserController", description = "사용자 서비스 컨트롤러")
+@Tag(name = "UserApiController", description = "사용자 Api 서비스 컨트롤러")
 public class UserApiController {
 
     private final UserBusiness userBusiness;
