@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "series")
@@ -20,10 +24,13 @@ public class SeriesEntity {
     @Column(name = "series_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blog_id")
+    private BlogEntity blogEntity;
+
     @Column(length = 255, nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private PostEntity postEntity;
+    @OneToMany(mappedBy = "seriesEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostEntity> postEntities = new ArrayList<>();
 }

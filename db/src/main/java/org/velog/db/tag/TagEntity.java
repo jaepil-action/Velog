@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.velog.db.blog.BlogEntity;
 
 @Entity
 @Table(name = "tags")
@@ -18,6 +19,10 @@ public class TagEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blog_id")
+    private BlogEntity blogEntity;
 
     @Column(length = 255, nullable = false)
     private String tag;
