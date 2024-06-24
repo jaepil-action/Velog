@@ -1,5 +1,6 @@
 package org.velog.db.series;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class SeriesEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_id")
+    @JsonIgnore
     private BlogEntity blogEntity;
 
     @Column(length = 255, nullable = false)

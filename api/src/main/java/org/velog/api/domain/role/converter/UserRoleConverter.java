@@ -62,7 +62,7 @@ public class UserRoleConverter {
                             .userRoleId(userRoleEntity.getId())
                             .userEmail(userRoleEntity.getUserEntity().getEmail())
                             .admin(userRoleEntity.getRoleEntity().getAdmin())
-                            .authorizationDate(userRoleEntity.getAuthorizationDate())
+                            .authorizationDate(userRoleEntity.getRegistrationDate())
                             .build();
                 })
                 .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleEntity Null"));

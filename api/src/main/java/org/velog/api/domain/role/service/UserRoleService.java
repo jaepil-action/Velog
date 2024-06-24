@@ -8,9 +8,7 @@ import org.velog.db.role.RoleEntity;
 import org.velog.db.role.RoleRepository;
 import org.velog.db.role.UserRoleEntity;
 import org.velog.db.role.UserRoleRepository;
-import org.velog.db.user.UserEntity;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -32,7 +30,7 @@ public class UserRoleService {
     public UserRoleEntity userRoleRegister(UserRoleEntity userRoleEntity) {
         return Optional.ofNullable(userRoleEntity)
                 .map(it -> {
-                    userRoleEntity.setAuthorizationDate();
+                    userRoleEntity.setRegistrationDate();
                     return userRoleRepository.save(userRoleEntity);
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "RoleEntity null"));
