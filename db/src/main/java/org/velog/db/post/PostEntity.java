@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"blogEntity", "seriesEntity"})
+@ToString(exclude = {"blogEntity", "seriesEntity", "tagEntity"})
 public class PostEntity extends BaseEntity {
 
     @Id
@@ -34,9 +34,13 @@ public class PostEntity extends BaseEntity {
     private BlogEntity blogEntity;
 
     @Column(length = 255, nullable = false)
-    private String title;;
+    private String title;
 
-    @Column(length = 255, nullable = false)
+    @Lob
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
+
+    @Column(length = 255)
     private String excerpt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,8 +48,32 @@ public class PostEntity extends BaseEntity {
     @JsonIgnore
     private SeriesEntity seriesEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tag_id")
+    @JsonIgnore
+    private TagEntity tagEntity;
+
     private Integer likeCount;
     public void setRegistrationDate(){
         super.setRegistrationDate(LocalDateTime.now());
+    }
+
+    public void addSeriesEntity(SeriesEntity seriesEntity){
+        this.seriesEntity = seriesEntity;
+        seriesEntity.getPostEntityList().add(this);
+    }
+
+    public void addTagEntity(TagEntity tagEntity){
+        this.tagEntity = tagEntity;
+        tagEntity.getPostEntity().add(this);
+    }
+
+    public void addBlogEntity(BlogEntity blogEntity){
+        this.blogEntity = blogEntity;
+        blogEntity.getPostEntityList().add(this);
+    }
+
+    public void setLikeCountZero(){
+        likeCount = 0;
     }
 }

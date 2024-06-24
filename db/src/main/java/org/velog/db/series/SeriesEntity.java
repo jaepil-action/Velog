@@ -3,20 +3,24 @@ package org.velog.db.series;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "series")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @ToString(exclude = {"blogEntity"})
-public class SeriesEntity {
+public class SeriesEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +37,10 @@ public class SeriesEntity {
 
     @OneToMany(mappedBy = "seriesEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostEntity> postEntityList = new ArrayList<>();
+
+    public void setRegistrationDate(){
+        super.setRegistrationDate(LocalDateTime.now());
+    }
 
     public void addBlogEntity(BlogEntity blogEntity){
         this.blogEntity = blogEntity;

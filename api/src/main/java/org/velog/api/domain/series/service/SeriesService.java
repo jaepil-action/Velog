@@ -20,9 +20,17 @@ public class SeriesService {
             SeriesEntity seriesEntity
     ){
         return Optional.ofNullable(seriesEntity)
-                .map(seriesRepository::save)
+                .map(it -> {
+                    it.setRegistrationDate();
+                    return seriesRepository.save(it);
+                })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
-
+    public SeriesEntity getSeriesWithThrow(
+            Long seriesId
+    ){
+        return seriesRepository.findById(seriesId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+    }
 }
