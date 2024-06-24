@@ -1,5 +1,6 @@
 package org.velog.db.post;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +29,7 @@ public class PostEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_id")
+    @JsonIgnore
     private BlogEntity blogEntity;
 
     @Column(length = 255, nullable = false)
@@ -40,5 +42,8 @@ public class PostEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "series_id")
+    @JsonIgnore
     private SeriesEntity seriesEntity;
+
+    private Integer likeCount;
 }

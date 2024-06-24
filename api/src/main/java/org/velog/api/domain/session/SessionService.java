@@ -43,10 +43,11 @@ public class SessionService {
         }
     }
 
-    public void validateRoleUser(HttpServletRequest request) {
+    public UserEntity validateRoleUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session.getAttribute(LOGIN_USER) == null) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, "관리자 권한이 없습니다");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "일반 사용자 궎한이 없습니다");
         }
+        return (UserEntity) session.getAttribute(LOGIN_USER);
     }
 }

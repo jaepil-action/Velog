@@ -11,13 +11,12 @@ import org.velog.api.domain.role.business.UserRoleBusiness;
 import org.velog.api.domain.role.controller.model.RoleDto;
 import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
 import org.velog.api.domain.role.controller.model.UserRoleResponse;
-import org.velog.api.domain.role.service.UserRoleService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admins")
 @Tag(name = "AdminController", description = "어드민 서비스 컨트롤롤러")
-public class UserRoleController {
+public class UserRoleApiController {
 
     private final UserRoleBusiness userRoleBusiness;
 

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
+
 @Data
 @SuperBuilder
 @MappedSuperclass
@@ -13,7 +15,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private LocalDateTime registrationDate;
 }

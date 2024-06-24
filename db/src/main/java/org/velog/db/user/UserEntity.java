@@ -20,6 +20,11 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class UserEntity extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
+
     @OneToOne(mappedBy = "userEntity", fetch = FetchType.LAZY)
     private BlogEntity blogEntity;
 
@@ -35,12 +40,11 @@ public class UserEntity extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String email;
 
-    private LocalDateTime registrationDate;
 
     public void changeEmail(String email){
         this.email = email;
     }
     public void setRegistrationDate(){
-        this.registrationDate = LocalDateTime.now();
+        super.setRegistrationDate(LocalDateTime.now());
     }
 }
