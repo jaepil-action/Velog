@@ -2,9 +2,9 @@ package org.velog.api.domain.blog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.velog.api.common.error.BlogErrorCode;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
-import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.blog.BlogEntityRepository;
 
@@ -22,16 +22,24 @@ public class BlogService {
     ){
         return Optional.ofNullable(request)
                 .map(it -> {
-                    request.setBlogTitle(request.getBlogTitle());
-                    request.setRegistrationDate();
+                    request.addBlogTitle(request.getBlogTitle());
+                    request.addRegistrationDate();
                     return blogEntityRepository.save(request);
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
-    public List<BlogEntity> getBlogByLoginIdWithThrow(
+    public BlogEntity getBlogByLoginIdWithThrow(
             String loginId
     ){
-        return blogEntityRepository.findAllByUserEntity_LoginId(loginId);
+        return blogEntityRepository.findFirstByUserEntity_LoginId(loginId)
+                .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
+    }
+
+    public BlogEntity getBlogByUserIdWithThrow(
+            Long userId
+    ){
+        return blogEntityRepository.findFirstByUserEntity_Id(userId)
+                .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
     }
 }

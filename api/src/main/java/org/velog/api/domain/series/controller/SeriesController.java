@@ -1,4 +1,5 @@
-package org.velog.api.domain.blog.controller;
+package org.velog.api.domain.series.controller;
+
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,25 +13,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.velog.api.common.api.Api;
-import org.velog.api.domain.blog.business.BlogBusiness;
-import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
-import org.velog.api.domain.blog.controller.model.BlogResponse;
+import org.velog.api.domain.series.business.SeriesBusiness;
+import org.velog.api.domain.series.controller.model.SeriesRegisterRequest;
+import org.velog.api.domain.series.controller.model.SeriesResponse;
 
 @RestController
-@RequestMapping("/api/blogs")
+@RequestMapping("/api/series")
 @RequiredArgsConstructor
-@Tag(name = "BlogApiController", description = "블로그 Api 서비스 컨트롤러")
-public class BoardApiController {
+@Tag(name = "SeriesApiController", description = "시리즈 Api 서비스 컨트롤러")
+public class SeriesController {
 
-    private final BlogBusiness blogBusiness;
+    private final SeriesBusiness seriesBusiness;
 
-    @Operation(summary = "블로그 생성 API", description = "로그인한 사용자 블로그 생성")
+    @Operation(summary = "시리즈 생성 API", description = "사용자블로그의 시리즈 생성")
     @PostMapping("/create")
-    public ResponseEntity<Api<BlogResponse>> createBlog(
+    public ResponseEntity<Api<SeriesResponse>> createSeries(
             HttpServletRequest request,
-            @Valid @RequestBody BlogRegisterRequest blogRegisterRequest
+            @Valid @RequestBody SeriesRegisterRequest seriesRegisterRequest
     ){
-        BlogResponse response = blogBusiness.register(blogRegisterRequest, request);
+        SeriesResponse response = seriesBusiness.register(seriesRegisterRequest, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
     }
 }

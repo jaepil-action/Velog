@@ -2,10 +2,9 @@ package org.velog.db.post;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
@@ -17,10 +16,12 @@ import java.util.List;
 @Entity
 @Table(name = "posts")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class PostEntity {
+@SuperBuilder
+@ToString(exclude = {"blogEntity", "seriesEntity"})
+public class PostEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +39,13 @@ public class PostEntity {
     @Column(length = 255, nullable = false)
     private String excerpt;
 
-    private LocalDateTime createAt;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "series_id")
     @JsonIgnore
     private SeriesEntity seriesEntity;
 
     private Integer likeCount;
+    public void setRegistrationDate(){
+        super.setRegistrationDate(LocalDateTime.now());
+    }
 }

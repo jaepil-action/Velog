@@ -2,10 +2,7 @@ package org.velog.db.tag;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.velog.db.blog.BlogEntity;
 
 @Entity
@@ -14,6 +11,7 @@ import org.velog.db.blog.BlogEntity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"blogEntity"})
 public class TagEntity {
 
     @Id
