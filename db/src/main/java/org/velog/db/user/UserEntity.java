@@ -1,10 +1,7 @@
 package org.velog.db.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;

@@ -2,10 +2,7 @@ package org.velog.db.series;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
 
@@ -18,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = {"blogEntity"})
 public class SeriesEntity {
 
     @Id
@@ -34,5 +32,10 @@ public class SeriesEntity {
     private String title;
 
     @OneToMany(mappedBy = "seriesEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostEntity> postEntities = new ArrayList<>();
+    private List<PostEntity> postEntityList = new ArrayList<>();
+
+    public void addBlogEntity(BlogEntity blogEntity){
+        this.blogEntity = blogEntity;
+        blogEntity.getSeriesEntityList().add(this);
+    }
 }

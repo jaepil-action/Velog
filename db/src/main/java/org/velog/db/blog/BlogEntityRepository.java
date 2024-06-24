@@ -6,5 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BlogEntityRepository extends JpaRepository<BlogEntity, Long> {
-    List<BlogEntity> findAllByUserEntity_LoginId(String loginId);
+    Optional<BlogEntity> findFirstByUserEntity_LoginId(String loginId);
+
+    Optional<BlogEntity> findFirstByUserEntity_Id(Long userId);
 }

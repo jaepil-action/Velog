@@ -2,12 +2,10 @@ package org.velog.api.domain.blog.converter;
 
 import org.velog.api.common.annotation.Converter;
 import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
-import org.velog.api.domain.blog.controller.model.BlogRegisterWithUserRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.UserEntity;
 
-import java.util.Optional;
 
 @Converter
 public class BlogConverter {
@@ -16,11 +14,13 @@ public class BlogConverter {
             BlogRegisterRequest request,
             UserEntity userEntity
     ){
-        return BlogEntity.builder()
-                .userEntity(userEntity)
+        BlogEntity blogEntity = BlogEntity.builder()
                 .blogTitle(request.getBlogTitle())
                 .introduction(request.getIntroduction())
                 .build();
+        blogEntity.addUserEntity(userEntity);
+
+        return blogEntity;
     }
 
     public BlogResponse toResponse(

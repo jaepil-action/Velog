@@ -20,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString(exclude = {"userEntity"})
 /***
  * 1. 게시글 CRUD
  * 2. /도메인/@login_id 특정 유저의 블로그 상세페이지
@@ -38,7 +39,7 @@ public class BlogEntity extends BaseEntity {
     @Column(length = 255)
     private String introduction;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
@@ -51,13 +52,16 @@ public class BlogEntity extends BaseEntity {
     @OneToMany(mappedBy = "blogEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SeriesEntity> seriesEntityList = new ArrayList<>();
 
+    public void addUserEntity(UserEntity userEntity){
+        this.userEntity = userEntity;
+        userEntity.setBlogEntity(this); // TODO setter 사용
+    }
 
-
-    public void setRegistrationDate(){
+    public void addRegistrationDate(){
         super.setRegistrationDate(LocalDateTime.now());
     }
 
-    public void setBlogTitle(String title){
+    public void addBlogTitle(String title){
         if(title.isBlank()){
             this.blogTitle = "@" + userEntity.getLoginId();
         }else{
