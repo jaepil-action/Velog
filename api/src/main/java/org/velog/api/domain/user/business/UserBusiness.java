@@ -20,7 +20,6 @@ import static org.velog.api.domain.session.SessionService.LOGIN_USER_ID;
 
 @Business
 @RequiredArgsConstructor
-@Transactional
 public class UserBusiness {
 
     private final UserService userService;
@@ -39,7 +38,6 @@ public class UserBusiness {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "request Null"));
     }
 
-    @Transactional(readOnly = true)
     public UserResponse login(UserLoginRequest loginRequest, HttpServletRequest req){
 
         UserEntity userEntity = userService.login(loginRequest.getLoginId(), loginRequest.getPassword());

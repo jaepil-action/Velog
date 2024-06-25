@@ -20,8 +20,7 @@ public class UserRoleApiController {
 
     private final UserRoleBusiness userRoleBusiness;
 
-    @Operation(summary = "어드민 종류 등록 API",
-            description = "ROLE_USER / ROLE_ADMIN 등록")
+    @Operation(summary = "어드민 종류 등록 API", description = "ROLE_USER / ROLE_ADMIN 등록")
     @PostMapping("/role")
     public Api<RoleDto> registerAdmin(
         @Valid
@@ -32,8 +31,7 @@ public class UserRoleApiController {
         return Api.OK(roleDto);
     }
 
-    @Operation(summary = "어드민 권한 부여 API",
-            description = "관리자만 권한 부여 가능")
+    @Operation(summary = "어드민 권한 부여 API", description = "관리자만 권한 부여 가능")
     @PutMapping("edit")
     public Api<UserRoleResponse> registerUserRole(
             @Valid

@@ -25,7 +25,6 @@ import java.util.Optional;
 import static org.velog.api.domain.session.SessionService.LOGIN_ADMIN;
 
 @Business
-@Transactional
 @RequiredArgsConstructor
 public class UserRoleBusiness {
 

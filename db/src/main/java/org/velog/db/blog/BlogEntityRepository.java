@@ -9,4 +9,6 @@ public interface BlogEntityRepository extends JpaRepository<BlogEntity, Long> {
     Optional<BlogEntity> findFirstByUserEntity_LoginId(String loginId);
 
     Optional<BlogEntity> findFirstByUserEntity_Id(Long userId);
+
+    List<BlogEntity> findAllByUserEntity_Id(Long userId);
 }

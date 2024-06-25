@@ -2,6 +2,7 @@ package org.velog.api.domain.blog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.BlogErrorCode;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BlogService {
 
     private final BlogEntityRepository blogEntityRepository;
@@ -41,5 +43,11 @@ public class BlogService {
     ){
         return blogEntityRepository.findFirstByUserEntity_Id(userId)
                 .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
+    }
+
+    public Optional<BlogEntity> getBlogByUserId(
+            Long userId
+    ){
+        return blogEntityRepository.findFirstByUserEntity_Id(userId);
     }
 }

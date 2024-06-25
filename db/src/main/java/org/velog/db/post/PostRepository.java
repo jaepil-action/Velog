@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
+
+
 }
