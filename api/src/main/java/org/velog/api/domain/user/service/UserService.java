@@ -3,10 +3,12 @@ package org.velog.api.domain.user.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.error.UserErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.user.controller.model.UserEditRequest;
+import org.velog.db.post.PostEntity;
 import org.velog.db.role.Admin;
 import org.velog.db.role.RoleEntity;
 import org.velog.db.role.UserRoleEntity;
@@ -20,6 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -121,5 +124,9 @@ public class UserService {
         return userRepository.findFirstByIdOrderByIdDesc(
                 userId
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
+    }
+
+    public Optional<UserEntity> getUserWith(Long userId){
+        return userRepository.findById(userId);
     }
 }

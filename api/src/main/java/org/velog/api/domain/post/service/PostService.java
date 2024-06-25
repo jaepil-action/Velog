@@ -2,18 +2,26 @@ package org.velog.api.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.velog.api.common.error.ErrorCode;
+import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.blog.service.BlogService;
 import org.velog.api.domain.post.controller.model.PostRegisterRequest;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.series.service.SeriesService;
 import org.velog.api.domain.tag.service.TagService;
 import org.velog.db.blog.BlogEntity;
+import org.velog.db.blog.BlogEntityRepository;
 import org.velog.db.post.PostEntity;
 import org.velog.db.post.PostRepository;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PostService {
 
@@ -56,9 +64,18 @@ public class PostService {
                 postRegisterRequest
         );
 
-        postEntity.setLikeCountZero();
         postEntity.setRegistrationDate();
 
         return postRepository.save(postEntity);
+    }
+
+    public PostEntity getPostWithThrow(Long postId){
+        return postRepository.findById(
+                postId
+        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "post가 존재 하지 않습니다"));
+    }
+
+    public Optional<PostEntity> getPostWith(Long postId){
+        return postRepository.findById(postId);
     }
 }

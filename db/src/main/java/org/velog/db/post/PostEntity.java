@@ -53,7 +53,6 @@ public class PostEntity extends BaseEntity {
     @JsonIgnore
     private TagEntity tagEntity;
 
-    private Integer likeCount;
     public void setRegistrationDate(){
         super.setRegistrationDate(LocalDateTime.now());
     }
@@ -71,9 +70,5 @@ public class PostEntity extends BaseEntity {
     public void addBlogEntity(BlogEntity blogEntity){
         this.blogEntity = blogEntity;
         blogEntity.getPostEntityList().add(this);
-    }
-
-    public void setLikeCountZero(){
-        likeCount = 0;
     }
 }
