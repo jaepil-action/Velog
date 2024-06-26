@@ -5,12 +5,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
+import org.velog.api.domain.post.controller.model.PostResponse;
 import org.velog.api.domain.role.business.UserRoleBusiness;
 import org.velog.api.domain.role.controller.model.RoleDto;
 import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
 import org.velog.api.domain.role.controller.model.UserRoleResponse;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +37,7 @@ public class UserRoleApiController {
     }
 
     @Operation(summary = "어드민 권한 부여 API", description = "관리자만 권한 부여 가능")
-    @PutMapping("edit")
+    @PutMapping("/edit")
     public Api<UserRoleResponse> registerUserRole(
             @Valid
             @RequestBody Api<UserRoleRegisterRequest> userRoleRegister,
@@ -40,5 +45,24 @@ public class UserRoleApiController {
     ){
         UserRoleResponse userRoleResponse = userRoleBusiness.UserRoleRegister(userRoleRegister.getBody(), request);
         return Api.OK(userRoleResponse);
+    }
+
+    @Operation(summary = "관리자 권한 모든 Post 조회 API", description = "관리자만 조회 가능")
+    @GetMapping("/posts")
+    public ResponseEntity<Api<List<PostResponse>>> findAllPostsByAdmin(
+            HttpServletRequest request
+    ){
+        List<PostResponse> postResponseList = userRoleBusiness.findAllPostsByAdmin(request);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(postResponseList));
+    }
+
+    @Operation(summary = "관리자 권한 Post 삭제 API", description = "삭제할 post_id 입력")
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<Api<String>> deletePostByAdmin(
+            HttpServletRequest request,
+            @PathVariable Long postId
+    ){
+        userRoleBusiness.deletePostByAdmin(request, postId);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK("글 삭제가 완료 되었습니다."));
     }
 }

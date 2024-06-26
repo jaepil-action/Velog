@@ -61,11 +61,11 @@ public class LikeService {
 
 
         LikeEntity likeEntity = LikeEntity.builder()
-                .postEntity(postEntity)
                 .userEntity(userEntity)
                 .build();
 
         likeEntity.addRegistrationDate();
+        likeEntity.addPostEntity(postEntity);
         return likeEntityRepository.save(likeEntity);
     }
 
@@ -115,7 +115,7 @@ public class LikeService {
     }
 
     @Transactional(readOnly = true)
-    public int getLikeCount(
+    public int findLikeCount(
             Long postId
     ){
         List<LikeEntity> likeEntityList = likeEntityRepository.findAllByPostEntity_Id(postId);

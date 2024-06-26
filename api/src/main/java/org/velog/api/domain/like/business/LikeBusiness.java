@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.domain.like.service.LikeService;
 import org.velog.api.domain.session.SessionService;
-import org.velog.db.like.LikeEntity;
 
 @Business
 @RequiredArgsConstructor
@@ -33,6 +32,6 @@ public class LikeBusiness {
     public int getLikeCount(
             Long postId
     ){
-        return likeService.getLikeCount(postId);
+        return likeService.findLikeCount(postId);
     }
 }

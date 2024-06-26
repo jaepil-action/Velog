@@ -11,14 +11,12 @@ import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.series.service.SeriesService;
 import org.velog.api.domain.tag.service.TagService;
 import org.velog.db.blog.BlogEntity;
-import org.velog.db.blog.BlogEntityRepository;
 import org.velog.db.post.PostEntity;
 import org.velog.db.post.PostRepository;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,7 +35,7 @@ public class PostService {
     ){
         BlogEntity blogEntity = blogService.getBlogByUserIdWithThrow(userId);
 
-        // 아무것도 입력을 안했을시 null 반환 -> 시리즈, 태그 생성 후 추후 등록가능
+        // 아무것도 입력을 안했을시 null 반환 -> TODO 시리즈, 태그 생성 후 추후 등록가능
         SeriesEntity seriesEntity = getSeriesEntity(postRegisterRequest);
         TagEntity tagEntity = getTagEntity(postRegisterRequest);
 
@@ -59,8 +57,7 @@ public class PostService {
 
     private TagEntity getTagEntity(PostRegisterRequest postRegisterRequest) {
         TagEntity tagEntity = null;
-        if(postRegisterRequest.getTagId() != null &&
-                !postRegisterRequest.getTagId().isBlank())
+        if(!postRegisterRequest.getTagId().isBlank())
         {
             tagEntity = tagService.getTagWithThrow(
                     Long.parseLong(postRegisterRequest.getTagId()));
@@ -70,8 +67,7 @@ public class PostService {
 
     private SeriesEntity getSeriesEntity(PostRegisterRequest postRegisterRequest) {
         SeriesEntity seriesEntity = null;
-        if(postRegisterRequest.getSeriesId() != null &&
-                !postRegisterRequest.getSeriesId().isBlank())
+        if(!postRegisterRequest.getSeriesId().isBlank())
         {
             seriesEntity = seriesService.getSeriesWithThrow(
                     Long.parseLong(postRegisterRequest.getSeriesId()));
@@ -79,13 +75,20 @@ public class PostService {
         return seriesEntity;
     }
 
+    @Transactional(readOnly = true)
     public PostEntity getPostWithThrow(Long postId){
         return postRepository.findById(
                 postId
-        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "post가 존재 하지 않습니다"));
+        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
     }
 
-    public Optional<PostEntity> getPostWith(Long postId){
-        return postRepository.findById(postId);
+    public void deletePostById(
+            Long postsId
+    ){
+        PostEntity postEntity = getPostWithThrow(postsId);
+        postRepository.delete(postEntity);
     }
+
+    public List<PostEntity> findAllPosts(){ return postRepository.findAll(); }
+
 }
