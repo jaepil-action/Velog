@@ -58,4 +58,13 @@ public class SessionService {
         }
         return (Long) session.getAttribute(LOGIN_USER_ID);
     }
+
+    public String validateRoleUserLoginId(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session.getAttribute(LOGIN_USER) == null) {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "일반 사용자 권한이 없습니다");
+        }
+        UserEntity userEntity = (UserEntity) session.getAttribute(LOGIN_USER);
+        return userEntity.getLoginId();
+    }
 }
