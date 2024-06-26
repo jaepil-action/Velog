@@ -1,5 +1,6 @@
 package org.velog.api.domain.user.controller.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class UserResponse {
 
     private String email;
 
+    private String profileImage;
+
     private LocalDateTime registrationDate;
-
-
 }

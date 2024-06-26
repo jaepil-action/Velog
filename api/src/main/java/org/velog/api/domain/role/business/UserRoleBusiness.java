@@ -1,11 +1,8 @@
 package org.velog.api.domain.role.business;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.annotation.Business;
-import org.velog.api.common.api.Api;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.role.controller.model.RoleDto;
@@ -14,15 +11,9 @@ import org.velog.api.domain.role.controller.model.UserRoleResponse;
 import org.velog.api.domain.role.converter.UserRoleConverter;
 import org.velog.api.domain.role.service.UserRoleService;
 import org.velog.api.domain.session.SessionService;
-import org.velog.api.domain.user.converter.UserConverter;
-import org.velog.api.domain.user.service.UserService;
-import org.velog.db.role.RoleEntity;
-import org.velog.db.role.UserRoleEntity;
 import org.velog.db.user.UserEntity;
 
 import java.util.Optional;
-
-import static org.velog.api.domain.session.SessionService.LOGIN_ADMIN;
 
 @Business
 @RequiredArgsConstructor

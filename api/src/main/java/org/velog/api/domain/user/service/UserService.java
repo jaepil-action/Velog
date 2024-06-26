@@ -1,14 +1,11 @@
 package org.velog.api.domain.user.service;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.error.UserErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.user.controller.model.UserEditRequest;
-import org.velog.db.post.PostEntity;
 import org.velog.db.role.Admin;
 import org.velog.db.role.RoleEntity;
 import org.velog.db.role.UserRoleEntity;
@@ -17,7 +14,6 @@ import org.velog.db.user.UserEntity;
 import org.velog.db.user.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -81,7 +77,7 @@ public class UserService {
             throw new ApiException(ErrorCode.BAD_REQUEST, "Email and LonginId is already taken");
         }
 
-        if(userRepository.findFirstByLoginId(loginId).isPresent()){
+        if(userRepository.findFirstByLoginId(loginId).isPresent()){ //
             throw new ApiException(ErrorCode.BAD_REQUEST, "LogInId is already taken");
         }
 
@@ -98,7 +94,7 @@ public class UserService {
     public boolean checkDuplicationLoginId(
             String loginId
     ){
-        return userRepository.findFirstByLoginId(loginId).isPresent();
+        return userRepository.findFirstByLoginId(loginId).isPresent(); //
     }
 
     public UserEntity login(
@@ -123,6 +119,14 @@ public class UserService {
     ){
         return userRepository.findFirstByIdOrderByIdDesc(
                 userId
+        ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
+    }
+
+    public UserEntity getUserWithThrow(
+            String loginId
+    ){
+        return userRepository.findFirstByLoginId(
+                loginId
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
     }
 

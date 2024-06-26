@@ -37,21 +37,9 @@ public class PostService {
     ){
         BlogEntity blogEntity = blogService.getBlogByUserIdWithThrow(userId);
 
-        SeriesEntity seriesEntity = null;
-        if(postRegisterRequest.getSeriesId() != null &&
-                !postRegisterRequest.getSeriesId().isBlank())
-        {
-            seriesEntity = seriesService.getSeriesWithThrow(
-                    Long.parseLong(postRegisterRequest.getSeriesId()));
-        }
-
-        TagEntity tagEntity = null;
-        if(postRegisterRequest.getTagId() != null &&
-                !postRegisterRequest.getTagId().isBlank())
-        {
-            tagEntity = tagService.getTagWithThrow(
-                    Long.parseLong(postRegisterRequest.getTagId()));
-        }
+        // 아무것도 입력을 안했을시 null 반환 -> 시리즈, 태그 생성 후 추후 등록가능
+        SeriesEntity seriesEntity = getSeriesEntity(postRegisterRequest);
+        TagEntity tagEntity = getTagEntity(postRegisterRequest);
 
         if(postRegisterRequest.getExcerpt().isBlank()){
             postRegisterRequest.setExcerpt(null);
@@ -67,6 +55,28 @@ public class PostService {
         postEntity.setRegistrationDate();
 
         return postRepository.save(postEntity);
+    }
+
+    private TagEntity getTagEntity(PostRegisterRequest postRegisterRequest) {
+        TagEntity tagEntity = null;
+        if(postRegisterRequest.getTagId() != null &&
+                !postRegisterRequest.getTagId().isBlank())
+        {
+            tagEntity = tagService.getTagWithThrow(
+                    Long.parseLong(postRegisterRequest.getTagId()));
+        }
+        return tagEntity;
+    }
+
+    private SeriesEntity getSeriesEntity(PostRegisterRequest postRegisterRequest) {
+        SeriesEntity seriesEntity = null;
+        if(postRegisterRequest.getSeriesId() != null &&
+                !postRegisterRequest.getSeriesId().isBlank())
+        {
+            seriesEntity = seriesService.getSeriesWithThrow(
+                    Long.parseLong(postRegisterRequest.getSeriesId()));
+        }
+        return seriesEntity;
     }
 
     public PostEntity getPostWithThrow(Long postId){
