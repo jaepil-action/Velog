@@ -13,15 +13,12 @@ import org.velog.api.common.api.Api;
 import org.velog.api.domain.post.business.PostBusiness;
 import org.velog.api.domain.post.controller.model.PostRegisterRequest;
 import org.velog.api.domain.post.controller.model.PostResponse;
-import org.velog.api.domain.series.business.SeriesBusiness;
-import org.velog.api.domain.series.controller.model.SeriesRegisterRequest;
-import org.velog.api.domain.series.controller.model.SeriesResponse;
 
 @RestController
 @RequestMapping("/api/posts")
 @RequiredArgsConstructor
 @Tag(name = "PostApiController", description = "Post Api 서비스 컨트롤러")
-public class PostController {
+public class PostApiController {
 
     private final PostBusiness postBusiness;
 

@@ -5,8 +5,11 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
+import org.velog.db.follow.FollowEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -37,6 +40,9 @@ public class UserEntity extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String email;
 
+    // TODO 팔로어 삭제시
+    /*@OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE)
+    private List<FollowEntity> followEntityList = new ArrayList<>();*/
 
     public void changeEmail(String email){
         this.email = email;

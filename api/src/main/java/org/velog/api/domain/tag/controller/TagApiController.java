@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.velog.api.common.api.Api;
-import org.velog.api.domain.series.controller.model.SeriesRegisterRequest;
-import org.velog.api.domain.series.controller.model.SeriesResponse;
 import org.velog.api.domain.tag.business.TagBusiness;
 import org.velog.api.domain.tag.controller.model.TagRegisterRequest;
 import org.velog.api.domain.tag.controller.model.TagResponse;
@@ -22,7 +20,7 @@ import org.velog.api.domain.tag.controller.model.TagResponse;
 @RequestMapping("/api/tags")
 @RequiredArgsConstructor
 @Tag(name = "TagApiController", description = "Tag Api 서비스 컨트롤러")
-public class TagController {
+public class TagApiController {
 
     private final TagBusiness tagBusiness;
 

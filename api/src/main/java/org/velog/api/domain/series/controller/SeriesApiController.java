@@ -21,7 +21,7 @@ import org.velog.api.domain.series.controller.model.SeriesResponse;
 @RequestMapping("/api/series")
 @RequiredArgsConstructor
 @Tag(name = "SeriesApiController", description = "시리즈 Api 서비스 컨트롤러")
-public class SeriesController {
+public class SeriesApiController {
 
     private final SeriesBusiness seriesBusiness;
 

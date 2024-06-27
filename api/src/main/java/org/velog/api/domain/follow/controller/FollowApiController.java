@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Tag(name = "FollowApiController", description = "Follow Api 서비스 컨트롤러")
-public class FollowController {
+public class FollowApiController {
 
     private final FollowBusiness followBusiness;
 
