@@ -50,4 +50,8 @@ public class CommentBusiness {
         UserEntity commentWriter = sessionService.validateRoleUser(request);
         commentService.delete(postId, commentId, commentWriter);
     }
+
+    public void test(){
+
+    }
 }
