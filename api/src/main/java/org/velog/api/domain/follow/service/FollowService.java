@@ -2,6 +2,7 @@ package org.velog.api.domain.follow.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.user.service.UserService;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FollowService {
 
@@ -90,6 +92,7 @@ public class FollowService {
                 .anyMatch(followEntity -> Objects.equals(followEntity.getFollower().getId(), followerUserId));
     }
 
+    @Transactional(readOnly = true)
     public List<UserEntity> getFollowerDetails(
             String loginId
     ){
@@ -101,7 +104,7 @@ public class FollowService {
                 .collect(Collectors.toList());
     }
 
-
+    @Transactional(readOnly = true)
     public int getFollowCount(
             String loginId
     ){

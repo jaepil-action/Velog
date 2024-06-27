@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString(exclude = {"postEntity"})
 @Table(name = "likes", uniqueConstraints = {
         @UniqueConstraint(name = "UK_post_user", columnNames = {"post_id", "user_id"})
 })
@@ -34,10 +35,14 @@ public class LikeEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private UserEntity userEntity;
 
     public void addRegistrationDate(){
         super.setRegistrationDate(LocalDateTime.now());
+    }
+
+    public void addPostEntity(PostEntity postEntity){
+        this.postEntity = postEntity;
+        postEntity.getLikeEntityList().add(this);
     }
 }

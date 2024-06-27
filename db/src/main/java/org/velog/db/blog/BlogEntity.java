@@ -21,12 +21,6 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @ToString(exclude = {"userEntity"})
-/***
- * 1. 게시글 CRUD
- * 2. /도메인/@login_id 특정 유저의 블로그 상세페이지
- * 3. 게시글 좋아요, 작성일 기준으로 정렬
- * 4.
- */
 public class BlogEntity extends BaseEntity {
 
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
