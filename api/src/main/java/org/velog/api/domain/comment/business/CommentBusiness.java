@@ -30,7 +30,7 @@ public class CommentBusiness {
             HttpServletRequest request,
             Long postId,
             CommentRegisterRequest commentRegisterRequest
-    ){
+    ) {
         UserEntity commentWriter = sessionService.validateRoleUser(request);
         PostEntity postEntity = postService.getPostWithThrow(postId);
 
@@ -46,12 +46,8 @@ public class CommentBusiness {
             HttpServletRequest request,
             Long postId,
             Long commentId
-    ){
+    ) {
         UserEntity commentWriter = sessionService.validateRoleUser(request);
         commentService.delete(postId, commentId, commentWriter);
-    }
-
-    public void test(){
-
     }
 }
