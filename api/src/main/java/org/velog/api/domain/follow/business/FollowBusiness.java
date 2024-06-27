@@ -3,18 +3,14 @@ package org.velog.api.domain.follow.business;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
-import org.velog.api.domain.follow.controller.FollowController;
 import org.velog.api.domain.follow.controller.model.FollowResponse;
 import org.velog.api.domain.follow.converter.FollowConverter;
 import org.velog.api.domain.follow.service.FollowService;
 import org.velog.api.domain.session.SessionService;
-import org.velog.api.domain.user.controller.model.UserResponse;
-import org.velog.api.domain.user.converter.UserConverter;
 import org.velog.db.follow.FollowEntity;
 import org.velog.db.user.UserEntity;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Business
 @RequiredArgsConstructor

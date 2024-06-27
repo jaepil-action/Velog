@@ -3,7 +3,6 @@ package org.velog.api.domain.like.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import org.velog.api.domain.like.business.LikeBusiness;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @Tag(name = "LikeApiController", description = "Like Api 서비스 컨트롤러")
-public class LikeController {
+public class LikeApiController {
 
     private final LikeBusiness likeBusiness;
 
