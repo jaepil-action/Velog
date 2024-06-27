@@ -18,4 +18,5 @@ public class PostResponse {
     private String seriesTitle;
 
     private String tagTitle;
+
 }

@@ -26,16 +26,40 @@ public class CommentConverter {
                 .build();
     }
 
+    public CommentEntity toEntity(
+            UserEntity userEntity,
+            PostEntity postEntity,
+            CommentEntity parentComment,
+            CommentRegisterRequest commentRegisterRequest
+    ){
+        CommentEntity commentEntity = CommentEntity.builder()
+                .userEntity(userEntity)
+                .contents(commentRegisterRequest.getContents())
+                .build();
+        commentEntity.addParentComment(parentComment);
+        commentEntity.addPostEntity(postEntity);
+
+        return commentEntity;
+    }
+
     public CommentResponse toResponse(
             CommentEntity commentEntity
     ){
         return Optional.ofNullable(commentEntity)
                 .map(ce -> {
-                    return CommentResponse.builder()
+                    CommentResponse response = CommentResponse.builder()
                             .commentWriter(commentEntity.getUserEntity().getLoginId())
                             .contents(ce.getContents())
                             .writeDateTime(ce.getRegistrationDate())
                             .build();
+
+                    if(commentEntity.getParentComment() != null){
+                        response.setParentCommentId(commentEntity.getParentComment().getId());
+                    }else{
+                        response.setParentCommentId(null);
+                    }
+
+                    return response;
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "CommentEntity Null"));
     }

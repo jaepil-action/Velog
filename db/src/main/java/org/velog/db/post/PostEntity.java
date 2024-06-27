@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
+import org.velog.db.comment.CommentEntity;
 import org.velog.db.follow.FollowEntity;
 import org.velog.db.like.LikeEntity;
 import org.velog.db.series.SeriesEntity;
@@ -55,8 +56,11 @@ public class PostEntity extends BaseEntity {
     @JsonIgnore
     private TagEntity tagEntity;
 
-    @OneToMany(mappedBy = "postEntity", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeEntity> likeEntityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentEntity> commentEntityList = new ArrayList<>();
 
 
     public void setRegistrationDate(){
@@ -76,5 +80,13 @@ public class PostEntity extends BaseEntity {
     public void addBlogEntity(BlogEntity blogEntity){
         this.blogEntity = blogEntity;
         blogEntity.getPostEntityList().add(this);
+    }
+
+    public void changeTagEntity(TagEntity tagEntity){
+        this.tagEntity = tagEntity;
+    }
+
+    public void changeSeriesEntity(SeriesEntity seriesEntity){
+        this.seriesEntity = seriesEntity;
     }
 }

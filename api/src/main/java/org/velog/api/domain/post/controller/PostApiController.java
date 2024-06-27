@@ -13,6 +13,8 @@ import org.velog.api.common.api.Api;
 import org.velog.api.domain.post.business.PostBusiness;
 import org.velog.api.domain.post.controller.model.PostRegisterRequest;
 import org.velog.api.domain.post.controller.model.PostResponse;
+import org.velog.api.domain.post.controller.model.SeriesDto;
+import org.velog.api.domain.post.controller.model.TagDto;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -24,11 +26,42 @@ public class PostApiController {
 
     @Operation(summary = "Post 생성 API", description = "사용자블로그의 Post 생성")
     @PostMapping("/create")
-    public ResponseEntity<Api<PostResponse>> createSeries(
+    public ResponseEntity<Api<PostResponse>> createPost(
             HttpServletRequest request,
             @Valid @RequestBody PostRegisterRequest postRegisterRequest
     ){
-        PostResponse response = postBusiness.register(request, postRegisterRequest);
+        PostResponse response = postBusiness.createPost(request, postRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
+    }
+
+    @Operation(summary = "Post Tag 변경 API", description = "PostId, TagId 입력")
+    @PutMapping("/{postId}/tag")
+    public ResponseEntity<Api<String>> editTag(
+            HttpServletRequest request,
+            @PathVariable Long postId,
+            @Valid @RequestBody TagDto tagDto
+    ){
+        postBusiness.editTag(request, postId, tagDto);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK("Tag 변경 완료 되었습니다."));
+    }
+
+    @Operation(summary = "Post Series 변경 API", description = "PostId, SeriesId 입력")
+    @PutMapping("/{postId}/series")
+    public ResponseEntity<Api<String>> editSeries(
+            HttpServletRequest request,
+            @PathVariable Long postId,
+            @Valid @RequestBody SeriesDto seriesDto
+    ){
+        postBusiness.editSeries(request, postId, seriesDto);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK("Series 변경 완료 되었습니다."));
+    }
+
+    @Operation(summary = "Post 댓글 갯수 조회 API", description = "PostId 입력")
+    @PutMapping("/{postId}/commentCount")
+    public ResponseEntity<Api<Integer>> editSeries(
+            @PathVariable Long postId
+    ){
+        Integer count = postBusiness.commentCountByPost(postId);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(count));
     }
 }

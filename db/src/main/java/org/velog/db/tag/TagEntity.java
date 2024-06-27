@@ -49,6 +49,17 @@ public class TagEntity extends BaseEntity {
         blogEntity.getTagEntityList().add(this);
     }
 
+    public void addTagCount(){
+        ++this.count;
+    }
+    public void minusTagCount(){
+        if(count == 0){
+            count = 0;
+            return;
+        }
+        --this.count;
+    }
+
     public void setCountZero(){
         count = 0;
     }

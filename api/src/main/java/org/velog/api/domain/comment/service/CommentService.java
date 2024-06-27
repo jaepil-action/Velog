@@ -44,4 +44,9 @@ public class CommentService {
 
         commentRepository.delete(commentEntity);
     }
+
+    public CommentEntity findById(Long commentId){
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "CommentEntity Null"));
+    }
 }

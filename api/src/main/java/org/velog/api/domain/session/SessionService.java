@@ -43,6 +43,11 @@ public class SessionService {
         }
     }
 
+    /***
+     * 세션에 저장된 정보를 토대로 엔티티를 반환하는건 JPA 영속성 컨텍스트를 사용하지않고
+     * 그냥 아무의미없는 엔티티를 꺼내 쓰는것과 같다.
+     */
+/*
     public UserEntity validateRoleUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session.getAttribute(LOGIN_USER) == null) {
@@ -50,6 +55,7 @@ public class SessionService {
         }
         return (UserEntity) session.getAttribute(LOGIN_USER);
     }
+*/
 
     public Long validateRoleUserId(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
