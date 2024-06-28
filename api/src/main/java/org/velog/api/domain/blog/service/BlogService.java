@@ -34,7 +34,7 @@ public class BlogService {
     public BlogEntity getBlogByLoginIdWithThrow(
             String loginId
     ){
-        return blogEntityRepository.findFirstByUserEntity_LoginId(loginId)
+        return blogEntityRepository.findBlogByUserLoginId(loginId)
                 .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
     }
 

@@ -35,7 +35,7 @@ public class CommentService {
             Long commentId,
             UserEntity writer
     ){
-        CommentEntity commentEntity = commentRepository.findFirstByPostEntity_IdAndId(postId, commentId)
+        CommentEntity commentEntity = commentRepository.findByCommentAndPost(postId, commentId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "CommentEntity Null"));
 
         if(!Objects.equals(commentEntity.getUserEntity(), writer)){

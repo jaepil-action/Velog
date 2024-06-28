@@ -108,7 +108,7 @@ public class UserService {
             String loginId,
             String password
     ){
-        return userRepository.findFirstByLoginIdAndPasswordOrderByIdDesc(
+        return userRepository.findUserByLoginInfo(
                 loginId,
                 password
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
@@ -117,7 +117,7 @@ public class UserService {
     public UserEntity getUserWithThrow(
             Long userId
     ){
-        return userRepository.findFirstByIdOrderByIdDesc(
+        return userRepository.findUserById(
                 userId
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
     }
