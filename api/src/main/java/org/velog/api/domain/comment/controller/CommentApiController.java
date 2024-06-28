@@ -33,6 +33,18 @@ public class CommentApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(commentResponse));
     }
 
+    @Operation(summary = "대댓글 생성 API", description = "PostID, 부모댓글ID 입력")
+    @PostMapping("/{postId}/{parentId}/comments")
+    public ResponseEntity<Api<CommentResponse>> createChildComments(
+            HttpServletRequest request,
+            @PathVariable Long postId,
+            @PathVariable Long parentId,
+            @Valid @RequestBody CommentRegisterRequest commentRegisterRequest
+    ){
+        CommentResponse commentResponse = commentBusiness.registerCommentByParent(request, postId, parentId, commentRegisterRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(commentResponse));
+    }
+
     @Operation(summary = "댓글 삭제 API", description = "PostID 입력")
     @DeleteMapping("/{postId}/comments/{commentId}")
     public ResponseEntity<Api<String>> deleteComments(

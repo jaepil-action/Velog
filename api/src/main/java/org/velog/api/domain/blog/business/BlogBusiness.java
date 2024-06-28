@@ -11,6 +11,7 @@ import org.velog.api.domain.blog.converter.BlogConverter;
 import org.velog.api.domain.blog.service.BlogService;
 import org.velog.api.domain.session.SessionService;
 import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.service.UserService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.UserEntity;
 
@@ -22,6 +23,7 @@ public class BlogBusiness {
 
     private final BlogService blogService;
     private final BlogConverter blogConverter;
+    private final UserService userService;
     private final SessionService sessionService;
 
     public BlogResponse register(
@@ -29,7 +31,8 @@ public class BlogBusiness {
             HttpServletRequest request
     ){
 
-        UserEntity userEntity = sessionService.validateRoleUser(request);
+        Long userId = sessionService.validateRoleUserId(request);
+        UserEntity userEntity = userService.getUserWithThrow(userId);
         BlogEntity blogEntity = blogConverter.toEntity(blogRegisterRequest, userEntity);
 
         return Optional.ofNullable(blogEntity)

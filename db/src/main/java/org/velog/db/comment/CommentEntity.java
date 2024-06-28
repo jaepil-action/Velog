@@ -42,7 +42,7 @@ public class CommentEntity extends BaseEntity {
     private CommentEntity parentComment;
 
     @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentEntity> childComments = new ArrayList<>();
+    private List<CommentEntity> childCommentList = new ArrayList<>();
 
     @Lob
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -50,5 +50,15 @@ public class CommentEntity extends BaseEntity {
 
     public void addRegistrationDate(){
         super.setRegistrationDate(LocalDateTime.now());
+    }
+
+    public void addParentComment(CommentEntity parentComment){
+        this.parentComment = parentComment;
+        parentComment.getChildCommentList().add(this);
+    }
+
+    public void addPostEntity(PostEntity postEntity){
+        this.postEntity = postEntity;
+        postEntity.getCommentEntityList().add(this);
     }
 }

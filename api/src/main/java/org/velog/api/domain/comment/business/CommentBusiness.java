@@ -11,6 +11,7 @@ import org.velog.api.domain.comment.converter.CommentConverter;
 import org.velog.api.domain.comment.service.CommentService;
 import org.velog.api.domain.post.service.PostService;
 import org.velog.api.domain.session.SessionService;
+import org.velog.api.domain.user.service.UserService;
 import org.velog.db.comment.CommentEntity;
 import org.velog.db.post.PostEntity;
 import org.velog.db.user.UserEntity;
@@ -25,16 +26,39 @@ public class CommentBusiness {
     private final CommentConverter commentConverter;
     private final SessionService sessionService;
     private final PostService postService;
+    private final UserService userService;
 
     public CommentResponse registerCommentByPost(
             HttpServletRequest request,
             Long postId,
             CommentRegisterRequest commentRegisterRequest
     ) {
-        UserEntity commentWriter = sessionService.validateRoleUser(request);
+        Long userId = sessionService.validateRoleUserId(request);
+        UserEntity commentWriter = userService.getUserWithThrow(userId);
+
         PostEntity postEntity = postService.getPostWithThrow(postId);
 
         CommentEntity commentEntity = commentConverter.toEntity(commentWriter, postEntity, commentRegisterRequest);
+
+        return Optional.ofNullable(commentEntity)
+                .map(commentService::register)
+                .map(commentConverter::toResponse)
+                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, "Bad Request"));
+    }
+
+    public CommentResponse registerCommentByParent(
+            HttpServletRequest request,
+            Long postId,
+            Long parentId,
+            CommentRegisterRequest commentRegisterRequest
+    ) {
+        Long userId = sessionService.validateRoleUserId(request);
+        UserEntity commentWriter = userService.getUserWithThrow(userId);
+
+        PostEntity postEntity = postService.getPostWithThrow(postId);
+        CommentEntity parentComment = commentService.findById(parentId);
+
+        CommentEntity commentEntity = commentConverter.toEntity(commentWriter, postEntity, parentComment, commentRegisterRequest);
 
         return Optional.ofNullable(commentEntity)
                 .map(commentService::register)
@@ -46,8 +70,9 @@ public class CommentBusiness {
             HttpServletRequest request,
             Long postId,
             Long commentId
-    ) {
-        UserEntity commentWriter = sessionService.validateRoleUser(request);
+    ){
+        Long userId = sessionService.validateRoleUserId(request);
+        UserEntity commentWriter = userService.getUserWithThrow(userId);
         commentService.delete(postId, commentId, commentWriter);
     }
 }
