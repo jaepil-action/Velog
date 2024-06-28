@@ -77,7 +77,7 @@ public class FollowService {
             Long followerUserId,
             Long followeeUserId
     ){
-        FollowEntity followEntity = followEntityRepository.findFirstByFollower_IdAndFollowee_Id(followerUserId, followeeUserId)
+        FollowEntity followEntity = followEntityRepository.findByFollowerAndFollowee(followerUserId, followeeUserId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "FollowEntity Null"));
 
         followEntityRepository.delete(followEntity);
