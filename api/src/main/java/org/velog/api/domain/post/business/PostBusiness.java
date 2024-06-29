@@ -18,6 +18,15 @@ import java.util.Optional;
 
 @Business
 @RequiredArgsConstructor
+/***
+ * 요구사항
+ * - 임시글 작성
+ * - 임시글 조회,삭제,수정 가능
+ * - 공개 일때 이미지 등록가능
+ * - 공개 일때 글의 제목,내용 일부 보여짐
+ * - 공개 일때 시리즈 추가 가능
+ * - 비공개 일때 비공개 표시
+ */
 public class PostBusiness {
 
     private final PostService postService;

@@ -6,6 +6,7 @@ import org.velog.api.domain.post.controller.model.PostRegisterRequest;
 import org.velog.api.domain.post.controller.model.PostResponse;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
+import org.velog.db.post.enums.PostStatus;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 
@@ -19,6 +20,7 @@ public class PostConverter {
             PostRegisterRequest postRegisterRequest
     ){
         PostEntity postEntity = PostEntity.builder()
+                .postStatus(postRegisterRequest.getPostStatus())
                 .title(postRegisterRequest.getTitle())
                 .content(postRegisterRequest.getContent())
                 .excerpt(postRegisterRequest.getExcerpt())
@@ -40,6 +42,7 @@ public class PostConverter {
             PostEntity postEntity
     ){
         PostResponse postResponse = PostResponse.builder()
+                .postStatus(postEntity.getPostStatus())
                 .title(postEntity.getTitle())
                 .content(postEntity.getContent())
                 .excerpt(postEntity.getExcerpt())

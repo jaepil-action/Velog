@@ -15,10 +15,12 @@ import org.velog.api.domain.tag.service.TagService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
 import org.velog.db.post.PostRepository;
+import org.velog.db.post.enums.PostStatus;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,10 +55,15 @@ public class PostService {
                 seriesEntity,
                 postRegisterRequest
         );
-
         postEntity.setRegistrationDate();
 
-        return postRepository.save(postEntity);
+        if (Objects.equals(postEntity.getPostStatus(), PostStatus.TEMPORARY) &&
+            postEntity.getSeriesEntity() != null)
+        {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "임시글에 시리즈를 추가 할 수 없습니다.");
+        }
+
+            return postRepository.save(postEntity);
     }
 
     private TagEntity getTagEntity(PostRegisterRequest postRegisterRequest) {
@@ -125,9 +132,13 @@ public class PostService {
         PostEntity postEntity = getPostWithThrow(postId);
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
 
-        if(!Objects.equals(userEntity.getId(), userId)){
-            throw new ApiException(ErrorCode.BAD_REQUEST, "자신의 Post가 아닙니다");
+        if(!Objects.equals(userEntity.getId(), userId) ||
+                Objects.equals(postEntity.getPostStatus(), PostStatus.TEMPORARY))
+        {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Post 수정 권한이 없습니다.");
         }
+
+
 
         if(seriesDto.getSeriesId() != null){
             SeriesEntity editSeries = seriesService.getSeriesWithThrow(seriesDto.getSeriesId());

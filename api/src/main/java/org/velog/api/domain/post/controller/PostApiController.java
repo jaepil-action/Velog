@@ -2,6 +2,7 @@ package org.velog.api.domain.post.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -49,6 +50,7 @@ public class PostApiController {
     @PutMapping("/{postId}/series")
     public ResponseEntity<Api<String>> editSeries(
             HttpServletRequest request,
+            @Parameter(description = "시리즈 변경할 Post ID", required = true, example = "1")
             @PathVariable Long postId,
             @Valid @RequestBody SeriesDto seriesDto
     ){
@@ -59,6 +61,7 @@ public class PostApiController {
     @Operation(summary = "Post 댓글 갯수 조회 API", description = "PostId 입력")
     @PutMapping("/{postId}/commentCount")
     public ResponseEntity<Api<Integer>> editSeries(
+            @Parameter(description = "댓글 갯수 해당 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
         Integer count = postBusiness.commentCountByPost(postId);

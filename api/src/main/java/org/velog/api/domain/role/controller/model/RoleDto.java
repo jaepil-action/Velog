@@ -18,6 +18,6 @@ public class RoleDto {
 
     @Enumerated(value = EnumType.STRING)
     @NotBlank
-    @Schema(description = "Role type", example = "ROLE_USER")
+    @Schema(description = "관리자만 접근 가능", example = "ROLE_USER")
     private Admin admin;
 }

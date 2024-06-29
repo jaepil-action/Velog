@@ -9,6 +9,7 @@ import org.velog.db.blog.BlogEntity;
 import org.velog.db.comment.CommentEntity;
 import org.velog.db.follow.FollowEntity;
 import org.velog.db.like.LikeEntity;
+import org.velog.db.post.enums.PostStatus;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 
@@ -35,6 +36,9 @@ public class PostEntity extends BaseEntity {
     @JoinColumn(name = "blog_id")
     @JsonIgnore
     private BlogEntity blogEntity;
+
+    @Enumerated(EnumType.STRING)
+    private PostStatus postStatus;
 
     @Column(length = 255, nullable = false)
     private String title;

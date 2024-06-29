@@ -1,6 +1,7 @@
 package org.velog.api.domain.comment.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ public class CommentApiController {
     @PostMapping("/{postId}/comments")
     public ResponseEntity<Api<CommentResponse>> createComments(
             HttpServletRequest request,
+            @Parameter(description = "댓글을 입력할 Post ID", required = true, example = "1")
             @PathVariable Long postId,
             @Valid @RequestBody CommentRegisterRequest commentRegisterRequest
     ){
@@ -37,7 +39,9 @@ public class CommentApiController {
     @PostMapping("/{postId}/{parentId}/comments")
     public ResponseEntity<Api<CommentResponse>> createChildComments(
             HttpServletRequest request,
+            @Parameter(description = "댓글을 입력할 Post ID", required = true, example = "1")
             @PathVariable Long postId,
+            @Parameter(description = "대댓글을 입력할 댓글 ID", required = true, example = "1")
             @PathVariable Long parentId,
             @Valid @RequestBody CommentRegisterRequest commentRegisterRequest
     ){
@@ -49,7 +53,9 @@ public class CommentApiController {
     @DeleteMapping("/{postId}/comments/{commentId}")
     public ResponseEntity<Api<String>> deleteComments(
             HttpServletRequest request,
+            @Parameter(description = "댓글을 삭제할 Post ID", required = true, example = "1")
             @PathVariable Long postId,
+            @Parameter(description = "삭제할 댓글의 ID", required = true, example = "1")
             @PathVariable Long commentId
     ){
         commentBusiness.deleteCommentByPost(request, postId, commentId);

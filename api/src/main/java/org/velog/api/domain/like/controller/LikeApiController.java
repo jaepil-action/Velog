@@ -1,6 +1,7 @@
 package org.velog.api.domain.like.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class LikeApiController {
     @PostMapping("/{postId}/like")
     public ResponseEntity<Api<String>> addLike(
             HttpServletRequest request,
+            @Parameter(description = "좋아요 대상 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
         likeBusiness.addLike(request, postId);
@@ -32,6 +34,7 @@ public class LikeApiController {
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<Api<String>> cancelLike(
             HttpServletRequest request,
+            @Parameter(description = "좋아요 취소 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
         likeBusiness.cancelLike(request, postId);
@@ -41,6 +44,7 @@ public class LikeApiController {
     @Operation(summary = "Post 좋아요 Count 조회 API", description = "post_id 입력")
     @GetMapping("/{postId}/like")
     public ResponseEntity<Api<Integer>> getLikeCount(
+            @Parameter(description = "좋아요 갯수 해당 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
         Integer count = likeBusiness.getLikeCount(postId);
