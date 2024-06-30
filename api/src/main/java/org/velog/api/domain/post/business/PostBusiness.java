@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
-import org.velog.api.domain.post.controller.model.PostRegisterRequest;
+import org.velog.api.domain.post.controller.model.PostRequest;
 import org.velog.api.domain.post.controller.model.PostResponse;
 import org.velog.api.domain.post.controller.model.SeriesDto;
 import org.velog.api.domain.post.controller.model.TagDto;
@@ -18,6 +18,15 @@ import java.util.Optional;
 
 @Business
 @RequiredArgsConstructor
+/***
+ * 요구사항
+ * - 임시글 작성
+ * - 임시글 조회,삭제,수정 가능
+ * - 공개 일때 이미지 등록가능
+ * - 공개 일때 글의 제목,내용 일부 보여짐
+ * - 공개 일때 시리즈 추가 가능
+ * - 비공개 일때 비공개 표시
+ */
 public class PostBusiness {
 
     private final PostService postService;
@@ -26,14 +35,40 @@ public class PostBusiness {
 
     public PostResponse createPost(
             HttpServletRequest request,
-            PostRegisterRequest postRegisterRequest
+            PostRequest postRequest
     ){
         Long userId = sessionService.validateRoleUserId(request);
-        PostEntity postEntity = postService.register(userId, postRegisterRequest);
+        PostEntity postEntity = postService.register(userId, postRequest);
 
         return Optional.ofNullable(postEntity)
                 .map(postConverter::toResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+    }
+
+    public PostResponse getPost(
+            Long postId
+    ){
+        return Optional.ofNullable(postId)
+                .map(postService::getPostWithThrow)
+                .map(postConverter::toResponse)
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+    }
+
+    public void deletePost(
+            HttpServletRequest request,
+            Long postId
+    ){
+        Long userId = sessionService.validateRoleUserId(request);
+        postService.delete(userId, postId);
+    }
+
+    public void editPost(
+            HttpServletRequest request,
+            Long postId,
+            PostRequest postRequest
+    ){
+        Long userId = sessionService.validateRoleUserId(request);
+        postService.edit(userId, postId, postRequest);
     }
 
     public void editTag(

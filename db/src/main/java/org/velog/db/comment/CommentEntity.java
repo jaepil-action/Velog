@@ -61,4 +61,8 @@ public class CommentEntity extends BaseEntity {
         this.postEntity = postEntity;
         postEntity.getCommentEntityList().add(this);
     }
+
+    public void editComment(String contents){
+        this.contents = contents;
+    }
 }

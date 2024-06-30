@@ -40,4 +40,12 @@ public class BlogBusiness {
                 .map(blogConverter::toResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
+
+    public void delete(
+            HttpServletRequest request
+    ){
+
+        Long userId = sessionService.validateRoleUserId(request);
+        blogService.deleteBlogByUserId(userId);
+    }
 }

@@ -16,4 +16,12 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     private LocalDateTime registrationDate;
+
+    /***
+     * TODO : @preUpdate, @prePersist
+     *        헤테오스, @Parameter
+     *        상태 (임시글, 비공개, 공개)
+     *        프로필, @Data 제거후 @Getter
+     *
+     */
 }

@@ -1,6 +1,7 @@
 package org.velog.api.domain.role.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -60,6 +61,7 @@ public class UserRoleApiController {
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<Api<String>> deletePostByAdmin(
             HttpServletRequest request,
+            @Parameter(description = "관리자 권한으로 삭제 할 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
         userRoleBusiness.deletePostByAdmin(request, postId);
