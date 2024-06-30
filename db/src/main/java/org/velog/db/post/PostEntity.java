@@ -93,4 +93,15 @@ public class PostEntity extends BaseEntity {
     public void changeSeriesEntity(SeriesEntity seriesEntity){
         this.seriesEntity = seriesEntity;
     }
+
+    public void changePost(PostStatus postStatus, String title, String content, TagEntity tagEntity, SeriesEntity seriesEntity, String excerpt) {
+
+        this.postStatus = postStatus;
+        this.title = title;
+        this.content = content;
+        this.tagEntity = tagEntity;
+        this.seriesEntity = seriesEntity;
+        this.excerpt = excerpt;
+    }
+
 }

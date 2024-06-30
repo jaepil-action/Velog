@@ -17,4 +17,6 @@ public interface BlogEntityRepository extends JpaRepository<BlogEntity, Long> {
     Optional<BlogEntity> findFirstByUserEntity_Id(Long userId);
 
     List<BlogEntity> findAllByUserEntity_Id(Long userId);
+
+    void deleteByUserEntity_Id(Long userId);
 }

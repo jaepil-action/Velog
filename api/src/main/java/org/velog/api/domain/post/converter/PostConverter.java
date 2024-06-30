@@ -1,12 +1,10 @@
 package org.velog.api.domain.post.converter;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.velog.api.common.annotation.Converter;
-import org.velog.api.domain.post.controller.model.PostRegisterRequest;
+import org.velog.api.domain.post.controller.model.PostRequest;
 import org.velog.api.domain.post.controller.model.PostResponse;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
-import org.velog.db.post.enums.PostStatus;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 
@@ -17,13 +15,13 @@ public class PostConverter {
             BlogEntity blogEntity,
             TagEntity tagEntity,
             SeriesEntity seriesEntity,
-            PostRegisterRequest postRegisterRequest
+            PostRequest postRequest
     ){
         PostEntity postEntity = PostEntity.builder()
-                .postStatus(postRegisterRequest.getPostStatus())
-                .title(postRegisterRequest.getTitle())
-                .content(postRegisterRequest.getContent())
-                .excerpt(postRegisterRequest.getExcerpt())
+                .postStatus(postRequest.getPostStatus())
+                .title(postRequest.getTitle())
+                .content(postRequest.getContent())
+                .excerpt(postRequest.getExcerpt())
                 .build();
 
         postEntity.addBlogEntity(blogEntity);

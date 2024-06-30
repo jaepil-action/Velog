@@ -6,7 +6,7 @@ import lombok.Data;
 import org.velog.db.post.enums.PostStatus;
 
 @Data
-public class PostRegisterRequest {
+public class PostRequest {
 
     @NotBlank
     @Schema(description = "PUBLIC, PRIVATE, TEMPORARY 입력가능", example = "PUBLIC")

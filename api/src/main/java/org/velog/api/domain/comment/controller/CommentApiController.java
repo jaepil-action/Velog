@@ -61,4 +61,16 @@ public class CommentApiController {
         commentBusiness.deleteCommentByPost(request, postId, commentId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("댓글 삭제가 완료 되었습니다."));
     }
+
+    @Operation(summary = "댓글 수정 API", description = "PostID 입력")
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<Api<String>> editComments(
+            HttpServletRequest request,
+            @Parameter(description = "수정할 댓글의 ID", required = true, example = "1")
+            @PathVariable Long commentId,
+            @Valid @RequestBody CommentRegisterRequest commentRegisterRequest
+    ){
+        commentBusiness.editComment(request, commentId, commentRegisterRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK("댓글 수정이 완료 되었습니다."));
+    }
 }

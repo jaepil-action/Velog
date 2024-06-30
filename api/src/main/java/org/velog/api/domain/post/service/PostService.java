@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.blog.service.BlogService;
-import org.velog.api.domain.post.controller.model.PostRegisterRequest;
+import org.velog.api.domain.post.controller.model.PostRequest;
 import org.velog.api.domain.post.controller.model.SeriesDto;
 import org.velog.api.domain.post.controller.model.TagDto;
 import org.velog.api.domain.post.converter.PostConverter;
@@ -20,7 +20,6 @@ import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,59 +36,121 @@ public class PostService {
 
     public PostEntity register(
             Long userId,
-            PostRegisterRequest postRegisterRequest
+            PostRequest postRequest
     ){
         BlogEntity blogEntity = blogService.getBlogByUserIdWithThrow(userId);
 
-        // 아무것도 입력을 안했을시 null 반환 -> 추후 등록가능
-        SeriesEntity seriesEntity = getSeriesEntity(postRegisterRequest);
-        TagEntity tagEntity = getTagEntity(postRegisterRequest);
+        checkPostStatusAndSeries(postRequest);
 
-        if(postRegisterRequest.getExcerpt().isBlank()){
-            postRegisterRequest.setExcerpt(null);
+        // 아무것도 입력을 안했을시 null 반환 -> 추후 등록가능
+        SeriesEntity seriesEntity = getSeriesEntity(postRequest, blogEntity.getId());
+        TagEntity tagEntity = getTagEntity(postRequest, blogEntity.getId());
+
+        if(postRequest.getExcerpt().isBlank()){
+            postRequest.setExcerpt(null);
         }
 
         PostEntity postEntity = postConverter.toEntity(
                 blogEntity,
                 tagEntity,
                 seriesEntity,
-                postRegisterRequest
+                postRequest
         );
         postEntity.setRegistrationDate();
 
-        if (Objects.equals(postEntity.getPostStatus(), PostStatus.TEMPORARY) &&
-            postEntity.getSeriesEntity() != null)
+        return postRepository.save(postEntity);
+    }
+
+    public void edit(
+            Long userId,
+            Long postId,
+            PostRequest postRequest
+    ){
+        PostEntity postEntity = getPostWithThrow(postId);
+        BlogEntity blogEntity = postEntity.getBlogEntity();
+
+        checkPostByBlogEntity(userId, blogEntity);
+        checkPostStatusAndSeries(postRequest);
+
+        // 아무것도 입력을 안했을시 null 반환 -> 추후 등록가능
+        SeriesEntity seriesEntity = getSeriesEntity(postRequest, blogEntity.getId());
+        TagEntity tagEntity = getTagEntity(postRequest, blogEntity.getId());
+
+        if(postRequest.getExcerpt().isBlank()){
+            postRequest.setExcerpt(null);
+        }
+
+        postEntity.changePost(
+                postRequest.getPostStatus(),
+                postRequest.getTitle(),
+                postRequest.getContent(),
+                tagEntity,
+                seriesEntity,
+                postRequest.getExcerpt()
+        );
+    }
+
+    private static void checkPostByBlogEntity(Long userId, BlogEntity blogEntity) {
+        if(!Objects.equals(blogEntity.getUserEntity().getId(), userId)){
+            throw new ApiException(ErrorCode.BAD_REQUEST, "자신의 Post가 아닙니다.");
+        }
+    }
+
+    public void delete(
+            Long userId,
+            Long postId
+    ){
+        PostEntity postEntity = getPostWithThrow(postId);
+        BlogEntity blogEntity = postEntity.getBlogEntity();
+        checkPostByBlogEntity(userId,blogEntity);
+        postRepository.delete(postEntity);
+    }
+
+    private static void checkPostStatusAndSeries(PostRequest postRequest) {
+        if (Objects.equals(postRequest.getPostStatus(), PostStatus.TEMPORARY) &&
+                !postRequest.getSeriesId().isBlank())
         {
             throw new ApiException(ErrorCode.BAD_REQUEST, "임시글에 시리즈를 추가 할 수 없습니다.");
         }
-
-            return postRepository.save(postEntity);
     }
 
-    private TagEntity getTagEntity(PostRegisterRequest postRegisterRequest) {
+    private TagEntity getTagEntity(
+            PostRequest postRequest,
+            Long blogId
+    ){
         TagEntity tagEntity = null;
-        if(!postRegisterRequest.getTagId().isBlank())
+        if(!postRequest.getTagId().isBlank())
         {
             tagEntity = tagService.getTagWithThrow(
-                    Long.parseLong(postRegisterRequest.getTagId()));
+                    Long.parseLong(postRequest.getTagId()));
+            if(!Objects.equals(tagEntity.getBlogEntity().getId(), blogId)){
+                throw new ApiException(ErrorCode.BAD_REQUEST, "해당 블로그의 태그가 아닙니다.");
+            }
             tagEntity.addTagCount();
         }
         return tagEntity;
     }
 
-    private SeriesEntity getSeriesEntity(PostRegisterRequest postRegisterRequest) {
+    private SeriesEntity getSeriesEntity(
+            PostRequest postRequest,
+            Long blogId
+    ){
         SeriesEntity seriesEntity = null;
-        if(!postRegisterRequest.getSeriesId().isBlank())
+        if(!postRequest.getSeriesId().isBlank())
         {
             seriesEntity = seriesService.getSeriesWithThrow(
-                    Long.parseLong(postRegisterRequest.getSeriesId()));
+                    Long.parseLong(postRequest.getSeriesId()));
+
+            if(!Objects.equals(seriesEntity.getBlogEntity().getId(), blogId)){
+                throw new ApiException(ErrorCode.BAD_REQUEST, "해당 블로그의 시리즈가 아닙니다.");
+            }
         }
         return seriesEntity;
     }
 
     @Transactional(readOnly = true)
     public PostEntity getPostWithThrow(Long postId){
-        return postRepository.findById(
+        return postRepository.findPostById(
                 postId
         ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
     }

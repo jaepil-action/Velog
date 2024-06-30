@@ -50,4 +50,10 @@ public class BlogService {
     ){
         return blogEntityRepository.findFirstByUserEntity_Id(userId);
     }
+
+    public void deleteBlogByUserId(
+            Long userId
+    ){
+        blogEntityRepository.deleteByUserEntity_Id(userId);
+    }
 }

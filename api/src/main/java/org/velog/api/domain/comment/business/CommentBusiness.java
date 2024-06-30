@@ -75,4 +75,13 @@ public class CommentBusiness {
         UserEntity commentWriter = userService.getUserWithThrow(userId);
         commentService.delete(postId, commentId, commentWriter);
     }
+
+    public void editComment(
+            HttpServletRequest request,
+            Long commentId,
+            CommentRegisterRequest commentRegisterRequest
+    ){
+        Long userId = sessionService.validateRoleUserId(request);
+        commentService.edit(userId, commentId, commentRegisterRequest);
+    }
 }

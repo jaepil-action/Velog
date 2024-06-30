@@ -33,7 +33,7 @@ public class BlogEntity extends BaseEntity {
     @Column(length = 255)
     private String introduction;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
