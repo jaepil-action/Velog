@@ -66,7 +66,7 @@ public class PostService {
             Long postId,
             PostRequest postRequest
     ){
-        PostEntity postEntity = getPostWithThrow(postId);
+        PostEntity postEntity = getPostWithTagAndSeries(postId);
         BlogEntity blogEntity = postEntity.getBlogEntity();
 
         checkPostByBlogEntity(userId, blogEntity);
@@ -114,6 +114,14 @@ public class PostService {
         }
     }
 
+    public void deletePostById(
+            Long postsId
+    ){
+        PostEntity postEntity = getPostWithThrow(postsId);
+        postEntity.getTagEntity().minusTagCount();
+        postRepository.delete(postEntity);
+    }
+
     private TagEntity getTagEntity(
             PostRequest postRequest,
             Long blogId
@@ -149,18 +157,32 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostEntity getPostWithThrow(Long postId){
-        return postRepository.findPostById(
+    public PostEntity getPostWithTagAndSeries(Long postId){
+        return postRepository.findPostWithTagAndSeries(
                 postId
         ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
     }
 
-    public void deletePostById(
-            Long postsId
-    ){
-        PostEntity postEntity = getPostWithThrow(postsId);
-        postEntity.getTagEntity().minusTagCount();
-        postRepository.delete(postEntity);
+    @Transactional(readOnly = true)
+    public PostEntity getPostWithSeries(Long postId){
+        return postRepository.findPostWithSeries(
+                postId
+        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
+    }
+
+    @Transactional(readOnly = true)
+    public PostEntity getPostWithTag(Long postId){
+        return postRepository.findPostWithTag(
+                postId
+        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
+    }
+
+
+    @Transactional(readOnly = true)
+    public PostEntity getPostWithThrow(Long postId){
+        return postRepository.findById(
+                postId
+        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
     }
 
     public List<PostEntity> findAllPosts(){ return postRepository.findAll(); }
@@ -170,7 +192,7 @@ public class PostService {
             Long postId,
             TagDto tagDto
     ){
-        PostEntity postEntity = getPostWithThrow(postId);
+        PostEntity postEntity = getPostWithTag(postId);
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
 
         if(!Objects.equals(userEntity.getId(), userId)){
@@ -190,7 +212,7 @@ public class PostService {
             Long postId,
             SeriesDto seriesDto
     ){
-        PostEntity postEntity = getPostWithThrow(postId);
+        PostEntity postEntity = getPostWithSeries(postId);
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
 
         if(!Objects.equals(userEntity.getId(), userId) ||

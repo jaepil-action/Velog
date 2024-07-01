@@ -15,12 +15,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "blogs")
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"userEntity"})
 public class BlogEntity extends BaseEntity {
 
     @Id  @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +47,7 @@ public class BlogEntity extends BaseEntity {
 
     public void addUserEntity(UserEntity userEntity){
         this.userEntity = userEntity;
-        userEntity.setBlogEntity(this); // TODO setter 사용
+        userEntity.addBlogEntity(this);
     }
 
     public void addRegistrationDate(){

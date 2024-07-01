@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,6 +46,10 @@ public class UserEntity extends BaseEntity {
 
     public void changeEmail(String email){
         this.email = email;
+    }
+
+    public void addBlogEntity(BlogEntity blogEntity){
+        this.blogEntity = blogEntity;
     }
     public void setRegistrationDate(){
         super.setRegistrationDate(LocalDateTime.now());
