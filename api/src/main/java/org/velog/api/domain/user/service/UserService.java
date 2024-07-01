@@ -58,13 +58,21 @@ public class UserService {
     public boolean checkUserRole(
             Long userId
     ){
-        if(userRoleRepository.findFirstByUserEntity_Id(userId).isPresent()){
+/*        if(userRoleRepository.findFirstByUserEntity_Id(userId).isPresent()){
             UserRoleEntity userRoleEntity = userRoleRepository.findFirstByUserEntity_Id(userId).get();
             RoleEntity roleEntity = userRoleEntity.getRoleEntity();
             return roleEntity.getAdmin().equals(Admin.ROLE_ADMIN);
         }else{
             return false;
-        }
+        }*/
+        /***
+         * 위에 코드 아래로 리팩터링 (공부필요)
+         */
+        return userRoleRepository.findFirstByUserEntity_Id(userId)
+                .map(UserRoleEntity::getRoleEntity)
+                .map(RoleEntity::getAdmin)
+                .map(Admin.ROLE_ADMIN::equals)
+                .orElse(false);
     }
 
     public void checkDuplicationLoginIdAndEmail(
@@ -128,9 +136,5 @@ public class UserService {
         return userRepository.findFirstByLoginId(
                 loginId
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
-    }
-
-    public Optional<UserEntity> getUserWith(Long userId){
-        return userRepository.findById(userId);
     }
 }

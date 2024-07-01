@@ -1,6 +1,7 @@
 package org.velog.api.domain.comment.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -26,6 +28,7 @@ public class CommentService {
         return Optional.ofNullable(commentEntity)
                 .map(ce -> {
                     ce.addRegistrationDate();
+                    log.info("=================comment save sql==============");
                     return commentRepository.save(ce);
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "CommentEntity Null"));

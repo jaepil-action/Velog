@@ -31,24 +31,11 @@ public class BlogService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
-    public BlogEntity getBlogByLoginIdWithThrow(
-            String loginId
-    ){
-        return blogEntityRepository.findBlogByUserLoginId(loginId)
-                .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
-    }
-
     public BlogEntity getBlogByUserIdWithThrow(
             Long userId
     ){
-        return blogEntityRepository.findFirstByUserEntity_Id(userId)
+        return blogEntityRepository.findBlogByUserId(userId)
                 .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
-    }
-
-    public Optional<BlogEntity> getBlogByUserId(
-            Long userId
-    ){
-        return blogEntityRepository.findFirstByUserEntity_Id(userId);
     }
 
     public void deleteBlogByUserId(
