@@ -42,6 +42,10 @@ public class SeriesEntity extends BaseEntity {
         super.setRegistrationDate(LocalDateTime.now());
     }
 
+    public void changeTitle(String title){
+        this.title = title;
+    }
+
     public void addBlogEntity(BlogEntity blogEntity){
         this.blogEntity = blogEntity;
         blogEntity.getSeriesEntityList().add(this);

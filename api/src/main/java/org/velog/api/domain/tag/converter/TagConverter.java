@@ -1,7 +1,7 @@
 package org.velog.api.domain.tag.converter;
 
 import org.velog.api.common.annotation.Converter;
-import org.velog.api.domain.tag.controller.model.TagRegisterRequest;
+import org.velog.api.domain.tag.controller.model.TagRequest;
 import org.velog.api.domain.tag.controller.model.TagResponse;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.tag.TagEntity;
@@ -11,10 +11,10 @@ public class TagConverter {
 
     public TagEntity toEntity(
             BlogEntity blogEntity,
-            TagRegisterRequest tagRegisterRequest
+            TagRequest tagRequest
     ){
         TagEntity tagEntity = TagEntity.builder()
-                .title(tagRegisterRequest.getTitle())
+                .title(tagRequest.getTitle())
                 .build();
         tagEntity.addBlogEntity(blogEntity);
 
