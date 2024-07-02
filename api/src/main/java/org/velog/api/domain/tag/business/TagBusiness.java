@@ -7,13 +7,14 @@ import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.blog.service.BlogService;
 import org.velog.api.domain.session.SessionService;
-import org.velog.api.domain.tag.controller.model.TagRegisterRequest;
+import org.velog.api.domain.tag.controller.model.TagRequest;
 import org.velog.api.domain.tag.controller.model.TagResponse;
 import org.velog.api.domain.tag.converter.TagConverter;
 import org.velog.api.domain.tag.service.TagService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.tag.TagEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 @Business
@@ -27,15 +28,48 @@ public class TagBusiness {
 
     public TagResponse register(
             HttpServletRequest request,
-            TagRegisterRequest tagRegisterRequest
+            TagRequest tagRequest
     ){
-        Long userId = sessionService.validateRoleUserId(request);
-        BlogEntity blogEntity = blogService.getBlogByUserIdWithThrow(userId);
-        TagEntity tagEntity = tagConverter.toEntity(blogEntity, tagRegisterRequest);
+        BlogEntity blogEntity = getBlogByRequest(request);
+        TagEntity tagEntity = tagConverter.toEntity(blogEntity, tagRequest);
 
         return Optional.ofNullable(tagEntity)
                 .map(tagService::register)
                 .map(tagConverter::toResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+    }
+
+    public void edit(
+            HttpServletRequest request,
+            Long tagId,
+            TagRequest tagRequest
+    ){
+        BlogEntity blogEntity = getBlogByRequest(request);
+
+        tagService.edit(blogEntity, tagId, tagRequest);
+    }
+
+    public void delete(
+            HttpServletRequest request,
+            Long tagId
+    ){
+        BlogEntity blogEntity = getBlogByRequest(request);
+
+        tagService.delete(blogEntity, tagId);
+    }
+
+    private BlogEntity getBlogByRequest(HttpServletRequest request) {
+        Long userId = sessionService.validateRoleUserId(request);
+        return blogService.getBlogByUserIdWithThrow(userId);
+    }
+    public List<TagResponse> retrieveAllTag(
+            Long blogId
+    ){
+        BlogEntity blogEntity = blogService.getBlogByIdWithThrow(blogId);
+        List<TagEntity> tagEntityList = blogEntity.getTagEntityList();
+
+        return tagEntityList.stream()
+                .map(tagConverter::toResponse)
+                .toList();
     }
 }

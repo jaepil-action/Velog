@@ -66,7 +66,7 @@ public class PostService {
             Long postId,
             PostRequest postRequest
     ){
-        PostEntity postEntity = getPostWithTagAndSeries(postId);
+        PostEntity postEntity = getPostWithTagAndSeries(postId); //
         BlogEntity blogEntity = postEntity.getBlogEntity();
 
         checkPostByBlogEntity(userId, blogEntity);
@@ -117,7 +117,7 @@ public class PostService {
     public void deletePostById(
             Long postsId
     ){
-        PostEntity postEntity = getPostWithThrow(postsId);
+        PostEntity postEntity = getPostWithTag(postsId);
         postEntity.getTagEntity().minusTagCount();
         postRepository.delete(postEntity);
     }

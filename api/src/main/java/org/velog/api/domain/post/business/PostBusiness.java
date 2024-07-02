@@ -49,7 +49,7 @@ public class PostBusiness {
             Long postId
     ){
         return Optional.ofNullable(postId)
-                .map(postService::getPostWithThrow)
+                .map(postService::getPostWithTagAndSeries)//
                 .map(postConverter::toResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }

@@ -1,7 +1,7 @@
 package org.velog.api.domain.series.converter;
 
 import org.velog.api.common.annotation.Converter;
-import org.velog.api.domain.series.controller.model.SeriesRegisterRequest;
+import org.velog.api.domain.series.controller.model.SeriesRequest;
 import org.velog.api.domain.series.controller.model.SeriesResponse;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.series.SeriesEntity;
@@ -11,10 +11,10 @@ public class SeriesConverter {
 
     public SeriesEntity toEntity(
             BlogEntity blogEntity,
-            SeriesRegisterRequest seriesRegisterRequest
+            SeriesRequest seriesRequest
     ){
         SeriesEntity seriesEntity = SeriesEntity.builder()
-                .title(seriesRegisterRequest.getTitle())
+                .title(seriesRequest.getTitle())
                 .build();
         seriesEntity.addBlogEntity(blogEntity);
 

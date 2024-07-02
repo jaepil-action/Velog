@@ -8,6 +8,7 @@ import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.blog.BlogEntityRepository;
+import org.velog.db.tag.TagEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,13 @@ public class BlogService {
             Long userId
     ){
         return blogEntityRepository.findBlogByUserId(userId)
+                .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
+    }
+
+    public BlogEntity getBlogByIdWithThrow(
+            Long blogId
+    ){
+        return blogEntityRepository.findById(blogId)
                 .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
     }
 
