@@ -103,9 +103,14 @@ public class PostService {
             Long userId,
             Long postId
     ){
-        PostEntity postEntity = getPostWithThrow(postId);
+        PostEntity postEntity = getPostWithTagAndSeries(postId);
+        if(postEntity.getTagEntity() != null){
+            postEntity.getTagEntity().minusTagCount();
+        }
+
         BlogEntity blogEntity = postEntity.getBlogEntity();
         checkPostByBlogEntity(userId,blogEntity);
+
         postRepository.delete(postEntity);
     }
 

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
+import org.velog.api.domain.blog.controller.model.BlogDetailResponse;
 import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
 import org.velog.api.domain.blog.converter.BlogConverter;
@@ -44,8 +45,16 @@ public class BlogBusiness {
     public void delete(
             HttpServletRequest request
     ){
-
         Long userId = sessionService.validateRoleUserId(request);
         blogService.deleteBlogByUserId(userId);
+    }
+
+    public BlogDetailResponse retrieveBlogByLoginId(String loginId) {
+
+        BlogEntity blogEntity = blogService.getBlogByLoginId(loginId);
+
+        return Optional.ofNullable(blogEntity)
+                .map(blogConverter::toDetailResponse)
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 }

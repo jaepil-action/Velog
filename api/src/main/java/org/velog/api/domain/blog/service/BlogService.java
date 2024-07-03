@@ -32,6 +32,13 @@ public class BlogService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
+    public BlogEntity getBlogByLoginId(
+            String loginId
+    ){
+        return blogEntityRepository.findBlogByUserLoginId(loginId)
+                .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
+    }
+
     public BlogEntity getBlogByUserIdWithThrow(
             Long userId
     ){

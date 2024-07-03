@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.blog.business.BlogBusiness;
+import org.velog.api.domain.blog.controller.model.BlogDetailResponse;
 import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
 
@@ -31,6 +32,16 @@ public class BoardApiController {
         BlogResponse response = blogBusiness.register(blogRegisterRequest, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
     }
+
+    @Operation(summary = "특정 블로그 조회 API", description = "LoginId 블로그 조회")
+    @PostMapping("/{loginId}")
+    public ResponseEntity<Api<BlogDetailResponse>> retrieveBlogByLoginId(
+            @PathVariable String loginId
+    ){
+        BlogDetailResponse response = blogBusiness.retrieveBlogByLoginId(loginId);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(response));
+    }
+
 
     @Operation(summary = "블로그 삭제 API", description = "로그인한 사용자 블로그 삭제")
     @DeleteMapping("/delete")

@@ -1,5 +1,6 @@
 package org.velog.db.blog;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +13,9 @@ public interface BlogEntityRepository extends JpaRepository<BlogEntity, Long> {
     @Query("select b from BlogEntity b join fetch b.userEntity u" +
             " where u.id = :userId")
     Optional<BlogEntity> findBlogByUserId(@Param("userId") Long userId);
+
+    @Query("select b from BlogEntity b join fetch b.userEntity u where u.loginId = :loginId")
+    Optional<BlogEntity> findBlogByUserLoginId(@Param("loginId") String loginId);
 
     void deleteByUserEntity_Id(Long userId);
 }

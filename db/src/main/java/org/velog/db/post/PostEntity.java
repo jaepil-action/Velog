@@ -60,7 +60,6 @@ public class PostEntity extends BaseEntity {
     @JsonIgnore
     private TagEntity tagEntity;
 
-    @BatchSize(size = 100)
     @JsonIgnore
     @OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeEntity> likeEntityList = new ArrayList<>();
@@ -90,6 +89,10 @@ public class PostEntity extends BaseEntity {
     }
 
     public void changeTagEntity(TagEntity tagEntity){
+        if(tagEntity != null){
+            tagEntity.addTagCount();
+        }
+        this.tagEntity.minusTagCount();
         this.tagEntity = tagEntity;
     }
 
