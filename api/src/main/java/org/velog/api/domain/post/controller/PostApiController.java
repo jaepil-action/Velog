@@ -12,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.post.business.PostBusiness;
-import org.velog.api.domain.post.controller.model.PostRequest;
-import org.velog.api.domain.post.controller.model.PostResponse;
-import org.velog.api.domain.post.controller.model.SeriesDto;
-import org.velog.api.domain.post.controller.model.TagDto;
+import org.velog.api.domain.post.controller.model.*;
+import org.velog.api.domain.post.controller.model.PostDetailResponse;
+import org.velog.api.domain.post.controller.model.PostsDetailPageResponse;
+import org.velog.api.domain.post.controller.model.PostsPageResponse;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -27,22 +27,54 @@ public class PostApiController {
 
     @Operation(summary = "Post 생성 API", description = "사용자블로그의 Post 생성")
     @PostMapping("")
-    public ResponseEntity<Api<PostResponse>> createPost(
+    public ResponseEntity<Api<PostDetailResponse>> createPost(
             HttpServletRequest request,
             @Valid @RequestBody PostRequest postRequest
     ){
-        PostResponse response = postBusiness.createPost(request, postRequest);
+        PostDetailResponse response = postBusiness.createPost(request, postRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
     }
 
-    @Operation(summary = "Post 조회 API", description = "PostId 입력")
+    @Operation(summary = "Post 단건 조회 API", description = "PostId 입력")
     @GetMapping("{postId}")
-    public ResponseEntity<Api<PostResponse>> retrievePost(
+    public ResponseEntity<Api<PostDetailResponse>> retrievePost(
             @Parameter(description = "조회할 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
-        PostResponse postResponse = postBusiness.getPost(postId);
+        PostDetailResponse postResponse = postBusiness.getPost(postId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(postResponse));
+    }
+
+    @Operation(summary = "모든 Post 상세 조회 API", description = "최신순, 인기순 조회 가능 (비공개 조회불가)")
+    @GetMapping("")
+    public ResponseEntity<Api<PostsDetailPageResponse>> retrieveAllPost(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "latest") String sortCond
+    ){
+        PostsDetailPageResponse postResponseList = postBusiness.getDetailPosts(page, size, sortCond);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(postResponseList));
+    }
+
+    @Operation(summary = "모든 Post 임시 조회 API", description = "공개,임시 상태 조회 가능 (비공개 조회불가)")
+    @GetMapping("/drafts")
+    public ResponseEntity<Api<PostsPageResponse>> retrieveAllPostWithDraft(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        PostsPageResponse postResponseList = postBusiness.getPostsByStatus(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(postResponseList));
+    }
+
+    @Operation(summary = "Post 삭제 API", description = "PostId 입력")
+    @DeleteMapping("{postId}")
+    public ResponseEntity<Api<String>> deletePost(
+            HttpServletRequest request,
+            @Parameter(description = "삭제할 Post ID", required = true, example = "1")
+            @PathVariable Long postId
+    ){
+        postBusiness.deletePost(request, postId);
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK("Post 삭제 성공"));
     }
 
     @Operation(summary = "Post 수정 API", description = "PostId 입력")
@@ -55,17 +87,6 @@ public class PostApiController {
     ){
         postBusiness.editPost(request, postId, postRequest);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("Post 변경 완료 되었습니다."));
-    }
-
-    @Operation(summary = "Post 삭제 API", description = "PostId 입력")
-    @DeleteMapping("{postId}")
-    public ResponseEntity<Api<String>> deletePost(
-            HttpServletRequest request,
-            @Parameter(description = "삭제할 Post ID", required = true, example = "1")
-            @PathVariable Long postId
-    ){
-        postBusiness.deletePost(request, postId);
-        return ResponseEntity.status(HttpStatus.OK).body(Api.OK("Post 삭제 성공"));
     }
 
     @Operation(summary = "Post Tag 변경 API", description = "PostId, TagId 입력")
@@ -91,8 +112,6 @@ public class PostApiController {
         postBusiness.editSeries(request, postId, seriesDto);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("Series 변경 완료 되었습니다."));
     }
-
-
 
     @Operation(summary = "Post 댓글 갯수 조회 API", description = "PostId 입력")
     @GetMapping("/{postId}/commentCount")

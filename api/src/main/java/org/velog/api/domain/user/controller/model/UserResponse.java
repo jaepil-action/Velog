@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.velog.db.user.ProfileImage;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,7 @@ public class UserResponse {
 
     private String email;
 
-    private String profileImage;
+    private ProfileImage profileImage;
 
     private LocalDateTime registrationDate;
 }

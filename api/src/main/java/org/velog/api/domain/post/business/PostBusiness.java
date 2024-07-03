@@ -2,13 +2,16 @@ package org.velog.api.domain.post.business;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
-import org.velog.api.domain.post.controller.model.PostRequest;
-import org.velog.api.domain.post.controller.model.PostResponse;
-import org.velog.api.domain.post.controller.model.SeriesDto;
-import org.velog.api.domain.post.controller.model.TagDto;
+import org.velog.api.domain.post.controller.model.*;
+import org.velog.api.domain.post.controller.model.PostDetailResponse;
+import org.velog.api.domain.post.controller.model.PostsAdminPageResponse;
+import org.velog.api.domain.post.controller.model.PostsDetailPageResponse;
+import org.velog.api.domain.post.controller.model.PostsPageResponse;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.post.service.PostService;
 import org.velog.api.domain.session.SessionService;
@@ -33,7 +36,7 @@ public class PostBusiness {
     private final PostConverter postConverter;
     private final SessionService sessionService;
 
-    public PostResponse createPost(
+    public PostDetailResponse createPost(
             HttpServletRequest request,
             PostRequest postRequest
     ){
@@ -41,16 +44,16 @@ public class PostBusiness {
         PostEntity postEntity = postService.register(userId, postRequest);
 
         return Optional.ofNullable(postEntity)
-                .map(postConverter::toResponse)
+                .map(postConverter::toDetailResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
-    public PostResponse getPost(
+    public PostDetailResponse getPost(
             Long postId
     ){
         return Optional.ofNullable(postId)
-                .map(postService::getPostWithTagAndSeries)//
-                .map(postConverter::toResponse)
+                .map(postService::getPostWithAuthorById)//
+                .map(postConverter::toDetailResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
@@ -93,5 +96,40 @@ public class PostBusiness {
             Long postId
     ){
         return postService.commentCount(postId);
+    }
+
+    public PostsAdminPageResponse getPostsByAdmin(
+            int offset,
+            int limit
+    ){
+        PageRequest pageRequest = PageRequest.of(offset, limit);
+        Page<PostEntity> postsPage = postService.findAdminPosts(pageRequest);
+        return postConverter.toAdminPostsResponse(postsPage);
+    }
+
+    public PostsPageResponse getPostsByStatus(
+            int offset,
+            int limit
+    ){
+        PageRequest pageRequest = PageRequest.of(offset, limit);
+        Page<PostEntity> postsPage = postService.findPostsByStatus(pageRequest);
+        return postConverter.toPostsResponse(postsPage);
+    }
+
+
+    public PostsDetailPageResponse getDetailPosts(
+            int offset,
+            int limit,
+            String sortCond
+    ){
+        PageRequest pageRequest = PageRequest.of(offset, limit);
+
+        if(sortCond.contains("popular")){
+            Page<PostEntity> postsPage = postService.findPostsOrderByLike(pageRequest);
+            return postConverter.toDetailPostsResponse(postsPage);
+        }
+
+        Page<PostEntity> postsPage = postService.findPostsOrderByDate(pageRequest);
+        return postConverter.toDetailPostsResponse(postsPage);
     }
 }
