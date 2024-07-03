@@ -1,6 +1,8 @@
 package org.velog.api.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
@@ -20,6 +22,7 @@ import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -117,7 +120,7 @@ public class PostService {
     public void deletePostById(
             Long postsId
     ){
-        PostEntity postEntity = getPostWithTag(postsId);
+        PostEntity postEntity = getPostWithTagAndSeries(postsId);
         postEntity.getTagEntity().minusTagCount();
         postRepository.delete(postEntity);
     }
@@ -164,35 +167,42 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostEntity getPostWithSeries(Long postId){
-        return postRepository.findPostWithSeries(
-                postId
-        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
-    }
-
-    @Transactional(readOnly = true)
-    public PostEntity getPostWithTag(Long postId){
-        return postRepository.findPostWithTag(
-                postId
-        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
-    }
-
-
-    @Transactional(readOnly = true)
     public PostEntity getPostWithThrow(Long postId){
         return postRepository.findById(
                 postId
         ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post가 존재 하지 않습니다"));
     }
 
-    public List<PostEntity> findAllPosts(){ return postRepository.findAll(); }
+    @Transactional(readOnly = true)
+    public PostEntity getPostWithAuthorById(Long postId){
+        return postRepository.findPostWithAuthorById(
+                postId
+        ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post 존재 하지 않습니다"));
+    }
+
+    public Page<PostEntity> findPostsByStatus(PageRequest pageRequest){ // TODO 공부필요 IN SQL
+        List<PostStatus> statuses = Arrays.asList(PostStatus.PUBLIC, PostStatus.TEMPORARY);
+        return postRepository.findByPostStatusIn(pageRequest, statuses);
+    }
+
+    public Page<PostEntity> findAdminPosts(PageRequest pageRequest){
+        return postRepository.findPosts(pageRequest);
+    }
+
+    public Page<PostEntity> findPostsOrderByLike(PageRequest pageRequest){
+        return postRepository.findPostsOrderByLikeCount(pageRequest, PostStatus.PUBLIC);
+    }
+
+    public Page<PostEntity> findPostsOrderByDate(PageRequest pageRequest){
+        return postRepository.findPostsOrderByDate(pageRequest, PostStatus.PUBLIC);
+    }
 
     public void editTag(
             Long userId,
             Long postId,
             TagDto tagDto
     ){
-        PostEntity postEntity = getPostWithTag(postId);
+        PostEntity postEntity = getPostWithTagAndSeries(postId);
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
 
         if(!Objects.equals(userEntity.getId(), userId)){
@@ -212,7 +222,7 @@ public class PostService {
             Long postId,
             SeriesDto seriesDto
     ){
-        PostEntity postEntity = getPostWithSeries(postId);
+        PostEntity postEntity = getPostWithTagAndSeries(postId);
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
 
         if(!Objects.equals(userEntity.getId(), userId) ||

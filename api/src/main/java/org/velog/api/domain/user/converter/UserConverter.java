@@ -37,6 +37,7 @@ public class UserConverter {
                             .loginId(userEntity.getLoginId())
                             .name(userEntity.getName())
                             .email(userEntity.getEmail())
+                            .profileImage(userEntity.getProfileImage())
                             .registrationDate(userEntity.getRegistrationDate())
                             .build();
                 })

@@ -10,13 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
-import org.velog.api.domain.post.controller.model.PostResponse;
+import org.velog.api.domain.post.controller.model.PostsAdminPageResponse;
 import org.velog.api.domain.role.business.UserRoleBusiness;
 import org.velog.api.domain.role.controller.model.RoleDto;
 import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
 import org.velog.api.domain.role.controller.model.UserRoleResponse;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,11 +47,13 @@ public class UserRoleApiController {
     }
 
     @Operation(summary = "관리자 권한 모든 Post 조회 API", description = "관리자만 조회 가능")
-    @GetMapping("/posts")
-    public ResponseEntity<Api<List<PostResponse>>> findAllPostsByAdmin(
-            HttpServletRequest request
+    @GetMapping("/postsPage")
+    public ResponseEntity<Api<PostsAdminPageResponse>> findAllPostsPageByAdmin(
+            HttpServletRequest request,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ){
-        List<PostResponse> postResponseList = userRoleBusiness.findAllPostsByAdmin(request);
+        PostsAdminPageResponse postResponseList = userRoleBusiness.findAllPostsPageByAdmin(request, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(postResponseList));
     }
 

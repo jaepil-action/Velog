@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.BatchSize;
 import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.comment.CommentEntity;
@@ -18,13 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "posts")
-@Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"blogEntity", "seriesEntity", "tagEntity"})
 public class PostEntity extends BaseEntity {
 
     @Id
@@ -60,10 +60,13 @@ public class PostEntity extends BaseEntity {
     @JsonIgnore
     private TagEntity tagEntity;
 
+    @BatchSize(size = 100)
+    @JsonIgnore
     @OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LikeEntity> likeEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "postEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
 

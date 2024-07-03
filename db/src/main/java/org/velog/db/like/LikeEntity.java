@@ -12,12 +12,11 @@ import org.velog.db.user.UserEntity;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"postEntity"})
 @Table(name = "likes", uniqueConstraints = {
         @UniqueConstraint(name = "UK_post_user", columnNames = {"post_id", "user_id"})
 })

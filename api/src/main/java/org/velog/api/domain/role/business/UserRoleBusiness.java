@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
-import org.velog.api.domain.post.controller.model.PostResponse;
+import org.velog.api.domain.post.business.PostBusiness;
+import org.velog.api.domain.post.controller.model.PostsAdminPageResponse;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.role.controller.model.RoleDto;
 import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
@@ -13,12 +14,9 @@ import org.velog.api.domain.role.controller.model.UserRoleResponse;
 import org.velog.api.domain.role.converter.UserRoleConverter;
 import org.velog.api.domain.role.service.UserRoleService;
 import org.velog.api.domain.session.SessionService;
-import org.velog.db.post.PostEntity;
 import org.velog.db.user.UserEntity;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Business
 @RequiredArgsConstructor
@@ -26,6 +24,7 @@ public class UserRoleBusiness {
 
     private final UserRoleService userRoleService;
     private final UserRoleConverter userRoleConverter;
+    private final PostBusiness postBusiness;
     private final PostConverter postConverter;
     private final SessionService sessionService;
 
@@ -64,15 +63,13 @@ public class UserRoleBusiness {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest request Null"));
     }
 
-    public List<PostResponse> findAllPostsByAdmin(
-            HttpServletRequest request
-    ){
+    public PostsAdminPageResponse findAllPostsPageByAdmin(
+            HttpServletRequest request,
+            int offset,
+            int limit
+    ) {
         sessionService.validateRoleAdmin(request);
-        List<PostEntity> postEntityList = userRoleService.findAllPosts();
-
-        return postEntityList.stream()
-                .map(postConverter::toResponse)
-                .toList();
+        return postBusiness.getPostsByAdmin(offset, limit);
     }
 
     public void deletePostByAdmin(

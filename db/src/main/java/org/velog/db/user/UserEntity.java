@@ -40,6 +40,9 @@ public class UserEntity extends BaseEntity {
     @Column(length = 100, nullable = false)
     private String email;
 
+    @Embedded
+    private ProfileImage profileImage;
+
     // TODO 팔로어 삭제시
     /*@OneToMany(mappedBy = "follower", cascade = CascadeType.REMOVE)
     private List<FollowEntity> followEntityList = new ArrayList<>();*/
