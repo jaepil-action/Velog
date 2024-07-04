@@ -39,13 +39,17 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
             " Order by p.registrationDate desc ")
     Page<PostEntity> findPostsOrderByDate(Pageable pageable, @Param("postStatus") PostStatus postStatus);
 
-    @Query("select p from PostEntity p" +
+/*    @Query("select p from PostEntity p" +
             " join fetch p.blogEntity b" +
             " join fetch b.userEntity u" +
             " left join p.likeEntityList l" +
             " WHERE p.postStatus = :postStatus" +
             " group by p.id" +
-            " order by count(l) desc")
+            " order by count(l) desc")*/
+@Query("select p from PostEntity p" +
+        " join fetch p.blogEntity b" +
+        " join fetch b.userEntity u" +
+        " WHERE p.postStatus = :postStatus")
     Page<PostEntity> findPostsOrderByLikeCount(Pageable pageable, @Param("postStatus") PostStatus postStatus);
 
     @Query("SELECT p FROM PostEntity p WHERE p.postStatus IN :statuses")

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.velog.api.common.annotation.Converter;
 import org.velog.api.domain.post.controller.model.*;
 import org.velog.db.blog.BlogEntity;
+import org.velog.db.like.LikeEntity;
 import org.velog.db.post.PostEntity;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
@@ -63,11 +64,11 @@ public class PostConverter {
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
         postResponse.setAuthor(new AuthorDto(userEntity.getName(), userEntity.getProfileImage()));
 
-/*        List<LikeEntity> likeEntityList = postEntity.getLikeEntityList();
+        List<LikeEntity> likeEntityList = postEntity.getLikeEntityList();
         for (LikeEntity likeEntity : likeEntityList) {
             Long id = likeEntity.getId();
             System.out.println("id = " + id);
-        }*/
+        }
 
         return postResponse;
     }

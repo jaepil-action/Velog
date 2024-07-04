@@ -14,6 +14,12 @@ import java.util.List;
 @Builder
 public class BlogDetailResponse {
 
+    private List<TagDto> tags;
 
+    private List<PostDto> posts;
+
+    private List<SeriesDto> series;
+
+    private String introduction;
 
 }
