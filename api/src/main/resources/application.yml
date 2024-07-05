@@ -10,6 +10,8 @@ spring:
         highlight_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 10
+        spring:
+
 
 
   datasource:

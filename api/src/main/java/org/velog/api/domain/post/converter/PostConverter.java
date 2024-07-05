@@ -10,6 +10,7 @@ import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Converter
@@ -63,12 +64,6 @@ public class PostConverter {
 
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
         postResponse.setAuthor(new AuthorDto(userEntity.getName(), userEntity.getProfileImage()));
-
-        List<LikeEntity> likeEntityList = postEntity.getLikeEntityList();
-        for (LikeEntity likeEntity : likeEntityList) {
-            Long id = likeEntity.getId();
-            System.out.println("id = " + id);
-        }
 
         return postResponse;
     }
@@ -145,4 +140,20 @@ public class PostConverter {
 
         return postsDetailPageResponse;
     }
+
+/*    public PostsDetailPageResponse test(
+            Page<PostDetailResponse> postEntity
+    ){
+        PostsDetailPageResponse postsDetailPageResponse = PostsDetailPageResponse.builder()
+                .totalElements(postEntity.getTotalElements())
+                .totalPages(postEntity.getTotalPages())
+                .offset((int)postEntity.getPageable().getOffset())
+                .limit(postEntity.getPageable().getPageSize())
+                .build();
+
+        List<PostDetailResponse> contents = postEntity.getContent();
+        postsDetailPageResponse.setContents(contents);
+
+        return postsDetailPageResponse;
+    }*/ //TODO 리포지토리에서 DTO 바로 반환하기
 }
