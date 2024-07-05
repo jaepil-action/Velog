@@ -1,7 +1,6 @@
 package org.velog.api.domain.blog.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -19,7 +18,7 @@ import org.velog.api.domain.blog.controller.model.BlogResponse;
 @RequestMapping("/api/blogs")
 @RequiredArgsConstructor
 @Tag(name = "BlogApiController", description = "블로그 Api 서비스 컨트롤러")
-public class BoardApiController {
+public class BlogApiController {
 
     private final BlogBusiness blogBusiness;
 
@@ -34,7 +33,7 @@ public class BoardApiController {
     }
 
     @Operation(summary = "특정 블로그 조회 API", description = "LoginId 블로그 조회")
-    @PostMapping("/{loginId}")
+    @GetMapping("/{loginId}")
     public ResponseEntity<Api<BlogDetailResponse>> retrieveBlogByLoginId(
             @PathVariable String loginId
     ){

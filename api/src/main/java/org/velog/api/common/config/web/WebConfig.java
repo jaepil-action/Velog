@@ -22,7 +22,11 @@ public class WebConfig implements WebMvcConfigurer {
 
     private List<String> DEFAULT_EXCLUDE = List.of(
             "/",
+            "/home",
+            "/login",
+            "/logout",
             "/favicon.io",
+            "/css/**",
             "/error"
     );
 

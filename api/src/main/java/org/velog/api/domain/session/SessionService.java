@@ -73,4 +73,9 @@ public class SessionService {
         UserEntity userEntity = (UserEntity) session.getAttribute(LOGIN_USER);
         return userEntity.getLoginId();
     }
+
+    public boolean checkLogInUser(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return session.getAttribute(LOGIN_USER_ID) != null;
+    }
 }
