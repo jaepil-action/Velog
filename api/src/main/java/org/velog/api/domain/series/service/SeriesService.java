@@ -3,7 +3,6 @@ package org.velog.api.domain.series.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.ObjectError;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.series.controller.model.SeriesRequest;
@@ -25,10 +24,7 @@ public class SeriesService {
             SeriesEntity seriesEntity
     ){
         return Optional.ofNullable(seriesEntity)
-                .map(it -> {
-                    it.setRegistrationDate();
-                    return seriesRepository.save(it);
-                })
+                .map(seriesRepository::save)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 

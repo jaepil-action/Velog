@@ -2,9 +2,7 @@ package org.velog.api.domain.blog.controller.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.velog.db.user.UserEntity;
 
 @Data
 public class BlogRegisterRequest {

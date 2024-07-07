@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.velog.db.role.Admin;
-import org.velog.db.role.RoleEntity;
-import org.velog.db.user.UserEntity;
 
 import java.time.LocalDateTime;
 

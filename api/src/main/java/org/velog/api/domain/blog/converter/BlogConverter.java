@@ -8,7 +8,6 @@ import org.velog.db.user.UserEntity;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Converter

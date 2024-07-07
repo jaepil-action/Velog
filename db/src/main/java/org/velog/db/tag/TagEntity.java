@@ -37,11 +37,14 @@ public class TagEntity extends BaseEntity {
 
     private Integer count;
 
-    @OneToMany(mappedBy = "tagEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostEntity> postEntity = new ArrayList<>();
+    @OneToMany(mappedBy = "tagEntity")
+    private List<PostEntity> postEntityList = new ArrayList<>();
 
-    public void setRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
+    @PreRemove
+    public void preRemove(){
+        for(PostEntity post : postEntityList){
+            post.changeTagEntity(null);
+        }
     }
 
     public void addBlogEntity(BlogEntity blogEntity){
@@ -52,7 +55,6 @@ public class TagEntity extends BaseEntity {
     public void changeTagTitle(String title){
         this.title = title;
     }
-
 
     public void addTagCount(){
         ++this.count;
@@ -65,7 +67,6 @@ public class TagEntity extends BaseEntity {
         }
         --this.count;
     }
-
     public void setCountZero(){
         count = 0;
     }

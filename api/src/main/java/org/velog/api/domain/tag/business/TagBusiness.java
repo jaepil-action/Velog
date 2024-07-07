@@ -6,7 +6,7 @@ import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.blog.service.BlogService;
-import org.velog.api.domain.session.SessionService;
+import org.velog.api.domain.session.ifs.CookieServiceIfs;
 import org.velog.api.domain.tag.controller.model.TagRequest;
 import org.velog.api.domain.tag.controller.model.TagResponse;
 import org.velog.api.domain.tag.converter.TagConverter;
@@ -23,7 +23,7 @@ public class TagBusiness {
 
     private final TagService tagService;
     private final TagConverter tagConverter;
-    private final SessionService sessionService;
+    private final CookieServiceIfs cookieService;
     private final BlogService blogService;
 
     public TagResponse register(
@@ -59,7 +59,7 @@ public class TagBusiness {
     }
 
     private BlogEntity getBlogByRequest(HttpServletRequest request) {
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         return blogService.getBlogByUserIdWithThrow(userId);
     }
     public List<TagResponse> retrieveAllTag(

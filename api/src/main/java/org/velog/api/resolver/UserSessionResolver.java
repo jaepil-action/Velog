@@ -1,4 +1,4 @@
-package org.velog.api.resolver;
+/*package org.velog.api.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +14,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import static org.velog.api.domain.session.SessionService.LOGIN_USER_ID;
+import static org.velog.api.domain.session.cookieServiceIfs.LOGIN_USER_ID;
 
 @Component
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class UserSessionResolver implements HandlerMethodArgumentResolver {
         // request context holder 에서 찾아오기
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession();
-        Object userId = session.getAttribute(LOGIN_USER_ID);
+        Object userId = session.getAttribute();
 
         UserEntity userEntity = userService.getUserWithThrow(Long.parseLong(userId.toString()));
 
@@ -55,4 +55,4 @@ public class UserSessionResolver implements HandlerMethodArgumentResolver {
                 .build()
                 ;
     }
-}
+}*/

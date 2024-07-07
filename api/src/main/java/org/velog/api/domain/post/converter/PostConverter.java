@@ -4,13 +4,11 @@ import org.springframework.data.domain.Page;
 import org.velog.api.common.annotation.Converter;
 import org.velog.api.domain.post.controller.model.*;
 import org.velog.db.blog.BlogEntity;
-import org.velog.db.like.LikeEntity;
 import org.velog.db.post.PostEntity;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Converter
@@ -59,8 +57,14 @@ public class PostConverter {
                 .postId(postEntity.getId())
                 .title(postEntity.getTitle())
                 .excerpt(postEntity.getExcerpt())
-                .likeCount(postEntity.getLikeEntityList().size())
                 .build();
+
+        if(postEntity.getLikeEntityList() == null){
+            postResponse.setLikeCount(0);
+        }else{
+            postResponse.setLikeCount(postEntity.getLikeEntityList().size());
+        }
+
 
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
         postResponse.setAuthor(new AuthorDto(userEntity.getName(), userEntity.getProfileImage()));

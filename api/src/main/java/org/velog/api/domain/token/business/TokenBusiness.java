@@ -21,7 +21,6 @@ public class TokenBusiness {
 
     public TokenResponse issueToken(UserEntity userEntity){
 
-
         return Optional.ofNullable(userEntity)
                 .map(ue -> {
                     return userEntity.getId();
@@ -33,7 +32,6 @@ public class TokenBusiness {
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
-
 
     public Long validationToken(String accessToken){
         return tokenService.validationToken(accessToken);

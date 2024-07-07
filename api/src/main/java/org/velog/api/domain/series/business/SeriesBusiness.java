@@ -11,7 +11,7 @@ import org.velog.api.domain.series.controller.model.SeriesRequest;
 import org.velog.api.domain.series.controller.model.SeriesResponse;
 import org.velog.api.domain.series.converter.SeriesConverter;
 import org.velog.api.domain.series.service.SeriesService;
-import org.velog.api.domain.session.SessionService;
+import org.velog.api.domain.session.ifs.CookieServiceIfs;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.series.SeriesEntity;
 
@@ -25,7 +25,7 @@ public class SeriesBusiness {
 
     private final SeriesService seriesService;
     private final SeriesConverter seriesConverter;
-    private final SessionService sessionService;
+    private final CookieServiceIfs cookieService;
     private final BlogService blogService;
 
     public SeriesResponse register(
@@ -69,7 +69,7 @@ public class SeriesBusiness {
     }
 
     private BlogEntity getBlogEntityByRequest(HttpServletRequest request) {
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         return blogService.getBlogByUserIdWithThrow(userId);
     }
 }

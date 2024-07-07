@@ -29,7 +29,6 @@ public class UserService {
         return Optional.ofNullable(userEntity)
                 .map(it -> {
                     checkDuplicationLoginIdAndEmail(userEntity.getLoginId(), userEntity.getEmail());
-                    userEntity.setRegistrationDate();
                     return userRepository.save(userEntity);
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "User Entity null"));
@@ -105,13 +104,6 @@ public class UserService {
         return userRepository.findFirstByLoginId(loginId).isPresent(); //
     }
 
-    public UserEntity login(
-            String loginId,
-            String password
-    ){
-        return getUserWithThrow(loginId, password);
-    }
-
     public UserEntity getUserWithThrow(
             String loginId,
             String password
@@ -119,7 +111,7 @@ public class UserService {
         return userRepository.findUserByLoginInfo(
                 loginId,
                 password
-        ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
+        ).orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
     }
 
     public UserEntity getUserWithThrow(

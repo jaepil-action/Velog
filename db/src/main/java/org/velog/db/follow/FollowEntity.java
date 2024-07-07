@@ -1,12 +1,10 @@
 package org.velog.db.follow;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.velog.db.BaseEntity;
-import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.UserEntity;
 
 import java.time.LocalDateTime;
@@ -34,8 +32,4 @@ public class FollowEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followee_id", nullable = false)
     private UserEntity followee;
-
-    public void addRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
-    }
 }

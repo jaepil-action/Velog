@@ -14,7 +14,7 @@ import org.velog.api.domain.post.controller.model.PostsDetailPageResponse;
 import org.velog.api.domain.post.controller.model.PostsPageResponse;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.post.service.PostService;
-import org.velog.api.domain.session.SessionService;
+import org.velog.api.domain.session.ifs.CookieServiceIfs;
 import org.velog.db.post.PostEntity;
 
 import java.util.Optional;
@@ -34,13 +34,13 @@ public class PostBusiness {
 
     private final PostService postService;
     private final PostConverter postConverter;
-    private final SessionService sessionService;
+    private final CookieServiceIfs cookieService;
 
     public PostDetailResponse createPost(
             HttpServletRequest request,
             PostRequest postRequest
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         PostEntity postEntity = postService.register(userId, postRequest);
 
         return Optional.ofNullable(postEntity)
@@ -61,7 +61,7 @@ public class PostBusiness {
             HttpServletRequest request,
             Long postId
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         postService.delete(userId, postId);
     }
 
@@ -70,7 +70,7 @@ public class PostBusiness {
             Long postId,
             PostRequest postRequest
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         postService.edit(userId, postId, postRequest);
     }
 
@@ -79,7 +79,7 @@ public class PostBusiness {
             Long postId,
             TagDto tagDto
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         postService.editTag(userId, postId, tagDto);
     }
 
@@ -88,7 +88,7 @@ public class PostBusiness {
             Long postId,
             SeriesDto seriesDto
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         postService.editSeries(userId, postId, seriesDto);
     }
 

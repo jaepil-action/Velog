@@ -44,7 +44,6 @@ public class LikeService {
                 .userEntity(userEntity)
                 .build();
 
-        likeEntity.addRegistrationDate();
         likeEntity.addPostEntity(postEntity);
         return likeEntityRepository.save(likeEntity);
     }

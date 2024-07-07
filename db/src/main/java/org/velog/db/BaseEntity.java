@@ -15,13 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BaseEntity {
 
+    @Column(updatable = false)
     private LocalDateTime registrationDate;
+    private LocalDateTime lastModifiedDate;
 
-    /***
-     * TODO : @preUpdate, @prePersist
-     *        헤테오스, @Parameter
-     *        상태 (임시글, 비공개, 공개)
-     *        프로필, @Data 제거후 @Getter
-     *
-     */
+    @PrePersist
+    public void prePersist(){
+        LocalDateTime now = LocalDateTime.now();
+        registrationDate = now;
+        lastModifiedDate = now;
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        lastModifiedDate = LocalDateTime.now();
+    }
 }

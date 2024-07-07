@@ -31,7 +31,7 @@ public class UserRoleApiController {
         @RequestBody RoleDto roleRequest,
         HttpServletRequest request
     ){
-        RoleDto roleDto = userRoleBusiness.RoleRegister(roleRequest, request);
+        RoleDto roleDto = userRoleBusiness.roleRegister(roleRequest, request);
         return Api.OK(roleDto);
     }
 
@@ -42,7 +42,7 @@ public class UserRoleApiController {
             @RequestBody Api<UserRoleRegisterRequest> userRoleRegister,
             HttpServletRequest request
     ){
-        UserRoleResponse userRoleResponse = userRoleBusiness.UserRoleRegister(userRoleRegister.getBody(), request);
+        UserRoleResponse userRoleResponse = userRoleBusiness.userRoleRegister(userRoleRegister.getBody(), request);
         return Api.OK(userRoleResponse);
     }
 

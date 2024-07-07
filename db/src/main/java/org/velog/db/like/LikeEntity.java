@@ -36,10 +36,6 @@ public class LikeEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    public void addRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
-    }
-
     public void addPostEntity(PostEntity postEntity){
         this.postEntity = postEntity;
         postEntity.getLikeEntityList().add(this);

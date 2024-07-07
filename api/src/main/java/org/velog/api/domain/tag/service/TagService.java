@@ -25,7 +25,6 @@ public class TagService {
     ){
         return Optional.ofNullable(tagEntity)
                 .map(it ->{
-                    it.setRegistrationDate();
                     it.setCountZero();
                     return tagRepository.save(it);
                 })

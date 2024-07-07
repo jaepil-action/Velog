@@ -32,10 +32,6 @@ public class UserRoleEntity extends BaseEntity {
     @JsonIgnore
     private RoleEntity roleEntity;
 
-    public void setRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
-    }
-
     public void editUserRole(RoleEntity roleEntity){
         //this.userEntity = userEntity;
         this.roleEntity = roleEntity;

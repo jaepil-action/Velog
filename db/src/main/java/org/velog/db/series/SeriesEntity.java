@@ -35,11 +35,14 @@ public class SeriesEntity extends BaseEntity {
     @Column(length = 255, nullable = false)
     private String title;
 
-    @OneToMany(mappedBy = "seriesEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seriesEntity")
     private List<PostEntity> postEntityList = new ArrayList<>();
 
-    public void setRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
+    @PreRemove
+    public void preRemove(){
+        for(PostEntity post : postEntityList){
+            post.changeSeriesEntity(null);
+        }
     }
 
     public void changeTitle(String title){

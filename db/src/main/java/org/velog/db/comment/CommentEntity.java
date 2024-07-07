@@ -41,15 +41,22 @@ public class CommentEntity extends BaseEntity {
     @JsonIgnore
     private CommentEntity parentComment;
 
-    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parentComment")
     private List<CommentEntity> childCommentList = new ArrayList<>();
 
     @Lob
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
-    public void addRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
+    @PreRemove
+    public void preRemove(){
+        for(CommentEntity comment : childCommentList){
+            comment.changeComment(null);
+        }
+    }
+
+    public void changeComment(CommentEntity commentEntity){
+        parentComment = commentEntity;
     }
 
     public void addParentComment(CommentEntity parentComment){

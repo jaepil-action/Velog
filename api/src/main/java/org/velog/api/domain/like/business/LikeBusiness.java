@@ -4,20 +4,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.domain.like.service.LikeService;
-import org.velog.api.domain.session.SessionService;
+import org.velog.api.domain.session.ifs.CookieServiceIfs;
 
 @Business
 @RequiredArgsConstructor
 public class LikeBusiness {
 
     private final LikeService likeService;
-    private final SessionService sessionService;
+    private final CookieServiceIfs cookieService;
 
     public void addLike(
             HttpServletRequest request,
             Long postId
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         likeService.addLikeAnotherPost(userId, postId);
     }
 
@@ -25,7 +25,7 @@ public class LikeBusiness {
             HttpServletRequest request,
             Long postId
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         likeService.cancelLikePost(userId, postId);
     }
 

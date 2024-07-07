@@ -1,6 +1,7 @@
 package org.velog.view.domain.open;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,8 @@ public class LoginController {
     public String login(
             @Validated @ModelAttribute("loginForm") UserLoginRequest loginForm,
             BindingResult bindingResult,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ){
         if(bindingResult.hasErrors()){
             log.info("login Errors={}", bindingResult);
@@ -40,7 +42,7 @@ public class LoginController {
         }
 
         try{
-            userBusiness.login(loginForm, request);
+            userBusiness.login(loginForm, request, response);
             return "redirect:/";
         }catch (ApiException e){
             bindingResult.reject("LoginFail", "아이디 또는 비밀번호가 맞지 않습니다.");

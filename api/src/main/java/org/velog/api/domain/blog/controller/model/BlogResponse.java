@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.velog.db.post.PostEntity;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
-import org.velog.db.user.UserEntity;
 
 import java.util.List;
 
