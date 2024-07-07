@@ -1,6 +1,7 @@
 package org.velog.api.domain.token.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;

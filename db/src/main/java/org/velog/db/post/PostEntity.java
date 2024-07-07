@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.BatchSize;
 import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.comment.CommentEntity;
-import org.velog.db.follow.FollowEntity;
 import org.velog.db.like.LikeEntity;
 import org.velog.db.post.enums.PostStatus;
 import org.velog.db.series.SeriesEntity;
@@ -68,11 +66,6 @@ public class PostEntity extends BaseEntity {
     @JsonIgnore
     private List<CommentEntity> commentEntityList = new ArrayList<>();
 
-
-    public void setRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
-    }
-
     public void addSeriesEntity(SeriesEntity seriesEntity){
         this.seriesEntity = seriesEntity;
         seriesEntity.getPostEntityList().add(this);
@@ -80,7 +73,7 @@ public class PostEntity extends BaseEntity {
 
     public void addTagEntity(TagEntity tagEntity){
         this.tagEntity = tagEntity;
-        tagEntity.getPostEntity().add(this);
+        tagEntity.getPostEntityList().add(this);
     }
 
     public void addBlogEntity(BlogEntity blogEntity){

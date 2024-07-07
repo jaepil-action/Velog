@@ -5,11 +5,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.velog.db.BaseEntity;
 import org.velog.db.blog.BlogEntity;
-import org.velog.db.follow.FollowEntity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -53,8 +50,5 @@ public class UserEntity extends BaseEntity {
 
     public void addBlogEntity(BlogEntity blogEntity){
         this.blogEntity = blogEntity;
-    }
-    public void setRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
     }
 }

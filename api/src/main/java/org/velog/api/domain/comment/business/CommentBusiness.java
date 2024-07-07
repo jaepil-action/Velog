@@ -11,7 +11,7 @@ import org.velog.api.domain.comment.controller.model.CommentResponse;
 import org.velog.api.domain.comment.converter.CommentConverter;
 import org.velog.api.domain.comment.service.CommentService;
 import org.velog.api.domain.post.service.PostService;
-import org.velog.api.domain.session.SessionService;
+import org.velog.api.domain.session.ifs.CookieServiceIfs;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.comment.CommentEntity;
 import org.velog.db.post.PostEntity;
@@ -26,7 +26,7 @@ public class CommentBusiness {
 
     private final CommentService commentService;
     private final CommentConverter commentConverter;
-    private final SessionService sessionService;
+    private final CookieServiceIfs cookieService;
     private final PostService postService;
     private final UserService userService;
 
@@ -35,7 +35,7 @@ public class CommentBusiness {
             Long postId,
             CommentRegisterRequest commentRegisterRequest
     ) {
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         UserEntity commentWriter = userService.getUserWithThrow(userId); // TODO 왜 여기서 블로그엔티티 셀렉트가 나갈까? 지연로딩이지만 블로그엔티티 관련 로직은 없기때문에 내생각에는 블로그 엔티티 조회를 할 필요가 없는데,,
         log.info("UserEntity={}",commentWriter.getClass());
 
@@ -56,7 +56,7 @@ public class CommentBusiness {
             Long parentId,
             CommentRegisterRequest commentRegisterRequest
     ) {
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         UserEntity commentWriter = userService.getUserWithThrow(userId);
 
         PostEntity postEntity = postService.getPostWithThrow(postId);
@@ -75,7 +75,7 @@ public class CommentBusiness {
             Long postId,
             Long commentId
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         UserEntity commentWriter = userService.getUserWithThrow(userId);
         commentService.delete(postId, commentId, commentWriter);
     }
@@ -85,7 +85,7 @@ public class CommentBusiness {
             Long commentId,
             CommentRegisterRequest commentRegisterRequest
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         commentService.edit(userId, commentId, commentRegisterRequest);
     }
 }

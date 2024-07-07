@@ -3,6 +3,7 @@ package org.velog.api.domain.user.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,10 +39,11 @@ public class UserOpenApiController {
     public ResponseEntity<Api<UserResponse>> login(
             @Valid
             @RequestBody Api<UserLoginRequest> userLoginRequest,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpServletResponse response
     ){
-        UserResponse response = userBusiness.login(userLoginRequest.getBody(), request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Api.OK(response));
+        UserResponse userResponse = userBusiness.login(userLoginRequest.getBody(), request, response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Api.OK(userResponse));
     }
 
     @Operation(summary = "회원 Email 중복여부 API", description = "Email 입력")

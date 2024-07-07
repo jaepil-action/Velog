@@ -2,7 +2,6 @@ package org.velog.api.domain.follow.converter;
 
 import org.velog.api.common.annotation.Converter;
 import org.velog.api.common.error.ErrorCode;
-import org.velog.api.common.error.UserErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.follow.controller.model.FollowResponse;
 import org.velog.db.user.UserEntity;

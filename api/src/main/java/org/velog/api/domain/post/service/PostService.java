@@ -59,7 +59,6 @@ public class PostService {
                 seriesEntity,
                 postRequest
         );
-        postEntity.setRegistrationDate();
 
         return postRepository.save(postEntity);
     }

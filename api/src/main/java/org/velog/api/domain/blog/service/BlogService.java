@@ -8,9 +8,7 @@ import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.blog.BlogEntityRepository;
-import org.velog.db.tag.TagEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,7 +24,6 @@ public class BlogService {
         return Optional.ofNullable(request)
                 .map(it -> {
                     request.addBlogTitle(request.getBlogTitle());
-                    request.addRegistrationDate();
                     return blogEntityRepository.save(request);
                 })
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));

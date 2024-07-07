@@ -10,8 +10,7 @@ import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
 import org.velog.api.domain.blog.converter.BlogConverter;
 import org.velog.api.domain.blog.service.BlogService;
-import org.velog.api.domain.session.SessionService;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.session.ifs.CookieServiceIfs;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.UserEntity;
@@ -25,14 +24,14 @@ public class BlogBusiness {
     private final BlogService blogService;
     private final BlogConverter blogConverter;
     private final UserService userService;
-    private final SessionService sessionService;
+    private final CookieServiceIfs cookieService;
 
     public BlogResponse register(
             BlogRegisterRequest blogRegisterRequest,
             HttpServletRequest request
     ){
 
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         UserEntity userEntity = userService.getUserWithThrow(userId);
         BlogEntity blogEntity = blogConverter.toEntity(blogRegisterRequest, userEntity);
 
@@ -45,7 +44,7 @@ public class BlogBusiness {
     public void delete(
             HttpServletRequest request
     ){
-        Long userId = sessionService.validateRoleUserId(request);
+        Long userId = cookieService.validateRoleUserGetId(request);
         blogService.deleteBlogByUserId(userId);
     }
 

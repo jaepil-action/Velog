@@ -27,7 +27,6 @@ public class CommentService {
     ){
         return Optional.ofNullable(commentEntity)
                 .map(ce -> {
-                    ce.addRegistrationDate();
                     log.info("=================comment save sql==============");
                     return commentRepository.save(ce);
                 })

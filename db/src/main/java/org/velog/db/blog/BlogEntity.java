@@ -50,10 +50,6 @@ public class BlogEntity extends BaseEntity {
         userEntity.addBlogEntity(this);
     }
 
-    public void addRegistrationDate(){
-        super.setRegistrationDate(LocalDateTime.now());
-    }
-
     public void addBlogTitle(String title){
         if(title.isBlank()){
             this.blogTitle = "@" + userEntity.getLoginId();

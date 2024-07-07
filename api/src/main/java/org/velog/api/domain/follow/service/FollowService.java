@@ -68,7 +68,6 @@ public class FollowService {
                 .follower(follower)
                 .followee(followee)
                 .build();
-        followEntity.addRegistrationDate();
 
         return followEntityRepository.save(followEntity);
     }
