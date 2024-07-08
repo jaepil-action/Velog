@@ -1,6 +1,5 @@
 package org.velog.api.domain.post.business;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +13,8 @@ import org.velog.api.domain.post.controller.model.PostsDetailPageResponse;
 import org.velog.api.domain.post.controller.model.PostsPageResponse;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.post.service.PostService;
-import org.velog.api.domain.session.ifs.CookieServiceIfs;
+import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
+import org.velog.api.domain.user.model.User;
 import org.velog.db.post.PostEntity;
 
 import java.util.Optional;
@@ -34,14 +34,12 @@ public class PostBusiness {
 
     private final PostService postService;
     private final PostConverter postConverter;
-    private final CookieServiceIfs cookieService;
 
     public PostDetailResponse createPost(
-            HttpServletRequest request,
+            User user,
             PostRequest postRequest
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        PostEntity postEntity = postService.register(userId, postRequest);
+        PostEntity postEntity = postService.register(user.getUserId(), postRequest);
 
         return Optional.ofNullable(postEntity)
                 .map(postConverter::toDetailResponse)
@@ -58,38 +56,34 @@ public class PostBusiness {
     }
 
     public void deletePost(
-            HttpServletRequest request,
+            User user,
             Long postId
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        postService.delete(userId, postId);
+        postService.delete(user.getUserId(), postId);
     }
 
     public void editPost(
-            HttpServletRequest request,
+            User user,
             Long postId,
             PostRequest postRequest
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        postService.edit(userId, postId, postRequest);
+        postService.edit(user.getUserId(), postId, postRequest);
     }
 
     public void editTag(
-            HttpServletRequest request,
+            User user,
             Long postId,
             TagDto tagDto
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        postService.editTag(userId, postId, tagDto);
+        postService.editTag(user.getUserId(), postId, tagDto);
     }
 
     public void editSeries(
-            HttpServletRequest request,
+            User user,
             Long postId,
             SeriesDto seriesDto
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        postService.editSeries(userId, postId, seriesDto);
+        postService.editSeries(user.getUserId(), postId, seriesDto);
     }
 
     public Integer commentCountByPost(

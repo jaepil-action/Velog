@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,11 +22,23 @@ public class SwaggerConfig {
     public ModelResolver modelResolver(ObjectMapper objectMapper){
         return new ModelResolver(objectMapper);
     }
+
     @Bean
-    public GroupedOpenApi customDeliveryOpenApi(){
-        String[] paths = {"/open-api/**","/api/**"};
+    @Order(1)
+    public GroupedOpenApi deliveryOpenApi(){
+        String[] paths = {"/open-api/**"};
         return GroupedOpenApi.builder()
                 .group("일반 사용자를 위한 Velog Service 도메인 API")
+                .pathsToMatch(paths)
+                .build();
+    }
+
+    @Bean
+    @Order(2)
+    public GroupedOpenApi deliveryLoginApi(){
+        String[] paths = {"/api/**"};
+        return GroupedOpenApi.builder()
+                .group("로그인 사용자를 위한 Velog Service 도메인 API")
                 .pathsToMatch(paths)
                 .build();
     }

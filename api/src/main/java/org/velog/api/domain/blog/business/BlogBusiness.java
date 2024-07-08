@@ -10,7 +10,8 @@ import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
 import org.velog.api.domain.blog.converter.BlogConverter;
 import org.velog.api.domain.blog.service.BlogService;
-import org.velog.api.domain.session.ifs.CookieServiceIfs;
+import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
+import org.velog.api.domain.user.model.User;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.UserEntity;
@@ -24,15 +25,12 @@ public class BlogBusiness {
     private final BlogService blogService;
     private final BlogConverter blogConverter;
     private final UserService userService;
-    private final CookieServiceIfs cookieService;
 
     public BlogResponse register(
             BlogRegisterRequest blogRegisterRequest,
-            HttpServletRequest request
+            User user
     ){
-
-        Long userId = cookieService.validateRoleUserGetId(request);
-        UserEntity userEntity = userService.getUserWithThrow(userId);
+        UserEntity userEntity = userService.getUserWithThrow(user.getUserId());
         BlogEntity blogEntity = blogConverter.toEntity(blogRegisterRequest, userEntity);
 
         return Optional.ofNullable(blogEntity)
@@ -41,11 +39,14 @@ public class BlogBusiness {
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
     }
 
+    public BlogEntity getBlogByIdWithThrow(Long blogId){
+        return blogService.getBlogByIdWithThrow(blogId);
+    }
+
     public void delete(
-            HttpServletRequest request
+            User user
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        blogService.deleteBlogByUserId(userId);
+        blogService.deleteBlogByUserId(user.getUserId());
     }
 
     public BlogDetailResponse retrieveBlogByLoginId(String loginId) {

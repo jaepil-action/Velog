@@ -6,7 +6,8 @@ import org.velog.api.common.annotation.Business;
 import org.velog.api.domain.follow.controller.model.FollowResponse;
 import org.velog.api.domain.follow.converter.FollowConverter;
 import org.velog.api.domain.follow.service.FollowService;
-import org.velog.api.domain.session.ifs.CookieServiceIfs;
+import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
+import org.velog.api.domain.user.model.User;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.follow.FollowEntity;
 import org.velog.db.user.UserEntity;
@@ -19,30 +20,28 @@ public class FollowBusiness {
 
     private final FollowService followService;
     private final FollowConverter followConverter;
-    private final CookieServiceIfs cookieService;
     private final UserService userService;
 
     public FollowEntity follow(
-            HttpServletRequest request,
+            User user,
             String followerLoginId
     ){
-        Long followeeUserId = cookieService.validateRoleUserGetId(request);
+        Long followeeUserId = user.getUserId();
         return followService.userFollow(followerLoginId, followeeUserId);
     }
 
     public void unFollow(
-            HttpServletRequest request,
+            User user,
             String followerLoginId
     ){
-        Long followeeUserId = cookieService.validateRoleUserGetId(request);
+        Long followeeUserId = user.getUserId();
         followService.userUnFollow(followerLoginId, followeeUserId);
     }
 
     public List<FollowResponse> getMyFollowerDetails(
-            HttpServletRequest request
+            User user
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        String loginId = userService.getUserWithThrow(userId).getLoginId();
+        String loginId = userService.getUserWithThrow(user.getUserId()).getLoginId();
         return getFollowerDetails(loginId);
     }
 
@@ -69,10 +68,9 @@ public class FollowBusiness {
     }
 
     public Integer getMyFollowCount(
-            HttpServletRequest request
+            User user
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
-        String loginId = userService.getUserWithThrow(userId).getLoginId();
+        String loginId = userService.getUserWithThrow(user.getUserId()).getLoginId();
         return followService.getFollowCount(loginId);
     }
 }

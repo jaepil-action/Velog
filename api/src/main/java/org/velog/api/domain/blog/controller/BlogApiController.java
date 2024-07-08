@@ -1,6 +1,7 @@
 package org.velog.api.domain.blog.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -8,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.velog.api.common.annotation.Login;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.blog.business.BlogBusiness;
 import org.velog.api.domain.blog.controller.model.BlogDetailResponse;
 import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
+import org.velog.api.domain.user.model.User;
 
 @RestController
 @RequestMapping("/api/blogs")
@@ -25,29 +28,20 @@ public class BlogApiController {
     @Operation(summary = "블로그 생성 API", description = "로그인한 사용자 블로그 생성")
     @PostMapping("/create")
     public ResponseEntity<Api<BlogResponse>> createBlog(
-            HttpServletRequest request,
+            @Parameter(hidden = true) @Login User user,
             @Valid @RequestBody BlogRegisterRequest blogRegisterRequest
     ){
-        BlogResponse response = blogBusiness.register(blogRegisterRequest, request);
+        BlogResponse response = blogBusiness.register(blogRegisterRequest, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
-    }
-
-    @Operation(summary = "특정 블로그 조회 API", description = "LoginId 블로그 조회")
-    @GetMapping("/{loginId}")
-    public ResponseEntity<Api<BlogDetailResponse>> retrieveBlogByLoginId(
-            @PathVariable String loginId
-    ){
-        BlogDetailResponse response = blogBusiness.retrieveBlogByLoginId(loginId);
-        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(response));
     }
 
 
     @Operation(summary = "블로그 삭제 API", description = "로그인한 사용자 블로그 삭제")
     @DeleteMapping("/delete")
     public ResponseEntity<Api<String>> deleteBlog(
-            HttpServletRequest request
+            @Parameter(hidden = true) @Login User user
     ){
-        blogBusiness.delete(request);
+        blogBusiness.delete(user);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("블로그 삭제 성공"));
     }
 }
