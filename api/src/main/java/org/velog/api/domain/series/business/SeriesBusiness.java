@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
+import org.velog.api.domain.blog.business.BlogBusiness;
 import org.velog.api.domain.blog.service.BlogService;
 import org.velog.api.domain.series.controller.model.SeriesRequest;
 import org.velog.api.domain.series.controller.model.SeriesResponse;
 import org.velog.api.domain.series.converter.SeriesConverter;
 import org.velog.api.domain.series.service.SeriesService;
-import org.velog.api.domain.session.ifs.CookieServiceIfs;
+import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
+import org.velog.api.domain.user.model.User;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.series.SeriesEntity;
 
@@ -25,14 +27,13 @@ public class SeriesBusiness {
 
     private final SeriesService seriesService;
     private final SeriesConverter seriesConverter;
-    private final CookieServiceIfs cookieService;
-    private final BlogService blogService;
+    private final BlogBusiness blogBusiness;
 
     public SeriesResponse register(
             SeriesRequest seriesRequest,
-            HttpServletRequest request
+            User user
     ){
-        BlogEntity blogEntity = getBlogEntityByRequest(request);
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
         SeriesEntity seriesEntity = seriesConverter.toEntity(blogEntity, seriesRequest);
 
         return Optional.ofNullable(seriesEntity)
@@ -43,7 +44,7 @@ public class SeriesBusiness {
 
     public List<SeriesResponse> retrieveAllTag(Long blogId) {
 
-        BlogEntity blogEntity = blogService.getBlogByIdWithThrow(blogId);
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(blogId);
         List<SeriesEntity> seriesEntityList = blogEntity.getSeriesEntityList();
 
         return seriesEntityList.stream()
@@ -52,24 +53,19 @@ public class SeriesBusiness {
     }
 
     public void edit(
-            HttpServletRequest request,
+            User user,
             Long seriesId,
             SeriesRequest seriesRequest
     ){
-        BlogEntity blogEntity = getBlogEntityByRequest(request);
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
         seriesService.edit(blogEntity, seriesId, seriesRequest);
     }
 
     public void delete(
-            HttpServletRequest request,
+            User user,
             Long seriesId
     ){
-        BlogEntity blogEntity = getBlogEntityByRequest(request);
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
         seriesService.delete(blogEntity, seriesId);
-    }
-
-    private BlogEntity getBlogEntityByRequest(HttpServletRequest request) {
-        Long userId = cookieService.validateRoleUserGetId(request);
-        return blogService.getBlogByUserIdWithThrow(userId);
     }
 }

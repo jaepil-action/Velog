@@ -7,7 +7,7 @@ import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.role.business.UserRoleBusiness;
-import org.velog.api.domain.session.ifs.CookieServiceIfs;
+import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
 import org.velog.api.domain.user.controller.model.*;
 import org.velog.api.domain.user.converter.UserConverter;
 import org.velog.api.domain.user.service.UserService;
@@ -21,7 +21,7 @@ public class UserBusiness {
 
     private final UserService userService;
     private final UserConverter userConverter;
-    private final CookieServiceIfs cookieService;
+    private final AuthorizationServiceIfs authorizationService;
     private final UserRoleBusiness userRoleBusiness;
 
 
@@ -40,9 +40,9 @@ public class UserBusiness {
         UserEntity userEntity = userService.getUserWithThrow(loginRequest.getLoginId(), loginRequest.getPassword());
 
         if(userService.checkUserRole(userEntity.getId())){
-            cookieService.createAdminCookie(req, rep, userEntity);
+            authorizationService.createAdminCookie(req, rep, userEntity);
         }else{
-            cookieService.createUserCookie(req, rep, userEntity);
+            authorizationService.createUserCookie(req, rep, userEntity);
         }
 
         return userConverter.toResponse(userEntity);
@@ -52,14 +52,14 @@ public class UserBusiness {
             HttpServletRequest request,
             HttpServletResponse response
     ){
-        cookieService.expiredCookie(request, response);
+        authorizationService.expiredCookie(request, response);
     }
 
     public void editUser(
             HttpServletRequest request,
             EmailDto emailDto
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
+        Long userId = authorizationService.validateRoleUserGetId(request);
         UserEditRequest editRequest = userConverter.toEditRequest(userId, emailDto);
         userService.editEmail(editRequest);
     }
@@ -69,9 +69,9 @@ public class UserBusiness {
             HttpServletRequest request,
             HttpServletResponse response
     ){
-        Long userId = cookieService.validateRoleUserGetId(request);
+        Long userId = authorizationService.validateRoleUserGetId(request);
         userService.deleteUser(userId, password);
-        cookieService.expiredCookie(request, response);
+        authorizationService.expiredCookie(request, response);
     }
 
     public DuplicationResponse checkDuplicateEmail(String email){

@@ -1,3 +1,4 @@
+/*
 package org.velog.view.domain.blog;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,3 +64,4 @@ public class BlogViewController {
         return "redirect:/";
     }
 }
+*/

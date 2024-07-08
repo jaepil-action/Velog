@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.velog.api.common.annotation.Login;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.like.business.LikeBusiness;
+import org.velog.api.domain.user.model.User;
 
 @RestController
 @RequestMapping("/api")
@@ -22,22 +24,22 @@ public class LikeApiController {
     @Operation(summary = "Post 좋아요 누르기 API", description = "post_id 입력")
     @PostMapping("/{postId}/like")
     public ResponseEntity<Api<String>> addLike(
-            HttpServletRequest request,
+            @Parameter(hidden = true) @Login User user,
             @Parameter(description = "좋아요 대상 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
-        likeBusiness.addLike(request, postId);
+        likeBusiness.addLike(user, postId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("좋아요가 추가 되었습니다."));
     }
 
     @Operation(summary = "Post 좋아요 취소 API", description = "post_id 입력")
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<Api<String>> cancelLike(
-            HttpServletRequest request,
+            @Parameter(hidden = true) @Login User user,
             @Parameter(description = "좋아요 취소 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
-        likeBusiness.cancelLike(request, postId);
+        likeBusiness.cancelLike(user, postId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("좋아요가 취소 되었습니다."));
     }
 

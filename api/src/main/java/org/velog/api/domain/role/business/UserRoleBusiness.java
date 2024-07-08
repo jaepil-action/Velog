@@ -12,7 +12,7 @@ import org.velog.api.domain.role.controller.model.UserRoleRegisterRequest;
 import org.velog.api.domain.role.controller.model.UserRoleResponse;
 import org.velog.api.domain.role.converter.UserRoleConverter;
 import org.velog.api.domain.role.service.UserRoleService;
-import org.velog.api.domain.session.ifs.CookieServiceIfs;
+import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
 import org.velog.db.user.UserEntity;
 
 import java.util.Optional;
@@ -24,12 +24,14 @@ public class UserRoleBusiness {
     private final UserRoleService userRoleService;
     private final UserRoleConverter userRoleConverter;
     private final PostBusiness postBusiness;
-    private final CookieServiceIfs cookieService;
+    private final AuthorizationServiceIfs authorizationService;
 
     // 관리자 권한으로 admin 등급 추가 가능
-    public RoleDto roleRegister(RoleDto roleDto, HttpServletRequest request) {
-
-        cookieService.validateRoleAdmin(request);
+    public RoleDto roleRegister(
+            RoleDto roleDto,
+            HttpServletRequest request
+    ){
+        authorizationService.validateRoleAdmin(request);
 
         return Optional.ofNullable(roleDto)
                 .map(userRoleConverter::toRoleEntity)
@@ -39,9 +41,12 @@ public class UserRoleBusiness {
     }
 
     // 관리자 권한으로 유저의 권한 변경
-    public UserRoleResponse userRoleRegister(UserRoleRegisterRequest userRoleRegister, HttpServletRequest request) {
+    public UserRoleResponse userRoleRegister(
+            UserRoleRegisterRequest userRoleRegister,
+            HttpServletRequest request
+    ){
 
-        cookieService.validateRoleAdmin(request);
+        authorizationService.validateRoleAdmin(request);
 
         return Optional.ofNullable(userRoleRegister)
                 .map(userRoleConverter::toUserRoleEntity)
@@ -66,7 +71,7 @@ public class UserRoleBusiness {
             int offset,
             int limit
     ) {
-        cookieService.validateRoleAdmin(request);
+        authorizationService.validateRoleAdmin(request);
         return postBusiness.getPostsByAdmin(offset, limit);
     }
 
@@ -74,7 +79,7 @@ public class UserRoleBusiness {
             HttpServletRequest request,
             Long postId
     ){
-        cookieService.validateRoleAdmin(request);
+        authorizationService.validateRoleAdmin(request);
         userRoleService.deletePostByAdmin(postId);
     }
 }

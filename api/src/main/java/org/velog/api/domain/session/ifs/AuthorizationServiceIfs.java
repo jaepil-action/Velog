@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.velog.db.user.UserEntity;
 
-public interface CookieServiceIfs {
+public interface AuthorizationServiceIfs {
 
     void createUserCookie(HttpServletRequest request, HttpServletResponse response, UserEntity loginUser);
 

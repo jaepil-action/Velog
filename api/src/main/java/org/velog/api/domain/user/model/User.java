@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class User {
 
-    private Long id;
+    private Long userId;
 
-    private BlogEntity blogEntity;
+    private Long blogId;
 
     private String loginId;
 
@@ -26,5 +26,9 @@ public class User {
 
     private String email;
 
+    private String profileImageUrl;
+
     private LocalDateTime registrationDate;
+
+    private LocalDateTime lastModifiedDate;
 }
