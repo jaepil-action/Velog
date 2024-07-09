@@ -3,7 +3,6 @@ package org.velog.api.domain.like.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.annotation.Login;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.like.business.LikeBusiness;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 
 @RestController
 @RequestMapping("/api")
@@ -24,22 +23,22 @@ public class LikeApiController {
     @Operation(summary = "Post 좋아요 누르기 API", description = "post_id 입력")
     @PostMapping("/{postId}/like")
     public ResponseEntity<Api<String>> addLike(
-            @Parameter(hidden = true) @Login User user,
+            @Parameter(hidden = true) @Login UserDto userDto,
             @Parameter(description = "좋아요 대상 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
-        likeBusiness.addLike(user, postId);
+        likeBusiness.addLike(userDto, postId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("좋아요가 추가 되었습니다."));
     }
 
     @Operation(summary = "Post 좋아요 취소 API", description = "post_id 입력")
     @DeleteMapping("/{postId}/like")
     public ResponseEntity<Api<String>> cancelLike(
-            @Parameter(hidden = true) @Login User user,
+            @Parameter(hidden = true) @Login UserDto userDto,
             @Parameter(description = "좋아요 취소 Post ID", required = true, example = "1")
             @PathVariable Long postId
     ){
-        likeBusiness.cancelLike(user, postId);
+        likeBusiness.cancelLike(userDto, postId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("좋아요가 취소 되었습니다."));
     }
 

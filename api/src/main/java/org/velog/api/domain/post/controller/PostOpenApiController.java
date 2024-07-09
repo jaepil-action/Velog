@@ -4,16 +4,13 @@ package org.velog.api.domain.post.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.velog.api.common.annotation.Login;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.post.business.PostBusiness;
 import org.velog.api.domain.post.controller.model.*;
-import org.velog.api.domain.user.model.User;
 
 @RestController
 @RequestMapping("/open-api/posts")

@@ -10,12 +10,11 @@ import org.velog.db.user.UserEntity;
 import java.time.LocalDateTime;
 
 @Entity(name = "user_roles")
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"userEntity", "roleEntity"})
 public class UserRoleEntity extends BaseEntity {
 
     @Id

@@ -1,17 +1,14 @@
 package org.velog.api.domain.follow.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.velog.api.common.annotation.Login;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.follow.business.FollowBusiness;
 import org.velog.api.domain.follow.controller.model.FollowResponse;
-import org.velog.api.domain.user.model.User;
 
 import java.util.List;
 

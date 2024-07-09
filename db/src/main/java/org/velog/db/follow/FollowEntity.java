@@ -10,7 +10,7 @@ import org.velog.db.user.UserEntity;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor

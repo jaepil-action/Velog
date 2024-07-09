@@ -1,19 +1,16 @@
 package org.velog.api.domain.series.business;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.blog.business.BlogBusiness;
-import org.velog.api.domain.blog.service.BlogService;
 import org.velog.api.domain.series.controller.model.SeriesRequest;
 import org.velog.api.domain.series.controller.model.SeriesResponse;
 import org.velog.api.domain.series.converter.SeriesConverter;
 import org.velog.api.domain.series.service.SeriesService;
-import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.series.SeriesEntity;
 
@@ -31,9 +28,9 @@ public class SeriesBusiness {
 
     public SeriesResponse register(
             SeriesRequest seriesRequest,
-            User user
+            UserDto userDto
     ){
-        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(userDto.getBlogId());
         SeriesEntity seriesEntity = seriesConverter.toEntity(blogEntity, seriesRequest);
 
         return Optional.ofNullable(seriesEntity)
@@ -53,19 +50,19 @@ public class SeriesBusiness {
     }
 
     public void edit(
-            User user,
+            UserDto userDto,
             Long seriesId,
             SeriesRequest seriesRequest
     ){
-        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(userDto.getBlogId());
         seriesService.edit(blogEntity, seriesId, seriesRequest);
     }
 
     public void delete(
-            User user,
+            UserDto userDto,
             Long seriesId
     ){
-        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(userDto.getBlogId());
         seriesService.delete(blogEntity, seriesId);
     }
 }

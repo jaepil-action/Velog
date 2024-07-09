@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.velog.api.common.annotation.Login;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.api.domain.user.service.UserService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ public class UserSessionResolver implements HandlerMethodArgumentResolver {
 
         // 1. 어노테이션이 있는지 체크
         boolean annotation = parameter.hasParameterAnnotation(Login.class);
-        boolean parameterType = parameter.getParameterType().equals(User.class);
+        boolean parameterType = parameter.getParameterType().equals(UserDto.class);
 
         return (annotation && parameterType);
     }
@@ -50,7 +50,7 @@ public class UserSessionResolver implements HandlerMethodArgumentResolver {
                 .map(ProfileImage::getProfileImageUrl)
                 .orElse(null);
 
-        return User.builder()
+        return UserDto.builder()
                 .userId(userEntity.getId())
                 .blogId(userEntity.getBlogEntity().getId())
                 .loginId(userEntity.getName())
