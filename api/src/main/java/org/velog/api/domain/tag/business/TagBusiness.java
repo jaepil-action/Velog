@@ -9,7 +9,7 @@ import org.velog.api.domain.tag.controller.model.TagRequest;
 import org.velog.api.domain.tag.controller.model.TagResponse;
 import org.velog.api.domain.tag.converter.TagConverter;
 import org.velog.api.domain.tag.service.TagService;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.tag.TagEntity;
 
@@ -25,10 +25,10 @@ public class TagBusiness {
     private final BlogBusiness blogBusiness;
 
     public TagResponse register(
-            User user,
+            UserDto userDto,
             TagRequest tagRequest
     ){
-        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(userDto.getBlogId());
         TagEntity tagEntity = tagConverter.toEntity(blogEntity, tagRequest);
 
         return Optional.ofNullable(tagEntity)
@@ -38,19 +38,19 @@ public class TagBusiness {
     }
 
     public void edit(
-            User user,
+            UserDto userDto,
             Long tagId,
             TagRequest tagRequest
     ){
-        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(userDto.getBlogId());
         tagService.edit(blogEntity, tagId, tagRequest);
     }
 
     public void delete(
-            User user,
+            UserDto userDto,
             Long tagId
     ){
-        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(user.getBlogId());
+        BlogEntity blogEntity = blogBusiness.getBlogByIdWithThrow(userDto.getBlogId());
         tagService.delete(blogEntity, tagId);
     }
 

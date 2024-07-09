@@ -1,11 +1,9 @@
 package org.velog.api.domain.like.business;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.domain.like.service.LikeService;
-import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 
 @Business
 @RequiredArgsConstructor
@@ -14,17 +12,17 @@ public class LikeBusiness {
     private final LikeService likeService;
 
     public void addLike(
-            User user,
+            UserDto userDto,
             Long postId
     ){
-        likeService.addLikeAnotherPost(user.getUserId(), postId);
+        likeService.addLikeAnotherPost(userDto.getUserId(), postId);
     }
 
     public void cancelLike(
-            User user,
+            UserDto userDto,
             Long postId
     ){
-        likeService.cancelLikePost(user.getUserId(), postId);
+        likeService.cancelLikePost(userDto.getUserId(), postId);
     }
 
     public int getLikeCount(

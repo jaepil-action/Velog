@@ -14,12 +14,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "tags")
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"blogEntity"})
 public class TagEntity extends BaseEntity {
 
     @Id
