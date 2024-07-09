@@ -4,7 +4,6 @@ package org.velog.api.domain.series.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,7 @@ import org.velog.api.common.api.Api;
 import org.velog.api.domain.series.business.SeriesBusiness;
 import org.velog.api.domain.series.controller.model.SeriesRequest;
 import org.velog.api.domain.series.controller.model.SeriesResponse;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 
 import java.util.List;
 
@@ -30,10 +29,10 @@ public class SeriesApiController {
     @Operation(summary = "시리즈 생성 API", description = "사용자블로그의 시리즈 생성")
     @PostMapping("/create")
     public ResponseEntity<Api<SeriesResponse>> createSeries(
-            @Parameter(hidden = true) @Login User user,
+            @Parameter(hidden = true) @Login UserDto userDto,
             @Valid @RequestBody SeriesRequest seriesRequest
     ){
-        SeriesResponse response = seriesBusiness.register(seriesRequest, user);
+        SeriesResponse response = seriesBusiness.register(seriesRequest, userDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
     }
 
@@ -49,21 +48,21 @@ public class SeriesApiController {
     @Operation(summary = "시리즈 수정 API", description = "사용자 블로그의 시리즈 수정")
     @PutMapping("/{seriesId}")
     public ResponseEntity<Api<String>> editTag(
-            @Parameter(hidden = true) @Login User user,
+            @Parameter(hidden = true) @Login UserDto userDto,
             @PathVariable Long seriesId,
             @Valid @RequestBody SeriesRequest seriesRequest
     ){
-        seriesBusiness.edit(user, seriesId, seriesRequest);
+        seriesBusiness.edit(userDto, seriesId, seriesRequest);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("시리즈 수정 성공"));
     }
 
     @Operation(summary = "시리즈 삭제 API", description = "사용자 블로그의 시리즈 수정")
     @DeleteMapping("/{seriesId}")
     public ResponseEntity<Api<String>> deleteTag(
-            @Parameter(hidden = true) @Login User user,
+            @Parameter(hidden = true) @Login UserDto userDto,
             @PathVariable Long seriesId
     ){
-        seriesBusiness.delete(user, seriesId);
+        seriesBusiness.delete(userDto, seriesId);
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK("시리즈 삭제 성공"));
     }
 }

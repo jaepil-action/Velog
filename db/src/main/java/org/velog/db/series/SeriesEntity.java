@@ -14,12 +14,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "series")
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {"blogEntity"})
 public class SeriesEntity extends BaseEntity {
 
     @Id

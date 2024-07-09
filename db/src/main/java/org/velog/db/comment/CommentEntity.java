@@ -14,12 +14,11 @@ import java.util.List;
 
 @Entity
 @Table(name = "Comments")
-@Data
+@Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString(exclude = {""})
 public class CommentEntity extends BaseEntity {
 
     @Id

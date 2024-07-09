@@ -13,8 +13,7 @@ import org.velog.api.domain.post.controller.model.PostsDetailPageResponse;
 import org.velog.api.domain.post.controller.model.PostsPageResponse;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.post.service.PostService;
-import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.db.post.PostEntity;
 
 import java.util.Optional;
@@ -36,10 +35,10 @@ public class PostBusiness {
     private final PostConverter postConverter;
 
     public PostDetailResponse createPost(
-            User user,
+            UserDto userDto,
             PostRequest postRequest
     ){
-        PostEntity postEntity = postService.register(user.getUserId(), postRequest);
+        PostEntity postEntity = postService.register(userDto.getUserId(), postRequest);
 
         return Optional.ofNullable(postEntity)
                 .map(postConverter::toDetailResponse)
@@ -56,34 +55,34 @@ public class PostBusiness {
     }
 
     public void deletePost(
-            User user,
+            UserDto userDto,
             Long postId
     ){
-        postService.delete(user.getUserId(), postId);
+        postService.delete(userDto.getUserId(), postId);
     }
 
     public void editPost(
-            User user,
+            UserDto userDto,
             Long postId,
             PostRequest postRequest
     ){
-        postService.edit(user.getUserId(), postId, postRequest);
+        postService.edit(userDto.getUserId(), postId, postRequest);
     }
 
     public void editTag(
-            User user,
+            UserDto userDto,
             Long postId,
             TagDto tagDto
     ){
-        postService.editTag(user.getUserId(), postId, tagDto);
+        postService.editTag(userDto.getUserId(), postId, tagDto);
     }
 
     public void editSeries(
-            User user,
+            UserDto userDto,
             Long postId,
             SeriesDto seriesDto
     ){
-        postService.editSeries(user.getUserId(), postId, seriesDto);
+        postService.editSeries(userDto.getUserId(), postId, seriesDto);
     }
 
     public Integer commentCountByPost(

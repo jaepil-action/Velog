@@ -1,6 +1,5 @@
 package org.velog.api.domain.blog.business;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.common.error.ErrorCode;
@@ -10,8 +9,7 @@ import org.velog.api.domain.blog.controller.model.BlogRegisterRequest;
 import org.velog.api.domain.blog.controller.model.BlogResponse;
 import org.velog.api.domain.blog.converter.BlogConverter;
 import org.velog.api.domain.blog.service.BlogService;
-import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.UserEntity;
@@ -28,9 +26,9 @@ public class BlogBusiness {
 
     public BlogResponse register(
             BlogRegisterRequest blogRegisterRequest,
-            User user
+            UserDto userDto
     ){
-        UserEntity userEntity = userService.getUserWithThrow(user.getUserId());
+        UserEntity userEntity = userService.getUserWithThrow(userDto.getUserId());
         BlogEntity blogEntity = blogConverter.toEntity(blogRegisterRequest, userEntity);
 
         return Optional.ofNullable(blogEntity)
@@ -44,9 +42,9 @@ public class BlogBusiness {
     }
 
     public void delete(
-            User user
+            UserDto userDto
     ){
-        blogService.deleteBlogByUserId(user.getUserId());
+        blogService.deleteBlogByUserId(userDto.getUserId());
     }
 
     public BlogDetailResponse retrieveBlogByLoginId(String loginId) {

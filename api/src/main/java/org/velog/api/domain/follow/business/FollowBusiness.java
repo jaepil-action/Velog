@@ -1,13 +1,11 @@
 package org.velog.api.domain.follow.business;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.domain.follow.controller.model.FollowResponse;
 import org.velog.api.domain.follow.converter.FollowConverter;
 import org.velog.api.domain.follow.service.FollowService;
-import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.follow.FollowEntity;
 import org.velog.db.user.UserEntity;
@@ -23,25 +21,25 @@ public class FollowBusiness {
     private final UserService userService;
 
     public FollowEntity follow(
-            User user,
+            UserDto userDto,
             String followerLoginId
     ){
-        Long followeeUserId = user.getUserId();
+        Long followeeUserId = userDto.getUserId();
         return followService.userFollow(followerLoginId, followeeUserId);
     }
 
     public void unFollow(
-            User user,
+            UserDto userDto,
             String followerLoginId
     ){
-        Long followeeUserId = user.getUserId();
+        Long followeeUserId = userDto.getUserId();
         followService.userUnFollow(followerLoginId, followeeUserId);
     }
 
     public List<FollowResponse> getMyFollowerDetails(
-            User user
+            UserDto userDto
     ){
-        String loginId = userService.getUserWithThrow(user.getUserId()).getLoginId();
+        String loginId = userService.getUserWithThrow(userDto.getUserId()).getLoginId();
         return getFollowerDetails(loginId);
     }
 
@@ -68,9 +66,9 @@ public class FollowBusiness {
     }
 
     public Integer getMyFollowCount(
-            User user
+            UserDto userDto
     ){
-        String loginId = userService.getUserWithThrow(user.getUserId()).getLoginId();
+        String loginId = userService.getUserWithThrow(userDto.getUserId()).getLoginId();
         return followService.getFollowCount(loginId);
     }
 }

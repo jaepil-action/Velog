@@ -1,6 +1,5 @@
 package org.velog.api.domain.comment.business;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.velog.api.common.annotation.Business;
@@ -11,8 +10,7 @@ import org.velog.api.domain.comment.controller.model.CommentResponse;
 import org.velog.api.domain.comment.converter.CommentConverter;
 import org.velog.api.domain.comment.service.CommentService;
 import org.velog.api.domain.post.service.PostService;
-import org.velog.api.domain.session.ifs.AuthorizationServiceIfs;
-import org.velog.api.domain.user.model.User;
+import org.velog.api.domain.user.model.UserDto;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.comment.CommentEntity;
 import org.velog.db.post.PostEntity;
@@ -31,11 +29,11 @@ public class CommentBusiness {
     private final UserService userService;
 
     public CommentResponse registerCommentByPost(
-            User user,
+            UserDto userDto,
             Long postId,
             CommentRegisterRequest commentRegisterRequest
     ) {
-        UserEntity commentWriter = userService.getUserWithThrow(user.getUserId()); // TODO 왜 여기서 블로그엔티티 셀렉트가 나갈까? 지연로딩이지만 블로그엔티티 관련 로직은 없기때문에 내생각에는 블로그 엔티티 조회를 할 필요가 없는데,,
+        UserEntity commentWriter = userService.getUserWithThrow(userDto.getUserId()); // TODO 왜 여기서 블로그엔티티 셀렉트가 나갈까? 지연로딩이지만 블로그엔티티 관련 로직은 없기때문에 내생각에는 블로그 엔티티 조회를 할 필요가 없는데,,
         log.info("UserEntity={}",commentWriter.getClass());
 
         PostEntity postEntity = postService.getPostWithThrow(postId);
@@ -50,12 +48,12 @@ public class CommentBusiness {
     }
 
     public CommentResponse registerCommentByParent(
-            User user,
+            UserDto userDto,
             Long postId,
             Long parentId,
             CommentRegisterRequest commentRegisterRequest
     ) {
-        UserEntity commentWriter = userService.getUserWithThrow(user.getUserId());
+        UserEntity commentWriter = userService.getUserWithThrow(userDto.getUserId());
         PostEntity postEntity = postService.getPostWithThrow(postId);
         CommentEntity parentComment = commentService.findById(parentId);
 
@@ -68,19 +66,19 @@ public class CommentBusiness {
     }
 
     public void deleteCommentByPost(
-            User user,
+            UserDto userDto,
             Long postId,
             Long commentId
     ){
-        UserEntity commentWriter = userService.getUserWithThrow(user.getUserId());
+        UserEntity commentWriter = userService.getUserWithThrow(userDto.getUserId());
         commentService.delete(postId, commentId, commentWriter);
     }
 
     public void editComment(
-            User user,
+            UserDto userDto,
             Long commentId,
             CommentRegisterRequest commentRegisterRequest
     ){
-        commentService.edit(user.getUserId(), commentId, commentRegisterRequest);
+        commentService.edit(userDto.getUserId(), commentId, commentRegisterRequest);
     }
 }
