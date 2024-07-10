@@ -3,6 +3,7 @@ package org.velog.api.domain.follow.business;
 import lombok.RequiredArgsConstructor;
 import org.velog.api.common.annotation.Business;
 import org.velog.api.domain.follow.controller.model.FollowResponse;
+import org.velog.api.domain.follow.controller.model.FollowResponses;
 import org.velog.api.domain.follow.converter.FollowConverter;
 import org.velog.api.domain.follow.service.FollowService;
 import org.velog.api.domain.user.model.UserDto;
@@ -43,10 +44,11 @@ public class FollowBusiness {
         return getFollowerDetails(loginId);
     }
 
-    public List<FollowResponse> getAnotherUserFollowerDetails(
+    public FollowResponses getAnotherUserFollowerDetails(
             String targetLoginId
     ){
-        return getFollowerDetails(targetLoginId);
+        List<FollowResponse> responses = getFollowerDetails(targetLoginId);
+        return followConverter.toResponses(responses);
     }
 
     private List<FollowResponse> getFollowerDetails(

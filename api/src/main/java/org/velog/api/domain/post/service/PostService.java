@@ -184,6 +184,13 @@ public class PostService {
         ).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Post 존재 하지 않습니다"));
     }
 
+    @Transactional(readOnly = true)
+    public List<PostEntity> getPostByUserId(Long userId){
+        return postRepository.findPostByUserId(
+                userId
+        );
+    }
+
     public Page<PostEntity> findPostsByStatus(PageRequest pageRequest){ // TODO 공부필요 IN SQL
         List<PostStatus> statuses = Arrays.asList(PostStatus.PUBLIC, PostStatus.TEMPORARY);
         return postRepository.findByPostStatusIn(pageRequest, statuses);

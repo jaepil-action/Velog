@@ -28,7 +28,7 @@ public class SwaggerConfig {
     public GroupedOpenApi deliveryOpenApi(){
         String[] paths = {"/open-api/**"};
         return GroupedOpenApi.builder()
-                .group("일반 사용자를 위한 Velog Service 도메인 API")
+                .group("전체 사용자를 위한 Velog Service 도메인 API")
                 .pathsToMatch(paths)
                 .build();
     }

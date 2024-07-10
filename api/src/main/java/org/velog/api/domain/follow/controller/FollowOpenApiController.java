@@ -2,15 +2,18 @@ package org.velog.api.domain.follow.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.follow.business.FollowBusiness;
-import org.velog.api.domain.follow.controller.model.FollowResponse;
-
-import java.util.List;
+import org.velog.api.domain.follow.controller.model.FollowResponses;
+import org.velog.api.domain.token.business.TokenBusiness;
+import org.velog.api.utils.hateoas.HateoasTemplate;
+import org.velog.api.utils.hateoas.target.FollowHateoasLink;
 
 @RestController
 @RequestMapping("/open-api/users")
@@ -19,15 +22,22 @@ import java.util.List;
 public class FollowOpenApiController {
 
     private final FollowBusiness followBusiness;
-
+    private final HateoasTemplate hateoasTemplate;
+    private final FollowHateoasLink followHateoasLink;
 
     @Operation(summary = "유저 Follower 목록 조회 API", description = "LoginId 입력")
     @GetMapping("/{loginId}/follow/details")
-    public ResponseEntity<Api<List<FollowResponse>>> getAnotherFollowerDetail(
-            @PathVariable String loginId
+    public ResponseEntity<Api<EntityModel<FollowResponses>>> getAnotherFollowerDetail(
+            @PathVariable String loginId,
+            HttpServletRequest request
     ){
-        List<FollowResponse> followResponseList = followBusiness.getAnotherUserFollowerDetails(loginId);
-        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(followResponseList));
+        //List<FollowResponse> followResponseList = followBusiness.getAnotherUserFollowerDetails(loginId);
+        FollowResponses followResponseList = followBusiness.getAnotherUserFollowerDetails(loginId);
+
+        EntityModel<FollowResponses> resource = EntityModel.of(followResponseList);
+        hateoasTemplate.addCommonLinks(resource, request, followHateoasLink);
+
+        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));
     }
 
 

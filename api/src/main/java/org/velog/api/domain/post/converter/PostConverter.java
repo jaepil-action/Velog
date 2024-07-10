@@ -67,7 +67,7 @@ public class PostConverter {
 
 
         UserEntity userEntity = postEntity.getBlogEntity().getUserEntity();
-        postResponse.setAuthor(new AuthorDto(userEntity.getName(), userEntity.getProfileImage()));
+        postResponse.setAuthor(new AuthorDto(userEntity.getLoginId(), userEntity.getProfileImage()));
 
         return postResponse;
     }
