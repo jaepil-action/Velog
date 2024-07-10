@@ -7,11 +7,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.velog.db.post.enums.PostStatus;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
 
+    @Query("select p from PostEntity p" +
+            " join fetch p.blogEntity b" +
+            " join fetch b.userEntity u" +
+            " where u.id = :userId")
+    List<PostEntity> findPostByUserId(@Param("userId") Long userId);
 
     @Query("select p from PostEntity p" +
             " join fetch p.blogEntity b" +

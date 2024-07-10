@@ -16,8 +16,6 @@ import org.velog.api.domain.series.controller.model.SeriesRequest;
 import org.velog.api.domain.series.controller.model.SeriesResponse;
 import org.velog.api.domain.user.model.UserDto;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/series")
 @RequiredArgsConstructor
@@ -36,18 +34,9 @@ public class SeriesApiController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Api.CREATED(response));
     }
 
-    @Operation(summary = "시리즈 조회 API", description = "블로그의 시리즈 전체 조회")
-    @GetMapping("/{blogId}")
-    public ResponseEntity<Api<List<SeriesResponse>>> retrieveAllTag(
-            @PathVariable Long blogId
-    ){
-        List<SeriesResponse> response = seriesBusiness.retrieveAllTag(blogId);
-        return ResponseEntity.status(HttpStatus.OK).body(Api.OK(response));
-    }
-
     @Operation(summary = "시리즈 수정 API", description = "사용자 블로그의 시리즈 수정")
     @PutMapping("/{seriesId}")
-    public ResponseEntity<Api<String>> editTag(
+    public ResponseEntity<Api<String>> editSeries(
             @Parameter(hidden = true) @Login UserDto userDto,
             @PathVariable Long seriesId,
             @Valid @RequestBody SeriesRequest seriesRequest
@@ -58,7 +47,7 @@ public class SeriesApiController {
 
     @Operation(summary = "시리즈 삭제 API", description = "사용자 블로그의 시리즈 수정")
     @DeleteMapping("/{seriesId}")
-    public ResponseEntity<Api<String>> deleteTag(
+    public ResponseEntity<Api<String>> deleteSeries(
             @Parameter(hidden = true) @Login UserDto userDto,
             @PathVariable Long seriesId
     ){
