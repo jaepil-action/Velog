@@ -8,7 +8,7 @@ import org.velog.db.user.ProfileImage;
 @Data
 public class AuthorDto {
 
-    private String username;
+    private String loginId;
 
     private ProfileImage profileImage;
 }

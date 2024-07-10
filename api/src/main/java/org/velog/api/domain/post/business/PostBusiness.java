@@ -1,5 +1,6 @@
 package org.velog.api.domain.post.business;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,9 +14,12 @@ import org.velog.api.domain.post.controller.model.PostsDetailPageResponse;
 import org.velog.api.domain.post.controller.model.PostsPageResponse;
 import org.velog.api.domain.post.converter.PostConverter;
 import org.velog.api.domain.post.service.PostService;
+import org.velog.api.domain.session.AuthorizationTokenService;
 import org.velog.api.domain.user.model.UserDto;
 import org.velog.db.post.PostEntity;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Business
@@ -33,6 +37,7 @@ public class PostBusiness {
 
     private final PostService postService;
     private final PostConverter postConverter;
+    private final AuthorizationTokenService tokenService;
 
     public PostDetailResponse createPost(
             UserDto userDto,
@@ -52,6 +57,19 @@ public class PostBusiness {
                 .map(postService::getPostWithAuthorById)//
                 .map(postConverter::toDetailResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+    }
+
+    public boolean checkMyPost(
+            HttpServletRequest request,
+            PostDetailResponse postResponse
+    ){
+        try{
+            Long userId = tokenService.validateRoleUserGetId(request);
+            return postService.getPostByUserId(userId).stream()
+                    .anyMatch(pe -> Objects.equals(pe.getId(), postResponse.getPostId()));
+        }catch(ApiException e){
+            return false;
+        }
     }
 
     public void deletePost(
