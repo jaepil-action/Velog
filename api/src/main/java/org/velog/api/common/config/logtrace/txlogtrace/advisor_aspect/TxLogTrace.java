@@ -21,7 +21,7 @@ public class TxLogTrace {
     @Pointcut("execution(* org.velog.api.domain..*Service.*(..))")
     private void allService(){}
 
-    @Pointcut("!execution(* org.velog.api.domain.token.service.TokenService.*(..))")
+    @Pointcut("!execution(* org.velog.api.domain..*TokenService.*(..))")
     private void excludeTokenService(){}
 
     @Around("allService() && excludeTokenService()")
