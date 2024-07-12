@@ -1,12 +1,12 @@
-package org.velog.api.common.config.logtrace.v2_autoaopcreator.advisor_aspect;
+package org.velog.api.common.config.logtrace.v2_autoaopcreator_aspect.advisor_aspect;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.velog.api.common.logtrace.LogTrace;
-import org.velog.api.common.logtrace.TraceStatus;
+import org.velog.api.utils.logtrace.LogTrace;
+import org.velog.api.utils.logtrace.TraceStatus;
 
 @Slf4j
 @Aspect
@@ -36,6 +36,7 @@ public class LogTraceAspect {
             Object result = joinPoint.proceed(); // target 호출
 
             logTrace.end(status);
+
             return result;
         } catch (Exception e) {
             logTrace.exception(status, e);

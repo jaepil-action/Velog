@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class UserRoleEntity extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_role_id")
     private Long id;
 

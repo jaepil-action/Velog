@@ -1,4 +1,4 @@
-package org.velog.api.common.logtrace;
+package org.velog.api.utils.logtrace;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

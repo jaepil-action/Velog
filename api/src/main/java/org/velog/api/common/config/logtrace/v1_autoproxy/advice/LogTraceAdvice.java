@@ -1,11 +1,9 @@
 package org.velog.api.common.config.logtrace.v1_autoproxy.advice;
 
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.velog.api.common.logtrace.LogTrace;
-import org.velog.api.common.logtrace.TraceStatus;
+import org.velog.api.utils.logtrace.LogTrace;
+import org.velog.api.utils.logtrace.TraceStatus;
 
 import java.lang.reflect.Method;
 
