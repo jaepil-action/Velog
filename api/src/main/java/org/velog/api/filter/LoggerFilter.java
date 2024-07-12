@@ -24,9 +24,16 @@ public class LoggerFilter implements Filter {
 
         log.info("INIT URI : {}", req.getRequestURI());
 
-        filterChain.doFilter(req, res);
+        try{
+            filterChain.doFilter(req, res);
+        }finally {
+            logRequestDetails(req);
+            logResponseDetails(res, req.getRequestURI(), req.getMethod());
+            res.copyBodyToResponse();
+        }
 
-        // request 정보
+
+      /*  // request 정보
         Enumeration<String> headerNames = req.getHeaderNames();
         StringBuilder requestHeaderValues = new StringBuilder();
 
@@ -65,6 +72,75 @@ public class LoggerFilter implements Filter {
         String responseBody = new String(res.getContentAsByteArray());
         log.info("<<<<< uri : {} , method : {} , header : {} , body : {}", uri, method, responseHeaderValues, responseBody);
 
-        res.copyBodyToResponse();
+        res.copyBodyToResponse();*/
+    }
+
+    private void logRequestDetails(ContentCachingRequestWrapper request){
+        if(shouldLogRequest(request)){
+            Enumeration<String> headerNames = request.getHeaderNames();
+            StringBuilder requestHeaderValues = new StringBuilder();
+
+            headerNames.asIterator().forEachRemaining(headerKey -> {
+                String headerValue = request.getHeader(headerKey);
+
+                requestHeaderValues
+                        .append("[")
+                        .append(headerKey)
+                        .append(" : ")
+                        .append(headerValue)
+                        .append("] ");
+            });
+
+            String requestBody = new String(request.getContentAsByteArray());
+            String uri = request.getRequestURI();
+            String method = request.getMethod();
+
+            log.info(">>>>> uri : {} , method : {} , header : {} , body : {}",
+                    uri, method, requestHeaderValues, limitBodySize(requestBody));
+        }
+    }
+
+    private void logResponseDetails(ContentCachingResponseWrapper response, String requestUri, String method){
+        if(shouldLogResponse(response)){
+            StringBuilder responseHeaderValues = new StringBuilder();
+            response.getHeaderNames().forEach(headerKey ->
+                    responseHeaderValues
+                            .append("[")
+                            .append(headerKey)
+                            .append(" : ")
+                            .append(response.getHeader(headerKey))
+                            .append("] ")
+                    );
+
+            String responseBody = new String(response.getContentAsByteArray());
+            log.info("<<<<< uri : {} , method : {} , headers : {} , body : {}",
+                    requestUri,
+                    method,
+                    response,
+                    limitBodySize(responseBody));
+        }
+    }
+
+    private boolean shouldLogRequest(ContentCachingRequestWrapper requestWrapper){
+        return "POST".equalsIgnoreCase(requestWrapper.getMethod());
+                //|| "GET".equalsIgnoreCase(requestWrapper.getMethod());
+    }
+
+    private boolean shouldLogResponse(ContentCachingResponseWrapper response) {
+        return response.getStatus() >= 200;
+    }
+
+    private String limitBodySize(String requestBody){
+        return requestBody.length() > 500 ? requestBody.substring(0, 500) + "..." :requestBody;
     }
 }
+/***
+ * GET /api/example HTTP/1.1
+ * Host: localhost:8080
+ * User-Agent: PostmanRuntime/7.28.4
+ * Accept: %/*
+ * Cookie:sessionId=abc123;trackingId=xyz456
+ *
+ * headerName[EnumerationType] : value
+ *
+ * */
