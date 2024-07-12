@@ -24,7 +24,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    @Order(1)
+    @Order(Integer.MIN_VALUE)
     public GroupedOpenApi deliveryOpenApi(){
         String[] paths = {"/open-api/**"};
         return GroupedOpenApi.builder()
@@ -34,7 +34,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    @Order(2)
+    @Order(Integer.MAX_VALUE)
     public GroupedOpenApi deliveryLoginApi(){
         String[] paths = {"/api/**"};
         return GroupedOpenApi.builder()
