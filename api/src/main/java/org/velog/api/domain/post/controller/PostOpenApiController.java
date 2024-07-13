@@ -15,9 +15,8 @@ import org.velog.api.common.api.Api;
 import org.velog.api.domain.post.business.PostBusiness;
 import org.velog.api.domain.post.controller.model.*;
 import org.velog.api.utils.hateoas.HateoasTemplate;
-import org.velog.api.utils.hateoas.target.PostHateoasLink;
-
-import java.util.Objects;
+import org.velog.api.utils.hateoas.target.mine.PostHateoasLink;
+import org.velog.api.utils.hateoas.target.other.OtherPostHateoasLink;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -30,7 +29,8 @@ public class PostOpenApiController {
 
     private final PostBusiness postBusiness;
     private final HateoasTemplate hateoasTemplate;
-    private final PostHateoasLink postHateoasLink;
+    private final PostHateoasLink myPostHateoasLink;
+    private final OtherPostHateoasLink otherPostHateoasLink;
 
     @Operation(summary = "Post 단건 조회 API", description = "PostId 입력")
     @GetMapping("{postId}")
@@ -42,14 +42,12 @@ public class PostOpenApiController {
         PostDetailResponse postResponse = postBusiness.getPost(postId);
         EntityModel<PostDetailResponse> resource = EntityModel.of(postResponse);
         WebMvcLinkBuilder all = linkTo(methodOn(this.getClass()).retrieveAllPost(null,0, 10, null));
+        resource.add(all.withRel("all-posts"));
 
         if(postBusiness.checkMyPost(request, postResponse)){
-            WebMvcLinkBuilder edit = linkTo(methodOn(PostApiController.class).editPost(null,null, null));
-            WebMvcLinkBuilder delete = linkTo(methodOn(PostApiController.class).deletePost(null,null));
-            resource.add(all.withRel("all-posts"), edit.withRel("edit-post"), delete.withRel("delete-post"));
+            myPostHateoasLink.getResourceLink(resource);
         }else{
-            resource.add(all.withRel("all-posts"));
-            hateoasTemplate.addCommonLinks(resource, request, postHateoasLink);
+            hateoasTemplate.addCommonLinks(resource, request, otherPostHateoasLink);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));
@@ -68,7 +66,7 @@ public class PostOpenApiController {
         EntityModel<PostsDetailPageResponse> resource = EntityModel.of(postResponseList);
         WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePost(null, null));
         resource.add(link.withRel("retrievePost"));
-        hateoasTemplate.addCommonLinks(resource, request, postHateoasLink);
+        hateoasTemplate.addCommonLinks(resource, request, myPostHateoasLink);
 
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));
     }

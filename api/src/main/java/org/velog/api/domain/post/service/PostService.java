@@ -191,6 +191,7 @@ public class PostService {
         );
     }
 
+
     public Page<PostEntity> findPostsByStatus(PageRequest pageRequest){ // TODO 공부필요 IN SQL
         List<PostStatus> statuses = Arrays.asList(PostStatus.PUBLIC, PostStatus.TEMPORARY);
         return postRepository.findByPostStatusIn(pageRequest, statuses);

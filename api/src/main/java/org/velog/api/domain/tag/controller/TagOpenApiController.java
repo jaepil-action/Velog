@@ -10,15 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
-import org.velog.api.domain.series.controller.SeriesApiController;
-import org.velog.api.domain.series.controller.model.SeriesResponses;
 import org.velog.api.domain.tag.business.TagBusiness;
-import org.velog.api.domain.tag.controller.model.TagResponse;
 import org.velog.api.domain.tag.controller.model.TagResponses;
 import org.velog.api.utils.hateoas.HateoasTemplate;
-import org.velog.api.utils.hateoas.target.TagHateoasLink;
-
-import java.util.List;
+import org.velog.api.utils.hateoas.target.mine.TagHateoasLink;
+import org.velog.api.utils.hateoas.target.other.OtherTagHateoasLink;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -32,6 +28,7 @@ public class TagOpenApiController {
     private final TagBusiness tagBusiness;
     private final HateoasTemplate hateoasTemplate;
     private final TagHateoasLink tagHateoasLink;
+    private final OtherTagHateoasLink otherTagHateoasLink;
 
     @Operation(summary = "Tag 조회 API", description = "블로그의 Tag 전체 조회")
     @GetMapping("/{blogId}")
@@ -43,12 +40,9 @@ public class TagOpenApiController {
         EntityModel<TagResponses> resource = EntityModel.of(response);
 
         if(tagBusiness.checkMyTag(request, blogId)){
-            WebMvcLinkBuilder add = linkTo(methodOn(TagApiController.class).createTag(null, null));
-            WebMvcLinkBuilder edit = linkTo(methodOn(TagApiController.class).editTag(null, null, null));
-            WebMvcLinkBuilder delete = linkTo(methodOn(TagApiController.class).deleteTag(null, null));
-            resource.add(add.withRel("add-tag"), edit.withRel("edit-tag"), delete.withRel("delete-tag"));
+            tagHateoasLink.getResourceLink(resource);
         }else{
-            hateoasTemplate.addCommonLinks(resource, request, tagHateoasLink);
+            hateoasTemplate.addCommonLinks(resource, request, otherTagHateoasLink);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));

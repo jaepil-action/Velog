@@ -1,4 +1,4 @@
-package org.velog.api.utils.hateoas.target;
+package org.velog.api.utils.hateoas.target.mine;
 
 import lombok.Setter;
 import org.springframework.hateoas.EntityModel;
@@ -13,21 +13,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class PostHateoasLink implements HateoasIfs {
-
+public class FollowHateoasLink implements HateoasIfs {
     @Override
-    public EntityModel<?> getResourceLink(
-            EntityModel<?> resource
-    ){
+    public EntityModel<?> getResourceLink(EntityModel<?> resource) {
 
-        Link addLike = linkTo(methodOn(LikeApiController.class)
-                .addLike(null, null)).withRel("addLike");
         Link follow = linkTo(methodOn(FollowApiController.class)
                 .userFollow(null, null)).withRel("follow");
-        Link addComment = linkTo(methodOn(CommentApiController.class)
-                .createComments(null, null, null)).withRel("addComment");
+        Link unfollow = linkTo(methodOn(FollowApiController.class)
+                .userUnFollow(null, null)).withRel("unFollow");
 
-        resource.add(addLike, follow, addComment);
+        resource.add(follow, unfollow);
 
         return  resource;
     }
