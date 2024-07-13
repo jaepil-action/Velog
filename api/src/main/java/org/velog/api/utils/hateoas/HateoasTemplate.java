@@ -22,8 +22,6 @@ public class HateoasTemplate {
 
     private final TokenBusiness tokenBusiness;
 
-
-
     public void addCommonLinks(
         EntityModel<?> resource,
         HttpServletRequest request,

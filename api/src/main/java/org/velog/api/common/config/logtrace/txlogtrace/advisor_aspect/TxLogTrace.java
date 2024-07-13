@@ -6,10 +6,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.velog.api.domain.log.service.LogService;
 import org.velog.api.utils.logtrace.LogTrace;
 import org.velog.api.utils.logtrace.TraceStatus;
-import org.velog.db.log.TxLogEntity;
-import org.velog.db.log.TxLogRepository;
 
 @Slf4j
 @Aspect
@@ -17,11 +16,11 @@ import org.velog.db.log.TxLogRepository;
 public class TxLogTrace {
 
     private final LogTrace logTrace;
-    private final TxLogRepository txLogRepository;
+    private final LogService logService;
     @Pointcut("execution(* org.velog.api.domain..*Service.*(..))")
     private void allService(){}
 
-    @Pointcut("!execution(* org.velog.api.domain..*TokenService.*(..))")
+    @Pointcut("!execution(* org.velog.api.domain..*TokenService.*(..)) && !execution(* org.velog.api.domain..*LogService.*(..))")
     private void excludeTokenService(){}
 
     @Around("allService() && excludeTokenService()")
@@ -52,25 +51,7 @@ public class TxLogTrace {
             long executionTime = System.currentTimeMillis() - startTime;
             log.info("long executionTime={}", executionTime);
 
-            saveTxLog(methodName, executionTime);
+            logService.saveTxLog(methodName, executionTime);
         }
-    }
-
-    private void saveTxLog(String methodName, long executionTime){
-
-        txLogRepository.findByMethodName(methodName)
-                .ifPresentOrElse(txLogEntity ->{
-                    checkExcessByExecutionTime(txLogEntity, executionTime);
-                }, () ->{
-                    TxLogEntity txLogEntity = new TxLogEntity(methodName, executionTime);
-                    txLogRepository.save(txLogEntity);
-                });
-    }
-
-    private void checkExcessByExecutionTime(TxLogEntity txLogEntity, long executionTime){
-        if(txLogEntity.getExecutionTime() < executionTime){
-            txLogEntity.changeExecutionTime(executionTime);
-        }
-        return;
     }
 }

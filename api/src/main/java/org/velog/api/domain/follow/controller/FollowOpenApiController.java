@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.velog.api.common.api.Api;
 import org.velog.api.domain.follow.business.FollowBusiness;
 import org.velog.api.domain.follow.controller.model.FollowResponses;
-import org.velog.api.domain.token.business.TokenBusiness;
 import org.velog.api.utils.hateoas.HateoasTemplate;
-import org.velog.api.utils.hateoas.target.FollowHateoasLink;
+import org.velog.api.utils.hateoas.target.mine.FollowHateoasLink;
 
 @RestController
 @RequestMapping("/open-api/users")
