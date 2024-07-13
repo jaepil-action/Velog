@@ -15,6 +15,7 @@ public class Result {
 
     private Integer resultCode;
     private String resultMessage;
+
     private String resultDescription;
 
     public static Result OK(){
