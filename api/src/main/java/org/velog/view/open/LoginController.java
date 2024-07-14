@@ -1,4 +1,4 @@
-package org.velog.view.domain.open;
+package org.velog.view.open;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,9 +11,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.velog.api.common.exception.ApiException;
 import org.velog.api.domain.user.business.UserBusiness;
 import org.velog.api.domain.user.controller.model.UserLoginRequest;
+import org.velog.api.domain.user.controller.model.UserResponse;
 
 @Slf4j
 @Controller
@@ -34,7 +36,8 @@ public class LoginController {
             @Validated @ModelAttribute("loginForm") UserLoginRequest loginForm,
             BindingResult bindingResult,
             HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletResponse response,
+            RedirectAttributes redirectAttributes
     ){
         if(bindingResult.hasErrors()){
             log.info("login Errors={}", bindingResult);
@@ -42,8 +45,9 @@ public class LoginController {
         }
 
         try{
-            userBusiness.login(loginForm, request, response);
-            return "redirect:/";
+            String loginId = userBusiness.login(loginForm, request, response).getLoginId();
+            redirectAttributes.addAttribute("loginId", loginId);
+            return "redirect:/@{loginId}";
         }catch (ApiException e){
             bindingResult.reject("LoginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "login/loginForm";

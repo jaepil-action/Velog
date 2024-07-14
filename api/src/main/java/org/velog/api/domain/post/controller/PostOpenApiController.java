@@ -29,7 +29,7 @@ public class PostOpenApiController {
 
     private final PostBusiness postBusiness;
     private final HateoasTemplate hateoasTemplate;
-    private final PostHateoasLink myPostHateoasLink;
+    private final PostHateoasLink postHateoasLink;
     private final OtherPostHateoasLink otherPostHateoasLink;
 
     @Operation(summary = "Post 단건 조회 API", description = "PostId 입력")
@@ -45,7 +45,7 @@ public class PostOpenApiController {
         resource.add(all.withRel("all-posts"));
 
         if(postBusiness.checkMyPost(request, postResponse)){
-            myPostHateoasLink.getResourceLink(resource);
+            postHateoasLink.getResourceLink(resource);
         }else{
             hateoasTemplate.addCommonLinks(resource, request, otherPostHateoasLink);
         }
@@ -66,7 +66,7 @@ public class PostOpenApiController {
         EntityModel<PostsDetailPageResponse> resource = EntityModel.of(postResponseList);
         WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePost(null, null));
         resource.add(link.withRel("retrievePost"));
-        hateoasTemplate.addCommonLinks(resource, request, myPostHateoasLink);
+        hateoasTemplate.addCommonLinks(resource, request, postHateoasLink);
 
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));
     }

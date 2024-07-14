@@ -21,7 +21,7 @@ public class UserRoleEntity extends BaseEntity {
     @Column(name = "user_role_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", unique = true)
     private UserEntity userEntity;
 

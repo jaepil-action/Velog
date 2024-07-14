@@ -21,9 +21,9 @@ public class TxLogTrace {
     private void allService(){}
 
     @Pointcut("!execution(* org.velog.api.domain..*TokenService.*(..)) && !execution(* org.velog.api.domain..*LogService.*(..))")
-    private void excludeTokenService(){}
+    private void excludeTokenAndLogService(){}
 
-    @Around("allService() && excludeTokenService()")
+    @Around("allService() && excludeTokenAndLogService()")
     public Object transactionLog(ProceedingJoinPoint joinPoint) throws Throwable{
 
         TraceStatus status = null;

@@ -7,10 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface BlogEntityRepository extends JpaRepository<BlogEntity, Long> {
-    //Optional<BlogEntity> findFirstByUserEntity_Id(Long userId);
-    @Query("select b from BlogEntity b join fetch b.userEntity u" +
-            " where u.id = :userId")
-    Optional<BlogEntity> findBlogByUserId(@Param("userId") Long userId);
+
+    Optional<BlogEntity> findByUserEntity_Id(Long userId);
 
     @Query("select b from BlogEntity b join fetch b.userEntity u where u.loginId = :loginId")
     Optional<BlogEntity> findBlogByUserLoginId(@Param("loginId") String loginId);

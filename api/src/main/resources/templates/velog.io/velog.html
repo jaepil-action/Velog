@@ -13,52 +13,45 @@
 <body>
 <nav class="navbar navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="/">Velog</a>
+        <a class="navbar-brand" href="/">나만의 Velog</a>
         <div class="d-flex">
+            <a class="btn btn-outline-primary me-2" href="/write">새 글 작성</a>
             <a class="btn btn-outline-secondary" href="/login" th:href="@{/login}">로그인</a>
         </div>
     </div>
 </nav>
 
 <main class="container mt-5">
-    <h1 class="mb-4">Posts</h1>
-    <div class="row row-cols-1 row-cols-md-2 g-4" th:each="post : ${posts.contents}">
+    <h1 class="mb-4">Velog</h1>
+    <div class="row row-cols-1 row-cols-md-2 g-4" th:each="post : ${posts}">
         <div class="col">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title"><a th:href="@{/posts/{id}(id=${post.postId})}" th:text="${post.title}"></a></h5>
-                    <p class="card-text" th:text="${post.excerpt}"></p>
+                    <h5 class="card-title"><a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"></a></h5>
+                    <p class="card-text" th:text="${post.content}"></p>
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted" th:text="${post.likeCount}"></small>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted" th:text="${post.author.loginId}"></small>
+                    <small class="text-muted" th:text="${post.createdDate}"></small>
                 </div>
             </div>
         </div>
     </div>
 
-    <nav th:if="${posts.totalPages > 1}" aria-label="Page navigation" class="mt-4">
+    <nav th:if="${totalPages > 1}" aria-label="Page navigation" class="mt-4">
         <ul class="pagination justify-content-center">
-
-            <li class="page-item" th:classappend="${posts.offset == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/(page=${posts.offset / posts.limit - 1}, size=${posts.limit})}" aria-label="Previous">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/(page=${currentPage - 1})}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-
-            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, posts.totalPages)}"
-                th:classappend="${posts.offset / posts.limit + 1 == pageNumber} ? 'active'">
-                <a class="page-link" th:href="@{/(page=${pageNumber - 1}, size=${posts.limit})}" th:text="${pageNumber}"></a>
+            <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage == pageNumber} ? 'active'">
+                <a class="page-link" th:href="@{/(page=${pageNumber})}" th:text="${pageNumber}"></a>
             </li>
-
-            <li class="page-item" th:classappend="${posts.offset / posts.limit + 1 == posts.totalPages} ? 'disabled'">
-                <a class="page-link" th:href="@{/(page=${posts.offset / posts.limit + 1}, size=${posts.limit})}" aria-label="Next">
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a class="page-link" th:href="@{/(page=${currentPage + 1})}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
-
         </ul>
     </nav>
 </main>

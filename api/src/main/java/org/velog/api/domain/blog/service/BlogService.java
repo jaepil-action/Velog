@@ -39,7 +39,7 @@ public class BlogService {
     public BlogEntity getBlogByUserIdWithThrow(
             Long userId
     ){
-        return blogEntityRepository.findBlogByUserId(userId)
+        return blogEntityRepository.findByUserEntity_Id(userId)
                 .orElseThrow(() -> new ApiException(BlogErrorCode.BLOG_NOT_FOUND));
     }
 

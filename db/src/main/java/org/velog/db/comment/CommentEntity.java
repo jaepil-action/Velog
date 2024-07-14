@@ -71,4 +71,8 @@ public class CommentEntity extends BaseEntity {
     public void editComment(String contents){
         this.contents = contents;
     }
+
+    public void changeUserEntityNull(){
+        userEntity = null;
+    }
 }

@@ -21,8 +21,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             @Param("password") String password
     );
 
-    Optional<UserEntity> findByLoginIdAndPassword(String loginId, String password);
-
     @EntityGraph(attributePaths = "blogEntity")
     Optional<UserEntity> findFirstByLoginId(String loginId);
     @EntityGraph(attributePaths = "blogEntity")

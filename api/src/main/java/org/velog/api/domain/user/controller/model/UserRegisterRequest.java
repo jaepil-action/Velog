@@ -10,16 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegisterRequest {
-    @NotBlank
+
+    @NotBlank(message = "가입 ID를 입력 하세요.")
     private String loginId;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력 하세요.")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력 하세요.")
     private String name;
 
-    @NotBlank
     @Email
+    @NotBlank(message = "이메일을 입력 하세요.")
     private String email;
 }

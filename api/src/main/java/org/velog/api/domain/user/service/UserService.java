@@ -5,7 +5,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.velog.api.common.error.ErrorCode;
 import org.velog.api.common.error.UserErrorCode;
 import org.velog.api.common.exception.ApiException;
-import org.velog.api.domain.user.controller.model.UserEditRequest;
+import org.velog.db.blog.BlogEntityRepository;
+import org.velog.db.comment.CommentEntity;
+import org.velog.db.comment.CommentRepository;
+import org.velog.db.follow.FollowEntityRepository;
+import org.velog.db.like.LikeEntityRepository;
 import org.velog.db.role.Admin;
 import org.velog.db.role.RoleEntity;
 import org.velog.db.role.UserRoleEntity;
@@ -23,6 +27,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final FollowEntityRepository followEntityRepository;
+    private final LikeEntityRepository likeEntityRepository;
+    private final CommentRepository commentRepository;
+    private final BlogEntityRepository blogEntityRepository;
 
     public UserEntity register(UserEntity userEntity){
 
@@ -37,21 +45,19 @@ public class UserService {
     public void deleteUser(Long userId, String password) {
         UserEntity deleteUser = getUserWithThrow(userId);
         if(deleteUser.getPassword().equals(password)){
+            deleteUserBefore(userId);
             userRepository.delete(deleteUser);
         }else{
             throw new ApiException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다.");
         }
     }
 
-    public void editEmail(UserEditRequest param){
-        Optional.ofNullable(param)
-                .ifPresentOrElse(it -> {
-                    UserEntity user = getUserWithThrow(it.getId());
-                    user.changeEmail(param.getEmail());
-                    userRepository.save(user);
-                }, () -> {
-                    throw new ApiException(ErrorCode.NULL_POINT, "User Entity null");
-                });
+    public void editEmail(
+            Long userId,
+            String email
+    ){
+        UserEntity userEntity = getUserWithThrow(userId);
+        userEntity.changeEmail(email);
     }
 
     public boolean checkUserRole(
@@ -65,9 +71,9 @@ public class UserService {
             return false;
         }*/
         /***
-         * 위에 코드 아래로 리팩터링 (공부필요)
+         * TODO 위에 코드 아래로 리팩터링 (공부필요)
          */
-        return userRoleRepository.findFirstByUserEntity_Id(userId)
+        return userRoleRepository.findByUserEntity_Id(userId)
                 .map(UserRoleEntity::getRoleEntity)
                 .map(RoleEntity::getAdmin)
                 .map(Admin.ROLE_ADMIN::equals)
@@ -128,5 +134,13 @@ public class UserService {
         return userRepository.findFirstByLoginId(
                 loginId
         ).orElseThrow(()-> new ApiException(UserErrorCode.USER_NOT_FOUND));
+    }
+
+    private void deleteUserBefore(Long userId){
+        blogEntityRepository.findByUserEntity_Id(userId).ifPresent(blogEntityRepository::delete);
+        commentRepository.findByUserEntity_Id(userId).forEach(CommentEntity::changeUserEntityNull);
+        likeEntityRepository.deleteAll(likeEntityRepository.findAllByUserEntity_Id(userId));
+        followEntityRepository.deleteAll(followEntityRepository.findAllByFollower_Id(userId));
+        followEntityRepository.deleteAll(followEntityRepository.findAllByFollowee_Id(userId));
     }
 }
