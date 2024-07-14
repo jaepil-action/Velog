@@ -12,6 +12,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.velog.db.blog.BlogEntity;
 import org.velog.db.user.ProfileImage;
 import org.velog.db.user.UserEntity;
 
@@ -50,10 +51,14 @@ public class UserSessionResolver implements HandlerMethodArgumentResolver {
                 .map(ProfileImage::getProfileImageUrl)
                 .orElse(null);
 
+        Long blogId = Optional.ofNullable(userEntity.getBlogEntity())
+                .map(BlogEntity::getId)
+                .orElse(null);
+
         return UserDto.builder()
                 .userId(userEntity.getId())
-                .blogId(userEntity.getBlogEntity().getId())
-                .loginId(userEntity.getName())
+                .blogId(blogId)
+                .loginId(userEntity.getLoginId())
                 .name(userEntity.getName())
                 .email(userEntity.getEmail())
                 .password(userEntity.getPassword())

@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
 
     @EntityGraph(attributePaths = "roleEntity")
-    Optional<UserRoleEntity> findFirstByUserEntity_Id(Long userId);
+    Optional<UserRoleEntity> findByUserEntity_Id(Long userId);
 }

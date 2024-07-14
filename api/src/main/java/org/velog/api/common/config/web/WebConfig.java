@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
             "/home",
             "/login",
             "/logout",
-            "/favicon.io",
+            "/favicon.ico",
             "/css/**",
             "/error"
     );

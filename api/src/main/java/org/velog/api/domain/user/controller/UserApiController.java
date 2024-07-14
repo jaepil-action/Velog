@@ -29,7 +29,8 @@ public class UserApiController {
             @Valid
             @RequestBody Api<EmailDto> editEmail
     ){
-        userBusiness.editUser(request, editEmail.getBody());
+        String email = editEmail.getBody().getEmail();
+        userBusiness.editUser(request, email);
         return Api.OK("이메일 수정 성공");
     }
 

@@ -13,9 +13,10 @@
 <body>
 <nav class="navbar navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="/">Velog</a>
+        <a class="navbar-brand" href="/" th:text="|${user.loginId}의 Velog|">나만의 Velog</a>
         <div class="d-flex">
-            <a class="btn btn-outline-secondary" href="/login" th:href="@{/login}">로그인</a>
+            <a class="btn btn-outline-primary me-2" href="/write">새 글 작성</a>
+            <a class="btn btn-outline-secondary" href="/login" th:href="@{${myUri}}">나의정보</a>
         </div>
     </div>
 </nav>

@@ -44,7 +44,7 @@ public class UserRoleConverter {
 
     public UserRoleEntity toUserRoleEntity(UserRoleRegisterRequest request){
 
-        UserRoleEntity userRoleEntity = userRoleRepository.findFirstByUserEntity_Id(request.getUserId())
+        UserRoleEntity userRoleEntity = userRoleRepository.findByUserEntity_Id(request.getUserId())
                 .orElseThrow(()-> new ApiException(ErrorCode.NULL_POINT, "UserRoleRegisterRequest Null"));
 
         RoleEntity roleEntity = roleRepository.findById(request.getRoleId())

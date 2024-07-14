@@ -102,5 +102,4 @@ public class PostEntity extends BaseEntity {
         this.seriesEntity = seriesEntity;
         this.excerpt = excerpt;
     }
-
 }

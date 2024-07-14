@@ -13,6 +13,7 @@ import org.velog.api.domain.user.converter.UserConverter;
 import org.velog.api.domain.user.service.UserService;
 import org.velog.db.user.UserEntity;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Business
@@ -57,11 +58,14 @@ public class UserBusiness {
 
     public void editUser(
             HttpServletRequest request,
-            EmailDto emailDto
+            String email
     ){
+        if(Objects.equals(checkDuplicateEmail(email).getExists(), "중복")){
+            throw new ApiException(ErrorCode.BAD_REQUEST, "이미 사용중인 이메일 입니다");
+        }
+
         Long userId = authorizationService.validateRoleUserGetId(request);
-        UserEditRequest editRequest = userConverter.toEditRequest(userId, emailDto);
-        userService.editEmail(editRequest);
+        userService.editEmail(userId, email);
     }
 
     public void deleteUser(
@@ -75,6 +79,7 @@ public class UserBusiness {
     }
 
     public DuplicationResponse checkDuplicateEmail(String email){
+
         // 중복이라면
         if(userService.checkDuplicationEmail(email)){
             return new DuplicationResponse("중복");
