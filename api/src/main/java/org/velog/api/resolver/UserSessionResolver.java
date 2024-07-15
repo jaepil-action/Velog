@@ -1,6 +1,7 @@
 package org.velog.api.resolver;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.velog.api.common.annotation.Login;
@@ -23,6 +24,7 @@ import static org.velog.api.domain.token.service.TokenService.USER_ID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserSessionResolver implements HandlerMethodArgumentResolver {
 
     private final UserService userService;
@@ -46,6 +48,7 @@ public class UserSessionResolver implements HandlerMethodArgumentResolver {
         Object userId = requestContext.getAttribute(USER_ID, RequestAttributes.SCOPE_REQUEST);
 
         UserEntity userEntity = userService.getUserWithThrow(Long.parseLong(userId.toString()));
+        log.info("userEntity Resolver={}", userEntity.getId());
 
         String profileImageUrl = Optional.ofNullable(userEntity.getProfileImage())
                 .map(ProfileImage::getProfileImageUrl)

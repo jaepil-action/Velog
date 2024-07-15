@@ -21,8 +21,6 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(500)
-                .body(
-                        Api.ERROR(ErrorCode.SERVER_ERROR)
-                );
+                .body(Api.ERROR(ErrorCode.SERVER_ERROR));
     }
 }

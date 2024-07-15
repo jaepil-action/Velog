@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">게시판 작성</h2>
+    <form action="" th:action th:object="${board}" method="post">
+        <!-- Name Field -->
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" th:field="${loginMember.loginId}" th:value="${loginMember.loginId}" readonly>
+        </div>
+
+        <!-- Title Field -->
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="Enter the title">
+            <div class="field-error" th:errors="*{title}" />
+        </div>
+
+        <!-- Content Field -->
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea class="form-control" id="content" rows="5" th:field="*{content}" placeholder="Enter the content"></textarea>
+            <div class="field-error" th:errors="*{content}" />
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Enter your password">
+            <div class="field-error" th:errors="*{password}" />
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

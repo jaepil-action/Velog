@@ -48,13 +48,14 @@ public class BlogEntity extends BaseEntity {
     public void addUserEntity(UserEntity userEntity){
         this.userEntity = userEntity;
         userEntity.addBlogEntity(this);
+
     }
 
     public void addBlogTitle(String title){
         if(title.isBlank()){
-            this.blogTitle = "@" + userEntity.getLoginId();
+            this.blogTitle = userEntity.getLoginId() + ".log";
         }else{
-            this.blogTitle = "@" + title;
+            this.blogTitle = title + ".log";
         }
     }
 }
