@@ -41,11 +41,6 @@ public class UserController {
             UserRegisterRequest request,
             BindingResult bindingResult
     ){
-        if(bindingResult.hasErrors()){
-            log.info("form errors={}", bindingResult);
-            return "/users/registerForm";
-        }
-
         try{
             userBusiness.register(request);
         }catch(ApiException e){
@@ -56,13 +51,13 @@ public class UserController {
         return "/velog.io/velog";
     }
 
-    @GetMapping("/@{loginId}/myPage")
+    @GetMapping("/{loginId}/myPage")
     public String myPage(
             Model model,
-            @Login UserDto userDto
+            @Login UserDto user
     ){
-       // UserDto userDto = new UserDto();
-        model.addAttribute("user", userDto);
+        model.addAttribute("user", user);
+        model.addAttribute("myUri", "/" + user.getLoginId());
         return "/users/myPage";
     }
 
@@ -79,16 +74,10 @@ public class UserController {
     @PostMapping("{userId}/update")
     public String editEmail(
             HttpServletRequest request,
-            @ModelAttribute("user") UserDto user,
+            @Valid @ModelAttribute("user") UserDto user,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ){
-
-        if(bindingResult.hasErrors()){
-            log.info("form errors={}", bindingResult);
-            return "/users/editForm";
-        }
-
         try{
             userBusiness.editUser(request, user.getEmail());
             redirectAttributes.addAttribute("loginId", user.getLoginId());
@@ -96,7 +85,7 @@ public class UserController {
         }catch (ApiException e){
             bindingResult.reject(e.getErrorCodeIfs().getDescription(), e.getErrorDescription());
             redirectAttributes.addAttribute("id", user.getUserId());
-            return "redirect:/users/{id}/update";
+            return "/users/editForm";
         }
     }
 

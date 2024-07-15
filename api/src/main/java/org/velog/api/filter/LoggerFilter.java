@@ -31,48 +31,6 @@ public class LoggerFilter implements Filter {
             logResponseDetails(res, req.getRequestURI(), req.getMethod());
             res.copyBodyToResponse();
         }
-
-
-      /*  // request 정보
-        Enumeration<String> headerNames = req.getHeaderNames();
-        StringBuilder requestHeaderValues = new StringBuilder();
-
-        headerNames.asIterator().forEachRemaining(headerKey -> {
-            String headerValue = req.getHeader(headerKey);
-
-            requestHeaderValues
-                    .append("[")
-                    .append(headerKey)
-                    .append(" : ")
-                    .append(headerValue)
-                    .append("] ");
-        });
-
-        String requestBody = new String(req.getContentAsByteArray());
-        String uri = req.getRequestURI();
-        String method = req.getMethod();
-
-        log.info(">>>>> uri : {} , method : {} , header : {} , body : {}", uri, method, requestHeaderValues, requestBody);
-
-        // response 정보
-        StringBuilder responseHeaderValues = new StringBuilder();
-
-        // Collection 반환
-        res.getHeaderNames().forEach(headerKey -> {
-            String headerValue = res.getHeader(headerKey);
-
-            responseHeaderValues
-                    .append("[")
-                    .append(headerKey)
-                    .append(" : ")
-                    .append(headerValue)
-                    .append("] ");
-        });
-
-        String responseBody = new String(res.getContentAsByteArray());
-        log.info("<<<<< uri : {} , method : {} , header : {} , body : {}", uri, method, responseHeaderValues, responseBody);
-
-        res.copyBodyToResponse();*/
     }
 
     private void logRequestDetails(ContentCachingRequestWrapper request){
@@ -96,7 +54,10 @@ public class LoggerFilter implements Filter {
             String method = request.getMethod();
 
             log.info(">>>>> uri : {} , method : {} , header : {} , body : {}",
-                    uri, method, requestHeaderValues, limitBodySize(requestBody));
+                    uri,
+                    method,
+                    requestHeaderValues,
+                    limitBodySize(requestBody));
         }
     }
 
