@@ -18,7 +18,6 @@ import org.velog.api.domain.session.AuthorizationTokenService;
 import org.velog.api.domain.user.model.UserDto;
 import org.velog.db.post.PostEntity;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 

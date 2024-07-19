@@ -42,15 +42,23 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
+    // actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     //jwt
     implementation 'com.auth0:java-jwt:4.0.0'
 
+    // QueryDsl
 
     implementation project(':db')
 }
 
 test {
     useJUnitPlatform()
+}
+
+springBoot{
+    mainClass.set("org.velog.ApiApplication")
 }
 
 bootJar{
