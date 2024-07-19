@@ -88,7 +88,7 @@ public class LoggerFilter implements Filter {
     }
 
     private boolean shouldLogResponse(ContentCachingResponseWrapper response) {
-        return response.getStatus() >= 200;
+        return response.getStatus() >= 400;
     }
 
     private String limitBodySize(String requestBody){
