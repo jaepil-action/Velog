@@ -16,8 +16,10 @@ import org.velog.api.domain.series.service.SeriesService;
 import org.velog.api.domain.tag.service.TagService;
 import org.velog.db.blog.BlogEntity;
 import org.velog.db.post.PostEntity;
+import org.velog.db.post.PostEntityQueryDSlRepository;
 import org.velog.db.post.PostRepository;
 import org.velog.db.post.enums.PostStatus;
+import org.velog.db.post.model.PostSearchDto;
 import org.velog.db.series.SeriesEntity;
 import org.velog.db.tag.TagEntity;
 import org.velog.db.user.UserEntity;
@@ -32,6 +34,7 @@ import java.util.Objects;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostEntityQueryDSlRepository postEntityQueryDSlRepository;
     private final PostConverter postConverter;
     private final BlogService blogService;
     private final SeriesService seriesService;
@@ -61,6 +64,14 @@ public class PostService {
         );
 
         return postRepository.save(postEntity);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostSearchDto> searchPost(
+            String loginIdCond,
+            String titleCond
+    ){
+        return postEntityQueryDSlRepository.searchPost(loginIdCond, titleCond);
     }
 
     public void edit(
