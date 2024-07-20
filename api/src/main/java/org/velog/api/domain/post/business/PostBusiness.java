@@ -17,7 +17,9 @@ import org.velog.api.domain.post.service.PostService;
 import org.velog.api.domain.session.AuthorizationTokenService;
 import org.velog.api.domain.user.model.UserDto;
 import org.velog.db.post.PostEntity;
+import org.velog.db.post.model.PostSearchDto;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -56,6 +58,13 @@ public class PostBusiness {
                 .map(postService::getPostWithAuthorById)//
                 .map(postConverter::toDetailResponse)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+    }
+
+    public List<PostSearchDto> searchPost(
+            String loginIdCond,
+            String titleCond
+    ){
+        return postService.searchPost(loginIdCond, titleCond);
     }
 
     public boolean checkMyPost(

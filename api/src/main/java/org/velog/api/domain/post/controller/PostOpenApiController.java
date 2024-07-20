@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -17,6 +18,9 @@ import org.velog.api.domain.post.controller.model.*;
 import org.velog.api.utils.hateoas.HateoasTemplate;
 import org.velog.api.utils.hateoas.target.mine.PostHateoasLink;
 import org.velog.api.utils.hateoas.target.other.OtherPostHateoasLink;
+import org.velog.db.post.model.PostSearchDto;
+
+import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -53,6 +57,18 @@ public class PostOpenApiController {
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));
     }
 
+    @Operation(summary = "Post 검색 조건 조회 API", description = "작성자, 제목 입력")
+    @GetMapping("/cond")
+    public ResponseEntity<Api<List<PostSearchDto>>> retrieveSearchPost(
+            @RequestParam(required = false) String loginIdCond,
+            @RequestParam(required = false) String titleCond
+    ){
+        List<PostSearchDto> postSearchDtos = postBusiness.searchPost(loginIdCond, titleCond);
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(Api.FOUND(postSearchDtos));
+    }
+
+
     @Operation(summary = "모든 Post 상세 조회 API", description = "최신순, 인기순 조회 가능 (비공개 조회불가)")
     @GetMapping("")
     public ResponseEntity<Api<EntityModel<PostsDetailPageResponse>>> retrieveAllPost(
@@ -65,8 +81,7 @@ public class PostOpenApiController {
 
         EntityModel<PostsDetailPageResponse> resource = EntityModel.of(postResponseList);
         WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrievePost(null, null));
-        resource.add(link.withRel("retrievePost"));
-        hateoasTemplate.addCommonLinks(resource, request, postHateoasLink);
+        hateoasTemplate.addCommonLinks(resource, request, otherPostHateoasLink);
 
         return ResponseEntity.status(HttpStatus.OK).body(Api.OK(resource));
     }
