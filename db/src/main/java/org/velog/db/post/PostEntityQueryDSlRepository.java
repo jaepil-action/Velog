@@ -1,6 +1,5 @@
 package org.velog.db.post;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.velog.db.post.model.PostSearchDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.velog.db.blog.QBlogEntity.*;
 import static org.velog.db.post.QPostEntity.*;
@@ -25,7 +23,7 @@ public class PostEntityQueryDSlRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<PostSearchDto> searchPost(
+    public List<PostSearchDto> searchPostDto(
             String loginIdCond,
             String titleCond
     ){
@@ -46,11 +44,11 @@ public class PostEntityQueryDSlRepository {
     }
 
     private BooleanExpression loginIdSearchCond(String loginIdCond) {
-        return loginIdCond != null ? userEntity.loginId.eq(loginIdCond) : null;
+        return loginIdCond != null ? userEntity.loginId.like("%" + loginIdCond + "%") : null;
     }
 
     private BooleanExpression titleSearchCond(String titleCond) {
-        return titleCond != null ? postEntity.title.eq(titleCond) : null;
+        return titleCond != null ? postEntity.title.like("%" + titleCond + "%") : null;
     }
 
 
