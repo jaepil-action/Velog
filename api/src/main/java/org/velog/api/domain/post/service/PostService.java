@@ -71,7 +71,7 @@ public class PostService {
             String loginIdCond,
             String titleCond
     ){
-        return postEntityQueryDSlRepository.searchPost(loginIdCond, titleCond);
+        return postEntityQueryDSlRepository.searchPostDto(loginIdCond, titleCond);
     }
 
     public void edit(
