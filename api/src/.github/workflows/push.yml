@@ -1,0 +1,9 @@
+name: push-workflow # 액션창에서 표현될 시각화 이름
+on: push
+
+jobs:
+  push-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: step1
+        run: echo hello world
